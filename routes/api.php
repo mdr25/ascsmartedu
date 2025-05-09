@@ -19,38 +19,42 @@ Route::get('/user', function (Request $request) {
 Route::post('/register', [UserController::class, 'register']);
 Route::post('/login', [UserController::class, 'login']);
 
-Route::get('/roles', [RoleController::class, 'index']);
+Route::apiResource('roles', RoleController::class);
 
 Route::middleware('auth:sanctum')->group(function () {
-    Route::get('/payments', [PaymentController::class, 'index']);
-    Route::post('/payments', [PaymentController::class, 'store']);
-    Route::put('/payments/{id}', [PaymentController::class, 'update']);
+    Route::apiResource('users', UserController::class);
+    Route::apiResource('payments', PaymentController::class);
+    Route::apiResource('classes', ClassController::class);
+    Route::apiResource('schedules', ScheduleController::class);
+    Route::apiResource('attendance', AttendanceController::class);
+    Route::apiResource('bank-soal', BankSoalController::class);
 });
 
-Route::middleware('auth:sanctum')->group(function () {
-    Route::get('/classes', [ClassController::class, 'index']);
-    Route::post('/classes', [ClassController::class, 'store']);
-    Route::put('/classes/{id}', [ClassController::class, 'update']);
-    Route::delete('/classes/{id}', [ClassController::class, 'destroy']);
-});
 
-Route::middleware('auth:sanctum')->group(function () {
-    Route::get('/schedules', [ScheduleController::class, 'index']);
-    Route::post('/schedules', [ScheduleController::class, 'store']);
-    Route::put('/schedules/{id}', [ScheduleController::class, 'update']);
-    Route::delete('/schedules/{id}', [ScheduleController::class, 'destroy']);
-});
+// Route::get('/roles', [RoleController::class, 'index']);
 
-Route::middleware('auth:sanctum')->group(function () {
-    Route::get('/attendance', [AttendanceController::class, 'index']);
-    Route::post('/attendance', [AttendanceController::class, 'store']);
-    Route::put('/attendance/{id}', [AttendanceController::class, 'update']);
-    Route::delete('/attendance/{id}', [AttendanceController::class, 'destroy']);
-});
+// Route::middleware('auth:sanctum')->group(function () {
+//     Route::get('/payments', [PaymentController::class, 'index']);
+//     Route::post('/payments', [PaymentController::class, 'store']);
+//     Route::put('/payments/{id}', [PaymentController::class, 'update']);
 
-Route::middleware('auth:sanctum')->group(function () {
-    Route::get('/bank-soal', [BankSoalController::class, 'index']);
-    Route::post('/bank-soal', [BankSoalController::class, 'store']);
-    Route::put('/bank-soal/{id}', [BankSoalController::class, 'update']);
-    Route::delete('/bank-soal/{id}', [BankSoalController::class, 'destroy']);
-});
+//     Route::get('/classes', [ClassController::class, 'index']);
+//     Route::post('/classes', [ClassController::class, 'store']);
+//     Route::put('/classes/{id}', [ClassController::class, 'update']);
+//     Route::delete('/classes/{id}', [ClassController::class, 'destroy']);
+
+//     Route::get('/schedules', [ScheduleController::class, 'index']);
+//     Route::post('/schedules', [ScheduleController::class, 'store']);
+//     Route::put('/schedules/{id}', [ScheduleController::class, 'update']);
+//     Route::delete('/schedules/{id}', [ScheduleController::class, 'destroy']);
+
+//     Route::get('/attendance', [AttendanceController::class, 'index']);
+//     Route::post('/attendance', [AttendanceController::class, 'store']);
+//     Route::put('/attendance/{id}', [AttendanceController::class, 'update']);
+//     Route::delete('/attendance/{id}', [AttendanceController::class, 'destroy']);
+
+//     Route::get('/bank-soal', [BankSoalController::class, 'index']);
+//     Route::post('/bank-soal', [BankSoalController::class, 'store']);
+//     Route::put('/bank-soal/{id}', [BankSoalController::class, 'update']);
+//     Route::delete('/bank-soal/{id}', [BankSoalController::class, 'destroy']);
+// });
