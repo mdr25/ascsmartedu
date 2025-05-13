@@ -2,47 +2,53 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class User extends Authenticatable
 {
-    /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasFactory, Notifiable;
+    use HasApiTokens, HasFactory, Notifiable;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var list<string>
-     */
-    protected $fillable = [
-        'name',
-        'email',
-        'password',
-    ];
+    protected $guarded = ['id'];
 
-    /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var list<string>
-     */
     protected $hidden = [
         'password',
         'remember_token',
     ];
 
-    /**
-     * Get the attributes that should be cast.
-     *
-     * @return array<string, string>
-     */
-    protected function casts(): array
+    protected $casts = [
+        'email_verified_at' => 'datetime',
+    ];
+
+    // Relasi ke Role
+    public function role()
     {
-        return [
-            'email_verified_at' => 'datetime',
-            'password' => 'hashed',
-        ];
+        return $this->belongsTo(Role::class, 'id_role');
+    }
+
+    // File: app/Models/User.php
+
+    public function classes()
+    {
+        return $this->belongsToMany(Classes::class, 'class_user', 'user_id', 'class_id');
+    }
+
+    // Fungsi untuk mengecek role
+    public function hasRole($roleName)
+    {
+        return $this->role && $this->role->name_role === $roleName;
+    }
+
+    public function hasAnyRole(array $roles)
+    {
+        return $this->role && in_array($this->role->name_role, $roles);
+    }
+
+    public function jenjangKelas()
+    {
+        return $this->belongsTo(JenjangKelas::class, 'jenjang_kelas_id');
     }
 }
