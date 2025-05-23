@@ -3,58 +3,72 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
-use App\Http\Controllers\RoleController;
+use App\Http\Controllers\AdminController;
 use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\SubscriptionController;
 use App\Http\Controllers\ClassController;
+use App\Http\Controllers\TeacherController;
+use App\Http\Controllers\RoleController;
 use App\Http\Controllers\ScheduleController;
 use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\BankSoalController;
 
-
-Route::get('/user', function (Request $request) {
-    return $request->user();
-})->middleware('auth:sanctum');
-
-
 Route::post('/register', [UserController::class, 'register']);
 Route::post('/login', [UserController::class, 'login']);
 
-Route::apiResource('roles', RoleController::class);
-
-Route::middleware('auth:sanctum')->group(function () {
-    Route::apiResource('users', UserController::class);
-    Route::apiResource('payments', PaymentController::class);
-    Route::apiResource('classes', ClassController::class);
-    Route::apiResource('schedules', ScheduleController::class);
-    Route::apiResource('attendance', AttendanceController::class);
-    Route::apiResource('bank-soal', BankSoalController::class);
+Route::middleware(['auth:sanctum'])->group(function () {
+    Route::post('/logout', [UserController::class, 'logout']);
 });
 
+Route::middleware(['auth:sanctum', 'role:Admin'])->prefix('admin')->group(function () {
+    // CRUD Users
+    Route::get('/users', [AdminController::class, 'listUsers']);
+    Route::post('/users', [AdminController::class, 'createUser']);
+    Route::put('/users/{id}', [AdminController::class, 'updateUser']);
+    Route::delete('/users/{id}', [AdminController::class, 'deleteUser']);
 
-// Route::get('/roles', [RoleController::class, 'index']);
+    // CRUD Classes
+    Route::get('/classes', [AdminController::class, 'listClasses']);
+    Route::post('/classes', [AdminController::class, 'createClass']);
+    Route::put('/classes/{id}', [AdminController::class, 'updateClass']);
+    Route::delete('/classes/{id}', [AdminController::class, 'deleteClass']);
 
-// Route::middleware('auth:sanctum')->group(function () {
-//     Route::get('/payments', [PaymentController::class, 'index']);
-//     Route::post('/payments', [PaymentController::class, 'store']);
-//     Route::put('/payments/{id}', [PaymentController::class, 'update']);
+    // Manage Payments
+    Route::get('/payments', [AdminController::class, 'listPayments']);
+    Route::put('/payments/{id}/status', [AdminController::class, 'updatePaymentStatus']);
 
-//     Route::get('/classes', [ClassController::class, 'index']);
-//     Route::post('/classes', [ClassController::class, 'store']);
-//     Route::put('/classes/{id}', [ClassController::class, 'update']);
-//     Route::delete('/classes/{id}', [ClassController::class, 'destroy']);
+    // Manage Roles
+    Route::get('/pengajar', [AdminController::class, 'getTeachers']);
+});
 
-//     Route::get('/schedules', [ScheduleController::class, 'index']);
-//     Route::post('/schedules', [ScheduleController::class, 'store']);
-//     Route::put('/schedules/{id}', [ScheduleController::class, 'update']);
-//     Route::delete('/schedules/{id}', [ScheduleController::class, 'destroy']);
+Route::middleware(['auth:sanctum', 'role:Siswa'])->prefix('student')->group(function () {
+    // Subscription Management
+    Route::get('/subscription', [SubscriptionController::class, 'checkSubscription']);
+    Route::get('/subscription/status', [SubscriptionController::class, 'subscriptionStatus']);
 
-//     Route::get('/attendance', [AttendanceController::class, 'index']);
-//     Route::post('/attendance', [AttendanceController::class, 'store']);
-//     Route::put('/attendance/{id}', [AttendanceController::class, 'update']);
-//     Route::delete('/attendance/{id}', [AttendanceController::class, 'destroy']);
+    // Payment Transactions
+    Route::post('/payments', [PaymentController::class, 'createPayment']);
+    Route::get('/payments', [PaymentController::class, 'paymentHistory']);
+});
 
-//     Route::get('/bank-soal', [BankSoalController::class, 'index']);
-//     Route::post('/bank-soal', [BankSoalController::class, 'store']);
-//     Route::put('/bank-soal/{id}', [BankSoalController::class, 'update']);
-//     Route::delete('/bank-soal/{id}', [BankSoalController::class, 'destroy']);
-// });
+Route::middleware(['auth:sanctum', 'role:Siswa', 'hasActiveSubscription'])->prefix('student')->group(function () {
+    Route::get('/classes', [ClassController::class, 'index']);
+    Route::get('/classes/{classId}/schedule', [ClassController::class, 'schedule']);
+    Route::get('/classes/{classId}/attendance', [ClassController::class, 'attendance']);
+    Route::put('/classes/{classId}/attendance/{attendanceId}', [ClassController::class, 'updateAttendance']);
+    Route::get('/classes/{id}/bank_soal', [ClassController::class, 'bankSoal']);
+});
+
+Route::middleware('auth:sanctum')->prefix('teacher')->group(function () {
+    Route::get('/classes', [TeacherController::class, 'getClasses']);
+    Route::get('/classes/{id}/students', [TeacherController::class, 'getStudentsInClass']);
+    Route::post('/classes/{id}/attendance', [TeacherController::class, 'createAttendance']);
+    Route::get('/classes/{id}/attendance', [TeacherController::class, 'getAttendancesInClass']);
+    Route::put('/attendance/{id}', [TeacherController::class, 'updateAttendance']);
+
+    Route::post('/schedules', [TeacherController::class, 'createSchedule']);
+
+    Route::post('/bank_soal', [TeacherController::class, 'storeBankSoal']);
+    Route::put('/bank_soal/{id}', [TeacherController::class, 'updateBankSoal']);
+    Route::delete('/bank_soal/{id}', [TeacherController::class, 'deleteBankSoal']);
+});

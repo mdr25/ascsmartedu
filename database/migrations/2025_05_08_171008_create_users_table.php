@@ -20,6 +20,9 @@ return new class extends Migration
             $table->enum('gender', ['M', 'F']);
             $table->string('address', 255);
             $table->foreignId('roles_id')->constrained('roles')->onDelete('cascade');
+            $table->foreignId('classes_id')->nullable()->constrained('classes')->onDelete('set null');
+            $table->foreignId('subscription_id')->nullable()->constrained('subscription_packages')->onDelete('set null');
+            $table->timestamps();
         });
     }
 

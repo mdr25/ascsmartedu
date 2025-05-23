@@ -14,4 +14,11 @@ class ClassModel extends Model
     {
         return $this->belongsTo(JenjangKelas::class, 'jenjang_kelas_id');
     }
+
+    public function pengajar()
+    {
+        return $this->hasOne(User::class, 'classes_id')->whereHas('role', function ($query) {
+            $query->where('name', 'Pengajar');
+        });
+    }
 }

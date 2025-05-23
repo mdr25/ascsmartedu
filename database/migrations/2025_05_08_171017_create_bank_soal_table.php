@@ -14,10 +14,12 @@ return new class extends Migration
         Schema::create('bank_soal', function (Blueprint $table) {
             $table->id();
             $table->string('nama_materi', 45);
-            $table->string('soal', 255);
-            $table->string('materi', 255);
+            $table->text('soal');
+            $table->text('materi');
             $table->enum('level', ['Easy', 'Medium', 'Hard']);
             $table->foreignId('classes_id')->constrained('classes')->onDelete('cascade');
+            $table->boolean('is_free')->default(true);
+            $table->timestamps();
         });
     }
 

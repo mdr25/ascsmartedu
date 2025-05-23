@@ -13,12 +13,14 @@ return new class extends Migration
     {
         Schema::create('payments', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('users_id')->constrained('users')->onDelete('cascade');
+            $table->foreignId('subscription_id')->constrained('subscription_packages')->onDelete('cascade');
             $table->decimal('total_amount', 10, 2);
-            $table->date('payment_date');
+            $table->date('payment_date')->nullable();
             $table->enum('payment_method', ['Transfer', 'Qris', 'Virtual Account']);
             $table->string('payment_proof', 255);
-            $table->enum('status', ['paid', 'unpaid']);
-            $table->foreignId('users_id')->constrained('users')->onDelete('cascade');
+            $table->enum('status', ['paid', 'unpaid'])->default('unpaid');
+            $table->timestamps();
         });
     }
 

@@ -9,7 +9,6 @@ use Illuminate\Validation\ValidationException;
 
 class UserController extends Controller
 {
-    // Register User
     public function register(Request $request)
     {
         $validatedData = $request->validate([
@@ -32,13 +31,9 @@ class UserController extends Controller
             'roles_id' => $validatedData['roles_id'],
         ]);
 
-        $user->tokens()->delete();
-        $token = $user->createToken('auth_token')->plainTextToken;
-
-        return response()->json(['message' => 'Register Success', 'token' => $token]);
+        return response()->json(['message' => 'Register Success']);
     }
 
-    // Login User
     public function login(Request $request)
     {
         $validatedData = $request->validate([
@@ -57,5 +52,11 @@ class UserController extends Controller
         $token = $user->createToken('auth_token')->plainTextToken;
 
         return response()->json(['message' => 'Login Success', 'token' => $token]);
+    }
+
+    public function logout(Request $request)
+    {
+        $request->user()->tokens()->delete();
+        return response()->json(['message' => 'Logout Success']);
     }
 }

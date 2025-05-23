@@ -11,12 +11,10 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('classes', function (Blueprint $table) {
+        Schema::create('subbab', function (Blueprint $table) {
             $table->id();
-            $table->string('class_name', 45);
-            $table->integer('total_student')->default(0);
-            $table->foreignId('jenjang_kelas_id')->constrained('jenjang_kelas')->onDelete('cascade');
-            $table->foreignId('teacher_id')->constrained('users')->onDelete('cascade');
+            $table->foreignId('bab_id')->constrained('bab')->onDelete('cascade');
+            $table->string('judul_subbab', 100);
             $table->timestamps();
         });
     }
@@ -26,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('classes');
+        Schema::dropIfExists('subbab');
     }
 };

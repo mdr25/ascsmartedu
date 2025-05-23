@@ -3,47 +3,43 @@
 namespace App\Http\Controllers;
 
 use App\Models\Payment;
+use App\Models\SubscriptionPackage;
 use Illuminate\Http\Request;
 
 class PaymentController extends Controller
 {
-    // Lihat semua pembayaran
-    public function index()
+    public function createPayment(Request $request)
     {
-        return response()->json(Payment::with('user')->get());
-    }
+        try {
+            $validatedData = $request->validate([
+                'payment_method' => 'required|in:Transfer,Qris,Virtual Account',
+                'payment_proof' => 'required|string|max:255',
+            ]);
 
-    // Buat pembayaran baru
-    public function store(Request $request)
-    {
-        $validatedData = $request->validate([
-            'total_amount' => 'required|numeric|min:0',
-            'payment_date' => 'required|date',
-            'payment_method' => 'required|in:Transfer,Qris,Virtual Account',
-            'payment_proof' => 'required|string|max:255',
-            'status' => 'required|in:paid,unpaid',
-            'users_id' => 'required|exists:users,id',
-        ]);
+            $package = SubscriptionPackage::where('price', 250000)->first();
 
-        $payment = Payment::create($validatedData);
+            if (!$package) {
+                return response()->json(['error' => 'Subscription package not found'], 404);
+            }
 
-        return response()->json(['message' => 'Payment Created', 'data' => $payment]);
-    }
+            $payment = Payment::create([
+                'users_id' => $request->user()->id,
+                'subscription_id' => $package->id,
+                'total_amount' => $package->price,
+                'payment_method' => $validatedData['payment_method'],
+                'payment_proof' => $validatedData['payment_proof'],
+                'status' => 'unpaid',
+            ]);
 
-    // Update status pembayaran
-    public function update(Request $request, $id)
-    {
-        $payment = Payment::find($id);
-        if (!$payment) {
-            return response()->json(['message' => 'Payment not found'], 404);
+            return response()->json(['message' => 'Payment submitted successfully', 'payment' => $payment]);
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 500);
         }
+    }
 
-        $validatedData = $request->validate([
-            'status' => 'required|in:paid,unpaid',
-        ]);
-
-        $payment->update($validatedData);
-
-        return response()->json(['message' => 'Payment Updated', 'data' => $payment]);
+    public function paymentHistory(Request $request)
+    {
+        $payments = $request->user()->payments()->with('subscription')->get();
+        return response()->json($payments);
     }
 }
