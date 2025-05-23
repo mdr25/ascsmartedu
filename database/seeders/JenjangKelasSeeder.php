@@ -10,9 +10,9 @@ class JenjangKelasSeeder extends Seeder
     public function run(): void
     {
         $jenjangKelas = [
-            'Dasar',
-            'Menengah',
-            'Lanjut',
+            'SD',
+            'SMP',
+            'SMA',
         ];
 
         foreach ($jenjangKelas as $nama) {

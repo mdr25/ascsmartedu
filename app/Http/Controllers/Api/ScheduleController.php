@@ -3,18 +3,30 @@
 namespace App\Http\Controllers\Api;
 
 use App\Models\Schedule;
+use App\Models\Payment;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Models\Payment;
-use Illuminate\Container\Attributes\Auth;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
 class ScheduleController extends Controller
 {
-    // ✅ Ambil semua jadwal
+    // ✅ Ambil semua jadwal (hanya admin)
     public function index()
     {
+        $user = Auth::user();
+        if (!$user || $user->role->name_role !== 'admin') {
+            return response()->json(['message' => 'Hanya admin yang dapat mengakses data ini.'], 403);
+        }
+
         $schedules = Schedule::with('classModel')->get();
+
+        if ($schedules->isEmpty()) {
+            return response()->json([
+                'message' => 'Daftar jadwal tidak ada.',
+                'data'    => []
+            ], 200);
+        }
 
         return response()->json([
             'message' => 'Daftar jadwal ditemukan.',
@@ -22,44 +34,81 @@ class ScheduleController extends Controller
         ], 200);
     }
 
-    // ✅ Method jadwal khusus siswa login (autentikasi)
+    // ✅ Jadwal khusus siswa login
     public function schedulesForAuthenticatedStudent()
-    {
-        $user = Auth::user();
+{
+    $user = Auth::user();
 
-        if (!$user) {
-            return response()->json([
-                'message' => 'User tidak terautentikasi.'
-            ], 401);
+    if (!$user || $user->role->name_role !== 'siswa') {
+        return response()->json(['message' => 'Hanya siswa yang dapat mengakses jadwal ini.'], 403);
+    }
+
+    // Ambil semua pembayaran yang sudah dibayar
+    $payments = Payment::with('classes')
+        ->where('users_id', $user->id)
+        ->where('status', 'paid')
+        ->get();
+
+    $classIds = $payments->flatMap(function ($payment) {
+        return $payment->classes->pluck('id');
+    })->unique();
+
+    if ($classIds->isEmpty()) {
+        return response()->json([
+            'message' => 'Anda belum melakukan pembayaran kelas, akses jadwal ditolak.'
+        ], 403);
+    }
+
+    $schedules = Schedule::whereIn('classes_id', $classIds)
+        ->with('classModel')
+        ->get();
+
+    return response()->json([
+        'message' => 'Jadwal kelas siswa berhasil diambil.',
+        'data'    => $schedules
+    ], 200);
+}
+
+
+
+    // ✅ Jadwal khusus pengajar login
+    public function schedulesForTeacher()
+    {
+        $user = auth()->user();
+
+        if (!$user || !$user->hasRole('pengajar')) {
+            return response()->json(['message' => 'Hanya pengajar yang dapat mengakses jadwal ini.'], 403);
         }
 
-        // Ambil ID kelas yang dibayar user
-        $classIds = Payment::where('users_id', $user->id)
-            ->where('status', 'paid')
-            ->pluck('classes_id');
+        // Ambil ID kelas yang diajar pengajar (gunakan relasi taughtClasses)
+        $classIds = $user->taughtClasses()->pluck('id');
 
         if ($classIds->isEmpty()) {
             return response()->json([
-                'message' => 'Siswa belum memiliki kelas yang diakses.',
+                'message' => 'Tidak ada kelas yang diajarkan.',
                 'data'    => []
             ], 200);
         }
 
-        // Ambil jadwal untuk kelas-kelas tersebut
         $schedules = Schedule::whereIn('classes_id', $classIds)
             ->with('classModel')
             ->get();
 
         return response()->json([
-            'message' => 'Jadwal untuk kelas siswa berhasil diambil.',
+            'message' => 'Jadwal untuk pengajar berhasil diambil.',
             'data'    => $schedules
         ], 200);
-    } 
-    
+    }
 
-    // ✅ Tambah jadwal
+
+    // ✅ Tambah jadwal (hanya admin)
     public function store(Request $request)
     {
+        $user = Auth::user();
+        if (!$user || $user->role->name_role !== 'admin') {
+            return response()->json(['message' => 'Hanya admin yang dapat menambah jadwal.'], 403);
+        }
+
         $validator = Validator::make($request->all(), [
             'date_sched'   => 'required|date',
             'course_name'  => 'required|string|max:255',
@@ -83,9 +132,14 @@ class ScheduleController extends Controller
         ], 201);
     }
 
-    // ✅ Perbarui jadwal
+    // ✅ Update jadwal (hanya admin)
     public function update(Request $request, $id)
     {
+        $user = Auth::user();
+        if (!$user || $user->role->name_role !== 'admin') {
+            return response()->json(['message' => 'Hanya admin yang dapat memperbarui jadwal.'], 403);
+        }
+
         $schedule = Schedule::find($id);
 
         if (!$schedule) {
@@ -115,9 +169,14 @@ class ScheduleController extends Controller
         ], 200);
     }
 
-    // ✅ Hapus jadwal
+    // ✅ Hapus jadwal (hanya admin)
     public function destroy($id)
     {
+        $user = Auth::user();
+        if (!$user || $user->role->name_role !== 'admin') {
+            return response()->json(['message' => 'Hanya admin yang dapat menghapus jadwal.'], 403);
+        }
+
         $schedule = Schedule::find($id);
 
         if (!$schedule) {
@@ -128,5 +187,4 @@ class ScheduleController extends Controller
 
         return response()->json(['message' => 'Jadwal berhasil dihapus.'], 200);
     }
-
 }

@@ -12,17 +12,22 @@ class Payment extends Model
     protected $table = 'payments';
 
     protected $fillable = [
-        'total_amount',
+        'price_id',
         'payment_date',
+        'expired_at',
         'payment_method',
         'payment_proof',
         'status',
-        'users_id',
+        'users_id'
     ];
 
     public function user()
     {
         return $this->belongsTo(User::class, 'users_id');
+    }
+    public function price()
+    {
+        return $this->belongsTo(Price::class, 'price_id');
     }
 
     public function classes()

@@ -4,26 +4,29 @@ namespace App\Http\Controllers\Api;
 
 use App\Models\Payment;
 use App\Models\Classes;
-use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
 use App\Models\User;
-use Illuminate\Support\Facades\Validator;
+use App\Models\Price;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Validator;
+use Carbon\Carbon;
 
 class PaymentController extends Controller
 {
     /**
-     * Menyimpan pembayaran siswa
      */
-public function store(Request $request)
+    public function store(Request $request)
     {
+       
+        $user = auth()->user();
+
         $validator = Validator::make($request->all(), [
-            'total_amount'   => 'required|numeric|min:1000',
+            'price_id'       => 'required|exists:prices,id',
             'payment_date'   => 'required|date',
             'payment_method' => 'required|in:Transfer,Qris,Virtual Account',
             'payment_proof'  => 'required|string',
             'status'         => 'in:paid,unpaid',
-            'users_id'       => 'required|exists:users,id',
             'classes_id'     => 'required|array|min:1',
             'classes_id.*'   => 'exists:classes,id',
         ]);
@@ -35,39 +38,47 @@ public function store(Request $request)
             ], 422);
         }
 
-        // Ambil data user
-        $user = User::find($request->users_id);
-
-        // Cek apakah user sudah memilih jenjang kelas (tanpa relasi pivot)
         if (is_null($user->jenjang_kelas_id)) {
             return response()->json([
                 'message' => 'Gagal melakukan pembayaran. Siswa belum memilih jenjang kelas.',
             ], 403);
         }
 
+        $invalidClasses = Classes::whereIn('id', $request->classes_id)
+            ->where('jenjang_kelas_id', '!=', $user->jenjang_kelas_id)
+            ->get();
+
+        if ($invalidClasses->isNotEmpty()) {
+            return response()->json([
+                'message' => 'Gagal melakukan pembayaran. Salah satu kelas yang dipilih tidak sesuai dengan jenjang yang telah dipilih siswa.',
+                'invalid_classes' => $invalidClasses->pluck('id')
+            ], 422);
+        }
+
         DB::beginTransaction();
 
         try {
-            // Simpan data pembayaran
+            $expiredAt = Carbon::parse($request->payment_date)->addMonth();
+
             $payment = Payment::create([
-                'total_amount'   => $request->total_amount,
-                'payment_date'   => $request->payment_date,
-                'payment_method' => $request->payment_method,
-                'payment_proof'  => $request->payment_proof,
-                'status'         => $request->status ?? 'unpaid',
-                'users_id'       => $request->users_id,
+                'price_id'        => $request->price_id,
+                'payment_date'    => $request->payment_date,
+                'expired_at'      => $expiredAt,
+                'payment_method'  => $request->payment_method,
+                'payment_proof'   => $request->payment_proof,
+                'status'          => $request->status ?? 'unpaid',
+                'users_id'        => $user->id,
             ]);
 
-            // Kaitkan kelas dengan pembayaran
             foreach ($request->classes_id as $classId) {
-                $payment->classes()->attach($classId, ['payments_users_id' => $request->users_id]);
+                $payment->classes()->attach($classId, ['payments_users_id' => $user->id]);
             }
 
             DB::commit();
 
             return response()->json([
                 'message' => 'Pembayaran berhasil disimpan.',
-                'data'    => $payment->load(['classes'])
+                'data'    => $payment->load(['classes', 'price'])
             ], 201);
 
         } catch (\Exception $e) {
@@ -79,13 +90,12 @@ public function store(Request $request)
         }
     }
 
-
     /**
      * Untuk siswa: Menampilkan pembayaran berdasarkan ID user
      */
     public function indexByUser($user_id)
     {
-        $payments = Payment::with('classes.jenjangKelas')
+        $payments = Payment::with(['classes.jenjangKelas', 'price'])
             ->where('users_id', $user_id)
             ->get();
 
@@ -107,7 +117,7 @@ public function store(Request $request)
      */
     public function indexForAdmin()
     {
-        $payments = Payment::with(['classes.jenjangKelas', 'user']) // pastikan relasi user ada
+        $payments = Payment::with(['classes.jenjangKelas', 'user', 'price'])
             ->orderBy('payment_date', 'desc')
             ->get();
 

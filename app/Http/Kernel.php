@@ -55,5 +55,6 @@ class Kernel extends HttpKernel
 
         // 🟡 Tambahkan middleware custom kamu di sini
         'role' => \App\Http\Middleware\RoleMiddleware::class,
+        'subscription' => \App\Http\Middleware\CheckSubscription::class,
     ];
 }

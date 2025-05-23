@@ -39,16 +39,13 @@ class ClassesController extends Controller
      */
     public function getAccessibleClasses($user_id)
     {
-        // Ambil semua payment yang statusnya 'paid' untuk user tertentu, beserta relasi kelas-nya
         $payments = Payment::with('classes')
             ->where('users_id', $user_id)
             ->where('status', 'paid')
             ->get();
 
-        // Ambil ID kelas dari payment yang sudah dibayar
         $classIds = $payments->pluck('classes')->flatten()->pluck('id')->unique();
 
-        // Ambil data kelas berdasarkan ID unik yang sudah dibayar
         $classes = Classes::whereIn('id', $classIds)
             ->with('jenjangKelas')
             ->get();
@@ -83,7 +80,11 @@ class ClassesController extends Controller
             ], 403);
         }
 
-        $class = Classes::with(['schedules', 'jenjangKelas'])->find($classes_id);
+        $class = Classes::with([
+            'schedules',
+            'jenjangKelas',
+            'pelajaran.bab.materi'
+        ])->find($classes_id);
 
         if (!$class) {
             return response()->json([
@@ -97,6 +98,7 @@ class ClassesController extends Controller
             'data'    => $class
         ]);
     }
+
 
     /**
      * Menambahkan kelas baru (hanya untuk admin dan pengajar)

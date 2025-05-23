@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Contracts\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -23,17 +24,32 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
+    protected static function booted()
+{
+    // Contoh global scope yang membatasi query
+    static::addGlobalScope('active', function (Builder $builder) {
+        $builder->where('is_active', 1);
+    });
+}
     // Relasi ke Role
     public function role()
     {
         return $this->belongsTo(Role::class, 'id_role');
     }
 
-    // File: app/Models/User.php
-
     public function classes()
     {
         return $this->belongsToMany(Classes::class, 'class_user', 'user_id', 'class_id');
+    }
+
+    public function attendances()
+    {
+        return $this->hasMany(Attendance::class);
+    }
+
+     public function taughtClasses()
+    {
+        return $this->hasMany(Classes::class, 'pengajar_id');
     }
 
     // Fungsi untuk mengecek role

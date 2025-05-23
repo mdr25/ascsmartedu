@@ -14,10 +14,8 @@ class RoleMiddleware
             return response()->json(['message' => 'Unauthorized'], 401);
         }
 
-        // Pastikan relasi 'role' dimuat, bukan 'roles'
         $user = auth()->user()->load('role');
 
-        // Log untuk debugging
         Log::info('Authenticated user:', ['user' => $user]);
         Log::info('User role:', ['role' => $user->role]);
 
@@ -26,7 +24,6 @@ class RoleMiddleware
             return response()->json(['message' => 'Role not found'], 403);
         }
 
-        // Ambil nama role
         $userRole = $user->role->name_role;
 
         // Validasi apakah role pengguna termasuk dalam yang diizinkan

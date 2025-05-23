@@ -4,8 +4,11 @@ use App\Models\Role;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 use Carbon\Carbon;
+use Database\Seeders\BabSeeder;
 use Database\Seeders\ClassesSeeder;
 use Database\Seeders\JenjangKelasSeeder;
+use Database\Seeders\PelajaranSeeder;
+use Database\Seeders\PriceSeeder;
 use Illuminate\Support\Facades\Hash;
 
 class DatabaseSeeder extends Seeder
@@ -37,6 +40,9 @@ class DatabaseSeeder extends Seeder
             $this->call([
             JenjangKelasSeeder::class,
             ClassesSeeder::class,  // Menambahkan seeder ke dalam DatabaseSeeder
+            PriceSeeder::class,
+            PelajaranSeeder::class,
+            BabSeeder::class,
          ]);
         }
 

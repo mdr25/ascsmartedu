@@ -14,7 +14,7 @@ class JenjangKelasController extends Controller
         $data = JenjangKelas::all();
 
         return response()->json([
-            'message' => 'Data jenjang kelas berhasil diambil',
+            'message' => 'Daftar Jenjang Kelas Yang Ada',
             'data'    => $data
         ], 200);
     }

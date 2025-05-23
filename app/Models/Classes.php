@@ -15,28 +15,35 @@ class Classes extends Model
         'class_name',
         'total_student',
         'jenjang_kelas_id',
+        'pengajar_id',
     ];
 
-    // Relasi: Class milik JenjangKelas
     public function jenjangKelas()
     {
         return $this->belongsTo(JenjangKelas::class, 'jenjang_kelas_id');
     }
 
+    public function pelajaran()
+    {
+        return $this->hasMany(Pelajaran::class, 'classes_id');
+    }
     
-    // Relasi: Class punya banyak Schedule
+    public function pengajar()
+    {
+        return $this->belongsTo(User::class, 'pengajar_id');
+    }
+
+
     public function schedules()
     {
         return $this->hasMany(Schedule::class, 'classes_id');
     }
 
-    // Relasi: Class punya banyak Attendance
     public function attendances()
     {
         return $this->hasMany(Attendance::class, 'classes_id');
     }
 
-    // Relasi: Class punya banyak BankSoal
     public function bankSoal()
     {
         return $this->hasMany(BankSoal::class, 'classes_id');
