@@ -13,7 +13,8 @@ return new class extends Migration
     {
         Schema::create('mata_pelajaran', function (Blueprint $table) {
             $table->id();
-            $table->string('nama_mapel', 50);
+            $table->foreignId('classes_id')->constrained()->onDelete('cascade');
+            $table->string('nama_mapel');
             $table->timestamps();
         });
     }

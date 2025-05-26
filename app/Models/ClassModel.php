@@ -15,6 +15,16 @@ class ClassModel extends Model
         return $this->belongsTo(JenjangKelas::class, 'jenjang_kelas_id');
     }
 
+    public function mapel()
+    {
+        return $this->hasMany(Mapel::class);
+    }
+
+    public function bookmarkedBy()
+    {
+        return $this->belongsToMany(User::class, 'bookmarked_classes', 'class_id', 'user_id')->withTimestamps();
+    }
+
     public function pengajar()
     {
         return $this->hasOne(User::class, 'classes_id')->whereHas('role', function ($query) {

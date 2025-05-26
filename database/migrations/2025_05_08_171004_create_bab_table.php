@@ -13,8 +13,9 @@ return new class extends Migration
     {
         Schema::create('bab', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('kelas_mapel_id')->constrained('kelas_mapel')->onDelete('cascade');
-            $table->string('nama_bab', 100);
+            $table->unsignedBigInteger('mapel_id');
+            $table->string('nama_bab');
+            $table->foreign('mapel_id')->references('id')->on('mata_pelajaran');
             $table->timestamps();
         });
     }

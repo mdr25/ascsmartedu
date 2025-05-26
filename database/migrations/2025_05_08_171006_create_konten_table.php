@@ -13,8 +13,11 @@ return new class extends Migration
     {
         Schema::create('konten', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('subbab_id')->constrained('subbab')->onDelete('cascade');
-            $table->string('judul_konten', 100);
+            $table->foreignId('bab_id')->nullable()->constrained('bab')->onDelete('cascade');
+            $table->foreignId('subbab_id')->nullable()->constrained('subbab')->onDelete('cascade');
+            $table->string('judul_konten');
+            $table->enum('tipe_konten', ['video', 'pdf', 'link']);
+            $table->text('konten_url'); // simpan link ke video/pdf/whatever
             $table->string('durasi', 10); // Contoh: "2min"
             $table->boolean('is_free')->default(false);
             $table->timestamps();

@@ -11,27 +11,31 @@ class UserController extends Controller
 {
     public function register(Request $request)
     {
-        $validatedData = $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users',
-            'password' => 'required|string|min:6',
-            'phone_number' => 'required|string|max:15',
-            'gender' => 'required|in:M,F',
-            'address' => 'required|string|max:255',
-            'roles_id' => 'required|integer|exists:roles,id',
-        ]);
+        try {
+            $validatedData = $request->validate([
+                'name' => 'required|string|max:255',
+                'email' => 'required|string|email|max:255|unique:users',
+                'password' => 'required|string|min:6',
+                'phone_number' => 'required|string|max:15',
+                'gender' => 'required|in:M,F',
+                'address' => 'required|string|max:255',
+                'roles_id' => 'required|integer|exists:roles,id',
+            ]);
 
-        $user = User::create([
-            'name' => $validatedData['name'],
-            'email' => $validatedData['email'],
-            'password' => Hash::make($validatedData['password']),
-            'phone_number' => $validatedData['phone_number'],
-            'gender' => $validatedData['gender'],
-            'address' => $validatedData['address'],
-            'roles_id' => $validatedData['roles_id'],
-        ]);
+            $user = User::create([
+                'name' => $validatedData['name'],
+                'email' => $validatedData['email'],
+                'password' => Hash::make($validatedData['password']),
+                'phone_number' => $validatedData['phone_number'],
+                'gender' => $validatedData['gender'],
+                'address' => $validatedData['address'],
+                'roles_id' => $validatedData['roles_id'],
+            ]);
 
-        return response()->json(['message' => 'Register Success']);
+            return response()->json(['message' => 'Register Success']);
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'Register Failed', 'error' => $e->getMessage()], 400);
+        }
     }
 
     public function login(Request $request)

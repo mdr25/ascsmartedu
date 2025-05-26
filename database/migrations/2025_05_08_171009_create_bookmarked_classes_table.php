@@ -9,12 +9,12 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
-    public function up()
+    public function up(): void
     {
-        Schema::create('subbab', function (Blueprint $table) {
+        Schema::create('bookmarked_classes', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('bab_id')->constrained('bab')->onDelete('cascade');
-            $table->string('judul_subbab');
+            $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            $table->foreignId('class_id')->constrained('classes')->onDelete('cascade');
             $table->timestamps();
         });
     }
@@ -24,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('subbab');
+        Schema::dropIfExists('bookmarked_classes');
     }
 };

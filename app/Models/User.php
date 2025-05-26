@@ -1,5 +1,10 @@
 <?php
 
+/**
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\ClassModel[] $bookmarkedClasses
+ * @method static \Illuminate\Database\Eloquent\Relations\BelongsToMany bookmarkedClasses()
+ */
+
 namespace App\Models;
 
 use Laravel\Sanctum\HasApiTokens;
@@ -23,6 +28,10 @@ class User extends Authenticatable
         return $this->belongsTo(ClassModel::class, 'classes_id');
     }
 
+    public function bookmarkedClasses()
+    {
+        return $this->belongsToMany(ClassModel::class, 'bookmarked_classes', 'user_id', 'class_id')->withTimestamps();
+    }
 
     public function subscription()
     {

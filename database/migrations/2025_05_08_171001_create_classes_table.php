@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('class_name', 45);
             $table->integer('total_student')->default(0);
             $table->foreignId('jenjang_kelas_id')->constrained('jenjang_kelas')->onDelete('cascade');
-            $table->foreignId('teacher_id')->constrained('users')->onDelete('cascade');
+            // $table->foreignId('teacher_id')->constrained('users')->onDelete('cascade');
             $table->timestamps();
         });
     }
