@@ -19,7 +19,6 @@ return new class extends Migration
             $table->enum('tipe_konten', ['video', 'pdf', 'link']);
             $table->text('konten_url'); // simpan link ke video/pdf/whatever
             $table->string('durasi', 10); // Contoh: "2min"
-            $table->boolean('is_free')->default(false);
             $table->timestamps();
         });
     }

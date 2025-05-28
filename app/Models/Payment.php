@@ -13,18 +13,17 @@ class Payment extends Model
         'payment_method',
         'payment_proof',
         'status',
-        'users_id',
-        'subscription_id'
+        'user_id',
+        'class_id'
     ];
-    public $timestamps = false;
 
     public function user()
     {
-        return $this->belongsTo(User::class, 'users_id');
+        return $this->belongsTo(User::class, 'user_id');
     }
 
-    public function subscription()
+    public function class()
     {
-        return $this->belongsTo(SubscriptionPackage::class, 'subscription_id');
+        return $this->belongsTo(ClassModel::class, 'class_id');
     }
 }

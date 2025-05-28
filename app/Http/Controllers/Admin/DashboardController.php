@@ -3,9 +3,9 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\{User, Role, ClassModel, Payment, SubscriptionPackage};
+use Illuminate\Support\Facades\DB;
+use App\Models\{User, Role, ClassModel, Payment};
 use Illuminate\Http\Request;
-use DB;
 
 class DashboardController extends Controller
 {
@@ -20,9 +20,21 @@ class DashboardController extends Controller
         $totalPayments = Payment::count();
         $paidPayments = Payment::where('status', 'paid')->count();
 
-        $mostUsedPackage = SubscriptionPackage::withCount('users')
-            ->orderByDesc('users_count')
+        // Kelas terlaris (paling banyak dibeli)
+        $bestSellingClass = DB::table('class_user')
+            ->select('class_id', DB::raw('count(*) as total'))
+            ->groupBy('class_id')
+            ->orderByDesc('total')
             ->first();
+
+        $bestSellingClassData = null;
+        if ($bestSellingClass) {
+            $class = ClassModel::find($bestSellingClass->class_id);
+            $bestSellingClassData = [
+                'class_name' => $class ? $class->class_name : null,
+                'total_buyer' => $bestSellingClass->total
+            ];
+        }
 
         return response()->json([
             'total_users' => $totalUsers,
@@ -30,10 +42,7 @@ class DashboardController extends Controller
             'total_classes' => $totalClasses,
             'total_payments' => $totalPayments,
             'paid_payments' => $paidPayments,
-            'most_used_package' => $mostUsedPackage ? [
-                'name' => $mostUsedPackage->name,
-                'count' => $mostUsedPackage->users_count
-            ] : null,
+            'best_selling_class' => $bestSellingClassData,
         ]);
     }
 }

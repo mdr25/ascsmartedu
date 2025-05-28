@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\{Bab, Subbab, Konten};
 use Illuminate\Http\Request;
 
-class KontenOrderController extends Controller
+class ContentOrderController extends Controller
 {
     public function updateBabOrder(Request $request)
     {

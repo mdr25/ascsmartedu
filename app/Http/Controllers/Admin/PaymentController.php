@@ -15,7 +15,7 @@ class PaymentController extends Controller
 
     public function show($id)
     {
-        $payment = Payment::with(['user', 'subscription'])->find($id);
+        $payment = Payment::with(['user', 'class'])->find($id);
 
         if (!$payment) {
             return response()->json(['message' => 'Pembayaran tidak ditemukan'], 404);
@@ -29,10 +29,10 @@ class PaymentController extends Controller
         $payment = Payment::findOrFail($id);
         $payment->update(['status' => $request->status]);
 
-        if ($request->status === 'paid') {
+        // Jika status paid, tambahkan kelas ke user (pivot class_user)
+        if ($request->status === 'paid' && $payment->class_id) {
             $user = $payment->user;
-            $user->subscription_id = $payment->subscription_id;
-            $user->save();
+            $user->classes()->syncWithoutDetaching([$payment->class_id]);
         }
 
         return response()->json([

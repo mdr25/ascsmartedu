@@ -11,8 +11,7 @@ class ClassController extends Controller
 {
     public function index()
     {
-        // Bisa juga nanti tambah eager loading jenjang
-        $classes = ClassModel::with('jenjangKelas')->get();
+        $classes = ClassModel::with(['jenjangKelas', 'teacher'])->get();
         return response()->json($classes);
     }
 
@@ -21,6 +20,9 @@ class ClassController extends Controller
         $validated = $request->validate([
             'class_name' => 'required|string|max:255',
             'jenjang_kelas_id' => 'required|integer|exists:jenjang_kelas,id',
+            'price' => 'required|numeric|min:0',
+            'description' => 'nullable|string',
+            // 'teacher_id' => 'nullable|exists:users,id', // aktifkan jika mau assign pengajar
         ]);
 
         $class = ClassModel::create($validated);
@@ -38,6 +40,9 @@ class ClassController extends Controller
         $validated = $request->validate([
             'class_name' => 'required|string|max:255',
             'jenjang_kelas_id' => 'required|integer|exists:jenjang_kelas,id',
+            'price' => 'required|numeric|min:0',
+            'description' => 'nullable|string',
+            // 'teacher_id' => 'nullable|exists:users,id',
         ]);
 
         $class->update($validated);
@@ -54,5 +59,41 @@ class ClassController extends Controller
         $class->delete();
 
         return response()->json(['message' => 'Kelas berhasil dihapus']);
+    }
+
+    // Assign pengajar utama (update kolom teacher_id)
+    public function assignTeacher(Request $request, $classId)
+    {
+        $request->validate(['teacher_id' => 'required|exists:users,id']);
+        $class = ClassModel::findOrFail($classId);
+        $class->teacher_id = $request->teacher_id;
+        $class->save();
+
+        return response()->json(['message' => 'Pengajar utama berhasil di-assign']);
+    }
+
+    public function removeTeacher($classId)
+    {
+        $class = ClassModel::findOrFail($classId);
+        $class->teacher_id = null;
+        $class->save();
+
+        return response()->json(['message' => 'Pengajar utama berhasil dihapus dari kelas']);
+    }
+
+    // Assign pengajar pendamping (pivot)
+    public function addAssistantTeacher(Request $request, $classId)
+    {
+        $request->validate(['teacher_id' => 'required|exists:users,id']);
+        $class = ClassModel::findOrFail($classId);
+        $class->teachers()->syncWithoutDetaching([$request->teacher_id]);
+        return response()->json(['message' => 'Pengajar pendamping berhasil di-assign']);
+    }
+
+    public function removeAssistantTeacher($classId, $teacherId)
+    {
+        $class = ClassModel::findOrFail($classId);
+        $class->teachers()->detach($teacherId);
+        return response()->json(['message' => 'Pengajar pendamping berhasil dihapus dari kelas']);
     }
 }

@@ -18,7 +18,6 @@ return new class extends Migration
             $table->text('materi');
             $table->enum('level', ['Easy', 'Medium', 'Hard']);
             $table->foreignId('classes_id')->constrained('classes')->onDelete('cascade');
-            $table->boolean('is_free')->default(true);
             $table->timestamps();
         });
     }

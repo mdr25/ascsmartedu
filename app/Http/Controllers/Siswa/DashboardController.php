@@ -18,42 +18,31 @@ class DashboardController extends Controller
         $user = Auth::user();
         $today = Carbon::today()->toDateString();
 
-        // Info kelas
-        $class = $user->kelas;
+        // List kelas yang sudah dibeli user
+        $classes = $user->classes()->get(['id', 'class_name']);
 
-        // Jadwal hari ini
-        $todaySchedule = Schedule::where('classes_id', $class?->id)
+        // Jadwal hari ini dari semua kelas yang dibeli
+        $todaySchedule = Schedule::whereIn('classes_id', $classes->pluck('id'))
             ->where('date_sched', $today)
-            ->select('course_name', 'start_time', 'end_time')
+            ->select('classes_id', 'course_name', 'start_time', 'end_time')
             ->get();
 
-        // Status langganan
-        $subscription = $user->subscription;
-        $subscriptionStatus = [
-            'active' => $user->hasActiveSubscription(),
-            'package_name' => $subscription?->name,
-            'expires_in_days' => optional($subscription)->duration, // asumsi ini fixed duration
-        ];
-
-        // Total konten belajar
-        $totalKonten = Konten::where(function ($query) use ($user) {
-            $query->where('is_free', true)
-                ->orWhereHas('bab.mapel.classes', function ($q) use ($user) {
-                    $q->where('id', $user->classes_id);
-                });
+        // Total konten belajar dari semua kelas yang dibeli
+        $classIds = $classes->pluck('id')->toArray();
+        $totalKonten = Konten::whereHas('bab.mapel', function ($q) use ($classIds) {
+            $q->whereIn('classes_id', $classIds);
         })->count();
 
-        // Riwayat absensi 3 hari terakhir
+        // Riwayat absensi 3 hari terakhir dari semua kelas
         $recentAttendance = Attendance::where('users_id', $user->id)
             ->orderBy('date', 'desc')
             ->take(3)
-            ->get(['date', 'status']);
+            ->get(['date', 'status', 'classes_id']);
 
         return response()->json([
             'name' => $user->name,
-            'class' => $class ? ['id' => $class->id, 'class_name' => $class->class_name] : null,
+            'classes' => $classes,
             'today_schedule' => $todaySchedule,
-            'subscription' => $subscriptionStatus,
             'total_konten' => $totalKonten,
             'recent_attendance' => $recentAttendance
         ]);

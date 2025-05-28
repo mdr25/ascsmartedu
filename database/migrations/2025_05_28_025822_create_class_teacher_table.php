@@ -9,13 +9,12 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
-    public function up()
+    public function up(): void
     {
-        Schema::create('subscription_packages', function (Blueprint $table) {
+        Schema::create('class_teacher', function (Blueprint $table) {
             $table->id();
-            $table->string('name')->default('Paket 1 Bulan');
-            $table->decimal('price', 10, 2)->default(250000);
-            $table->integer('duration')->default(30);
+            $table->foreignId('class_id')->constrained('classes')->onDelete('cascade');
+            $table->foreignId('teacher_id')->constrained('users')->onDelete('cascade');
             $table->timestamps();
         });
     }
@@ -25,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('subscription_packages');
+        Schema::dropIfExists('class_teacher');
     }
 };

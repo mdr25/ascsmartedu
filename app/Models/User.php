@@ -1,10 +1,5 @@
 <?php
 
-/**
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\ClassModel[] $bookmarkedClasses
- * @method static \Illuminate\Database\Eloquent\Relations\BelongsToMany bookmarkedClasses()
- */
-
 namespace App\Models;
 
 use Laravel\Sanctum\HasApiTokens;
@@ -14,44 +9,44 @@ class User extends Authenticatable
 {
     use HasApiTokens;
 
-    protected $fillable = ['name', 'email', 'password', 'phone_number', 'gender', 'address', 'roles_id', 'subscription_id'];
+    protected $fillable = [
+        'name',
+        'email',
+        'password',
+        'phone_number',
+        'gender',
+        'address',
+        'roles_id'
+    ];
     protected $hidden = ['password'];
-    public $timestamps = false;
 
+    // Relasi ke role
     public function role()
     {
         return $this->belongsTo(Role::class, 'roles_id');
     }
 
-    public function kelas()
+    // Relasi ke kelas yang dibeli siswa
+    public function classes()
     {
-        return $this->belongsTo(ClassModel::class, 'classes_id');
+        return $this->belongsToMany(ClassModel::class, 'class_user', 'user_id', 'class_id')->withTimestamps();
     }
 
-    public function bookmarkedClasses()
+    // Relasi ke kelas yang diampu pengajar (jika pakai class_teacher)
+    public function teachingClasses()
     {
-        return $this->belongsToMany(ClassModel::class, 'bookmarked_classes', 'user_id', 'class_id')->withTimestamps();
+        // Jika pakai pivot class_teacher
+        return $this->belongsToMany(
+            ClassModel::class,
+            'class_teacher',
+            'teacher_id',
+            'class_id'
+        );
     }
 
-    public function subscription()
-    {
-        return $this->belongsTo(SubscriptionPackage::class, 'subscription_id');
-    }
-
+    // Relasi ke pembayaran
     public function payments()
     {
-        return $this->hasMany(Payment::class, 'users_id');
-    }
-
-    public function hasSubscription()
-    {
-        return $this->subscription_id !== null;
-    }
-
-    public function hasActiveSubscription()
-    {
-        return $this->payments()
-            ->where('status', 'paid')
-            ->exists();
+        return $this->hasMany(Payment::class, 'user_id');
     }
 }

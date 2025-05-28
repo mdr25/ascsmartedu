@@ -7,7 +7,7 @@ use App\Models\Konten;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
-class KontenController extends Controller
+class ContentController extends Controller
 {
     public function index(Request $request)
     {
@@ -29,7 +29,6 @@ class KontenController extends Controller
         $validator = Validator::make($request->all(), [
             'judul_konten' => 'required|string|max:100',
             'durasi' => 'required|string|max:10',
-            'is_free' => 'boolean',
             'tipe_konten' => 'required|in:video,link,pdf',
             'konten_url' => 'required|string',
             'bab_id' => 'nullable|exists:bab,id',
@@ -63,7 +62,6 @@ class KontenController extends Controller
         $validator = Validator::make($request->all(), [
             'judul_konten' => 'sometimes|string|max:100',
             'durasi' => 'sometimes|string|max:10',
-            'is_free' => 'boolean',
             'tipe_konten' => 'in:video,link,pdf',
             'konten_url' => 'sometimes|string',
             'bab_id' => 'nullable|exists:bab,id',

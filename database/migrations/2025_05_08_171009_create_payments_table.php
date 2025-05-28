@@ -13,12 +13,13 @@ return new class extends Migration
     {
         Schema::create('payments', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('users_id')->constrained('users')->onDelete('cascade');
-            $table->foreignId('subscription_id')->constrained('subscription_packages')->onDelete('cascade');
+            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
+            $table->foreignId('class_id')->nullable()->constrained('classes')->onDelete('set null'); // pembayaran kelas
+            // $table->foreignId('subscription_id')->nullable()->constrained('subscription_packages')->onDelete('set null'); // kalau masih mau support subscription
             $table->decimal('total_amount', 10, 2);
             $table->date('payment_date')->nullable();
             $table->enum('payment_method', ['Transfer', 'Qris', 'Virtual Account']);
-            $table->string('payment_proof', 255);
+            $table->string('payment_proof', 255)->nullable();
             $table->enum('status', ['paid', 'unpaid'])->default('unpaid');
             $table->timestamps();
         });

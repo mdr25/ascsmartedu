@@ -14,9 +14,11 @@ return new class extends Migration
         Schema::create('classes', function (Blueprint $table) {
             $table->id();
             $table->string('class_name', 45);
+            $table->text('description')->nullable();
+            $table->decimal('price', 10, 2)->default(0); // Harga kelas
             $table->integer('total_student')->default(0);
             $table->foreignId('jenjang_kelas_id')->constrained('jenjang_kelas')->onDelete('cascade');
-            // $table->foreignId('teacher_id')->constrained('users')->onDelete('cascade');
+            $table->foreignId('teacher_id')->nullable()->constrained('users')->onDelete('set null');
             $table->timestamps();
         });
     }

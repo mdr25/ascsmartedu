@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Models\Role;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
@@ -19,8 +20,11 @@ class UserController extends Controller
                 'phone_number' => 'required|string|max:15',
                 'gender' => 'required|in:M,F',
                 'address' => 'required|string|max:255',
-                'roles_id' => 'required|integer|exists:roles,id',
+                // 'roles_id' dihapus dari validasi user biasa!
             ]);
+
+            // Cari id role siswa
+            $roleSiswaId = Role::where('name_role', 'Siswa')->first()->id;
 
             $user = User::create([
                 'name' => $validatedData['name'],
@@ -29,7 +33,7 @@ class UserController extends Controller
                 'phone_number' => $validatedData['phone_number'],
                 'gender' => $validatedData['gender'],
                 'address' => $validatedData['address'],
-                'roles_id' => $validatedData['roles_id'],
+                'roles_id' => $roleSiswaId, // Set otomatis
             ]);
 
             return response()->json(['message' => 'Register Success']);
