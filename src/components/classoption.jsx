@@ -24,7 +24,7 @@ export default function ClassOptions() {
     <section className="w-full px-4 py-10 bg-white relative">
       {/* Title */}
       <h3 className="text-2xl sm:text-3xl md:text-4xl font-bold text-center text-black mb-8">
-        Ayo Pilih Kelasmu dan Mulai Belajar!!!
+        Ayo Pilih Kelasmu dan Mulai Belajar!
       </h3>
 
       {/* Card Container */}
@@ -53,11 +53,9 @@ export default function ClassOptions() {
             </p>
           </div>
         ))}
+        <div className="mt-10 flex justify-center">
       </div>
-
-      {/* CTA Button */}
-      <div className="mt-10 flex justify-center">
-        <button className="w-full sm:w-96 h-16 bg-teal-600 rounded-lg text-white text-xl sm:text-2xl font-bold font-montserrat shadow-md transition hover:bg-teal-700">
+         <button className="w-full sm:w-72 h-14 bg-teal-600 rounded-lg text-white text-xl sm:text-2xl font-bold font-montserrat shadow-md transition hover:bg-teal-700">
           Daftar Sekarang
         </button>
       </div>
