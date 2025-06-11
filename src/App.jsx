@@ -1,33 +1,39 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Home from "./pages/public";
 import PublicLayout from "./layouts/public";
-import AdminUsers from "./pages/admin/users";
+import AdminClasses from "./pages/admin/classes";
+import CreateClass from "./pages/admin/classes/create";
+import ClassDetail from "./pages/admin/classes/detail";
+import UpdateClass from "./pages/admin/classes/update";
 import AdminLayout from "./layouts/admin";
-import UserCreate from "./pages/admin/users/create";
 
 
 function App() {
   return (
     <>
-      <BrowserRouter>
-        <Routes>
-          {/* public */}
-          <Route element={<PublicLayout />}>
-            <Route index element={<Home />} />
+    <BrowserRouter>
+      <Routes>
+        {/* Public Layout */}
+        <Route element={<PublicLayout />}>
+          <Route index element={<Home />} />
+        </Route>
+
+        {/* Admin Layout */}
+        <Route path="admin" element={<AdminLayout />}>
+
+          {/* Classes */}
+          <Route path="classes">
+            <Route index element={<AdminClasses />} />
+            <Route path="create" element={<CreateClass />} />
+            <Route path=":id/edit" element={<UpdateClass />} />
+            <Route path=":id" element={<ClassDetail />} />
           </Route>
+        </Route>
 
-          {/* admin */}
-          <Route path="admin" element={<AdminLayout />}>
-            {/* <Route index element={<Dashboard />} /> */}
-
-            <Route path="users">
-              <Route index element={<AdminUsers />} />
-              <Route path="create" element={<UserCreate />} />
-            </Route>
-          </Route>
-
-        </Routes>
-      </BrowserRouter>
+        {/* Fallback 404 */}
+        <Route path="*" element={<h1>404 - Halaman Tidak Ditemukan</h1>} />
+      </Routes>
+    </BrowserRouter>
     </>
   );
 }
