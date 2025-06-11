@@ -12,8 +12,33 @@ class ClassController extends Controller
     public function index()
     {
         $classes = ClassModel::with(['jenjangKelas', 'teacher'])->get();
-        return response()->json($classes);
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Data kelas berhasil diambil',
+            'data' => $classes
+        ], 200);
     }
+
+    public function show($id)
+    {
+        $class = ClassModel::with(['jenjangKelas', 'teacher', 'teachers'])->findOrFail($id);
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Detail kelas berhasil diambil',
+            'data' => [
+                'class_id' => $class->id,
+                'class_name' => $class->class_name,
+                'jenjang_kelas' => $class->jenjangKelas,
+                'description' => $class->description,
+                'teacher' => $class->teacher, // pengajar utama
+                'assistant_teachers' => $class->teachers, // pengajar pendamping (pivot)
+            ]
+        ]);
+    }
+
+
 
     public function store(Request $request)
     {
