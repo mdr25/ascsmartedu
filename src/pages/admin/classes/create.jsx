@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { createClass } from "../../../_service/classes";
-import { getJenjangKelas } from "../../../_service/classes"; // sesuaikan path ini
+import { createClass, getJenjangKelas } from "../../../_service/classes";
 
 export default function CreateClass() {
   const navigate = useNavigate();
@@ -11,6 +10,7 @@ export default function CreateClass() {
     price: "",
   });
   const [jenjangOptions, setJenjangOptions] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const fetchJenjang = async () => {
@@ -19,6 +19,7 @@ export default function CreateClass() {
         setJenjangOptions(data);
       } catch (error) {
         console.error("Gagal memuat jenjang kelas:", error);
+        alert("Gagal memuat jenjang kelas.");
       }
     };
     fetchJenjang();
@@ -31,16 +32,6 @@ export default function CreateClass() {
       [name]: value,
     }));
   };
-
-  const handleReset = () => {
-    setFormData({
-      class_name: "",
-      jenjang_kelas_id: "",
-      price: "",
-    });
-  };
-
-  const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -56,9 +47,15 @@ export default function CreateClass() {
 
     setLoading(true);
     try {
-      await createClass(formData);
-      alert("Kelas berhasil dibuat!"); // <-- notifikasi sukses
-      navigate("/classes");
+      const payload = {
+        class_name: formData.class_name,
+        jenjang_kelas_id: parseInt(formData.jenjang_kelas_id),
+        price: parseFloat(formData.price),
+      };
+
+      await createClass(payload);
+      alert("Kelas berhasil dibuat!");
+      navigate("/admin/classes");
     } catch (error) {
       console.error("Gagal membuat kelas:", error);
       alert("Terjadi kesalahan saat membuat kelas.");
@@ -84,14 +81,14 @@ export default function CreateClass() {
     "dark:bg-red-500 dark:hover:bg-red-600 dark:focus:ring-red-800";
 
   return (
-    <section className="bg-white dark:bg-gray-900">
-      <div className="max-w-2xl px-4 py-8 mx-auto lg:py-16">
-        <h2 className="mb-4 text-xl font-bold text-gray-900 dark:text-white">
+    <section className="p-6 bg-gray-50 dark:bg-gray-900 min-h-screen">
+      <div className="bg-white dark:bg-gray-800 shadow rounded-xl max-w-2xl mx-auto p-6">
+        <h2 className="mb-6 text-xl font-semibold text-gray-800 dark:text-white">
           Tambah Kelas
         </h2>
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit} className="space-y-5">
           {/* Nama Kelas */}
-          <div className="mb-4">
+          <div>
             <label
               htmlFor="class_name"
               className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
@@ -110,7 +107,7 @@ export default function CreateClass() {
           </div>
 
           {/* Jenjang Kelas */}
-          <div className="mb-4">
+          <div>
             <label
               htmlFor="jenjang_kelas_id"
               className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
@@ -135,7 +132,7 @@ export default function CreateClass() {
           </div>
 
           {/* Harga */}
-          <div className="mb-4">
+          <div>
             <label
               htmlFor="price"
               className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
@@ -153,7 +150,7 @@ export default function CreateClass() {
             />
           </div>
 
-          {/* Buttons */}
+          {/* Tombol */}
           <div className="flex items-center space-x-4">
             <button
               type="submit"
@@ -162,12 +159,8 @@ export default function CreateClass() {
             >
               {loading ? "Menyimpan..." : "Simpan"}
             </button>
-            <button
-              type="reset"
-              onClick={handleReset}
-              className={btnDangerClass}
-            >
-              Reset
+            <button type="button" onClick={() => navigate("/admin/classes")} className={btnDangerClass}>
+              Batal
             </button>
           </div>
         </form>

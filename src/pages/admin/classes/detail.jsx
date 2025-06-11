@@ -4,7 +4,7 @@ import { getClassDetail } from "../../../_service/classes";
 
 export default function ClassDetail() {
   const { id } = useParams();
-  const [classDetail, setClassDetail] = useState(null);
+  const [classDetail, setClassDetail] = useState(null);    
 
   useEffect(() => {
     const fetchData = async () => {
