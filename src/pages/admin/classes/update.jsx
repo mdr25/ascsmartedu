@@ -182,5 +182,5 @@ export default function UpdateClass() {
         </form>
       </div>
     </section>
-  );
+  );  
 }
