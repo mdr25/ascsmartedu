@@ -5,16 +5,26 @@ import Login from "./pages/auth/login";
 import Home from "./pages/public";
 import PublicLayout from "./layouts/public";
 import Register from "./pages/auth/register";
+
+// Admin
 import AdminLayout from "./layouts/admin";
 import AdminDashboard from "./pages/admin";
 import AdminUsers from "./pages/admin/users";
 import AdminClasses from "./pages/admin/classes";
 import AdminPayments from "./pages/admin/payments";
-import TeacherLayout from "./layouts/teacher";
-import StudentLayout from "./layouts/student";
 import UsersCreate from "./pages/admin/users/create";
 import ClassCreate from "./pages/admin/classes/create";
 import ClassUpdate from "./pages/admin/classes/edit";
+
+// Pengajar
+import TeacherLayout from "./layouts/teacher";
+
+// Siswa
+import StudentLayout from "./layouts/student";
+import StudentDashboard from "./pages/student";
+import StudentClasses from "./pages/student/classes";
+import StudentAttendances from "./pages/student/attendances";
+import StudentPayments from "./pages/student/payments";
 
 function App() {
   return (
@@ -88,7 +98,21 @@ function App() {
                 <StudentLayout />
               </ProtectedRoute>
             }
-          />
+          >
+            <Route index element={<StudentDashboard />} />
+
+            <Route path="classes">
+              <Route index element={<StudentClasses />} />
+            </Route>
+
+            <Route path="attendances">
+              <Route index element={<StudentAttendances />} />
+            </Route>
+
+            <Route path="payments">
+              <Route index element={<StudentPayments />} />
+            </Route>
+          </Route>
         </Routes>
       </BrowserRouter>
     </>

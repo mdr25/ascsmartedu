@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import { deleteClass, getClasses } from "../../../_services/classes";
 
 const pastelColors = [
   "bg-pink-100",
@@ -11,49 +12,46 @@ const pastelColors = [
   "bg-indigo-100",
 ];
 
-const dummyClasses = [
-  {
-    id: 1,
-    class_name: "Kelas Matematika",
-    description: "Belajar dasar matematika",
-    price: "250000.00",
-    total_student: 12,
-    jenjang_kelas: { nama_jenjang: "SD" },
-    teacher: { name: "Bu Diah" },
-  },
-  {
-    id: 2,
-    class_name: "Fisika SMA",
-    description: "Fisika Listrik & Magnet",
-    price: "250000.00",
-    total_student: 8,
-    jenjang_kelas: { nama_jenjang: "SMA" },
-    teacher: { name: "Pak Budi" },
-  },
-  {
-    id: 3,
-    class_name: "Bahasa Indonesia",
-    description: "Pemahaman teks",
-    price: "250000.00",
-    total_student: 4,
-    jenjang_kelas: { nama_jenjang: "SMP" },
-    teacher: null,
-  },
-];
+const jenjangOptions = ["Semua", "SD", "SMP", "SMA"];
 
 export default function AdminClasses() {
   const [activeTab, setActiveTab] = useState("Semua");
   const [activeDropdown, setActiveDropdown] = useState(null);
-
-  const jenjangOptions = ["Semua", "SD", "SMP", "SMA"];
-  const filteredClasses =
-    activeTab === "Semua"
-      ? dummyClasses
-      : dummyClasses.filter((c) => c.jenjang_kelas.nama_jenjang === activeTab);
+  const [classes, setClasses] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   const toggleDropdown = (id) => {
     setActiveDropdown((prev) => (prev === id ? null : id));
   };
+
+  const fetchData = async () => {
+    setLoading(true);
+    const data = await getClasses();
+    setClasses(data);
+    setLoading(false);
+  };
+
+  const handleDelete = async (id, name) => {
+    const confirmed = window.confirm(`Yakin ingin menghapus kelas "${name}"?`);
+    if (!confirmed) return;
+
+    try {
+      await deleteClass(id);
+      alert(`Kelas "${name}" berhasil dihapus.`);
+      fetchData();
+    } catch {
+  alert(`Gagal menghapus kelas "${name}".`);
+}
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  const filteredClasses =
+    activeTab === "Semua"
+      ? classes
+      : classes.filter((c) => c.jenjang_kelas?.nama_jenjang === activeTab);
 
   return (
     <div className="p-6">
@@ -73,7 +71,7 @@ export default function AdminClasses() {
           <button
             key={jenjang}
             onClick={() => setActiveTab(jenjang)}
-            className={`px-4 py-2 rounded-full border ${
+            className={`px-4 py-2 rounded-full border cursor-pointer ${
               activeTab === jenjang
                 ? "bg-teal-500 text-white"
                 : "bg-white text-gray-600 border-gray-300"
@@ -84,8 +82,10 @@ export default function AdminClasses() {
         ))}
       </div>
 
-      {/* Cards */}
-      {filteredClasses.length === 0 ? (
+      {/* Loading State */}
+      {loading ? (
+        <div className="text-center text-gray-500">Memuat data kelas...</div>
+      ) : filteredClasses.length === 0 ? (
         <div className="text-center text-gray-400">Tidak ada kelas.</div>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5">
@@ -100,11 +100,12 @@ export default function AdminClasses() {
                 {/* Banner */}
                 <div className={`h-[70px] w-full ${colorClass}`}></div>
 
-                {/* Dropdown Button */}
+                {/* Dropdown */}
                 <div className="absolute top-2 right-2 z-10">
                   <button
                     onClick={() => toggleDropdown(cls.id)}
                     className="text-gray-500 hover:text-gray-700"
+                    title="Opsi"
                   >
                     ⋮
                   </button>
@@ -117,9 +118,7 @@ export default function AdminClasses() {
                         Edit
                       </Link>
                       <button
-                        onClick={() =>
-                          alert(`Yakin ingin menghapus ${cls.class_name}?`)
-                        }
+                        onClick={() => handleDelete(cls.id, cls.class_name)}
                         className="block w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-gray-100"
                       >
                         Hapus
@@ -132,7 +131,7 @@ export default function AdminClasses() {
                 <Link to={`/admin/classes/${cls.id}`}>
                   <div className="p-4">
                     <div className="text-sm text-gray-500 mb-1">
-                      {cls.jenjang_kelas.nama_jenjang}
+                      {cls.jenjang_kelas?.nama_jenjang || "-"}
                     </div>
                     <h3 className="text-lg font-semibold text-gray-800">
                       {cls.class_name}

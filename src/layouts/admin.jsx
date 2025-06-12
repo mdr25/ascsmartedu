@@ -1,6 +1,8 @@
 // src/layout/Admin.jsx
 import { useEffect, useState } from "react";
 import { Link, Outlet, useNavigate } from "react-router-dom";
+import logoasc from "../assets/logoasc.png";
+import profile from "../assets/profile.jpg";
 
 export default function AdminLayout() {
   const navigate = useNavigate();
@@ -39,11 +41,7 @@ export default function AdminLayout() {
         <div className="py-8">
           <div className="text-center py-6 px-3">
             <Link to="/admin">
-              <img
-                src="src\assets\logoasc.png"
-                alt="Logo ASC"
-                className="h-[30px] mx-auto"
-              />
+              <img src={logoasc} alt="Logo ASC" className="h-[30px] mx-auto" />
             </Link>
             {/* <Link
               to="/admin/purchase"
@@ -111,12 +109,13 @@ export default function AdminLayout() {
           <div className="p-6">
             <div className="flex items-center">
               <img
-                src="src/assets/profile.jpg"
+                src={profile}
                 alt="Profile"
-                className="w-[50px] h-[50px] rounded-[18px]"
+                className="h-[30px] w-[30px] rounded-full object-cover"
               />
+
+              {/* Nama dan Dropdown */}
               <div className="ml-3 relative">
-                {/* Tombol Profile */}
                 <button
                   className="font-bold text-[#1e3953] flex items-center"
                   onClick={toggleDropdown}
