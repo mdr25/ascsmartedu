@@ -26,9 +26,9 @@ export default function Login() {
       if (user.role === "admin") {
         navigate("/admin");
       } else if (user.role === "pengajar") {
-        navigate("/teacher");
+        navigate("/pengajar");
       } else if (user.role === "siswa") {
-        navigate("/student");
+        navigate("/siswa");
       } else {
         navigate("/");
       }

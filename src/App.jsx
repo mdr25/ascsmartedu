@@ -88,7 +88,7 @@ function App() {
 
           {/* Siswa Route */}
           <Route
-            path="student"
+            path="siswa"
             element={
               <ProtectedRoute allowedRoles={["siswa"]}>
                 <StudentLayout />

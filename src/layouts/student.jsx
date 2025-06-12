@@ -59,26 +59,26 @@ export default function StudentLayout() {
           <nav className="flex flex-col flex-grow">
             <div>
               <Link
-                to="/student"
+                to="/siswa"
                 className="flex items-center mt-3 text-black font-medium border-r-4 border-teal-500 pl-6 pr-4 py-2"
               >
                 <i className="bx bx-layout text-teal-500 text-lg mr-2"></i>{" "}
                 Dashboard
               </Link>
               <Link
-                to="/student/classes"
+                to="/siswa/classes"
                 className="flex items-center my-2 text-[#bbbec5] hover:text-black transition pl-6 pr-4 py-2"
               >
                 <i className="bx bx-user text-lg mr-2"></i> Classes
               </Link>
               <Link
-                to="/student/attendances"
+                to="/siswa/attendances"
                 className="flex items-center text-[#bbbec5] hover:text-black transition pl-6 pr-4 py-2"
               >
                 <i className="bx bx-book-open text-lg mr-2"></i> Attendance
               </Link>
               <Link
-                to="/student/payments"
+                to="/siswa/payments"
                 className="flex items-center my-2 text-[#bbbec5] hover:text-black transition pl-6 pr-4 py-2"
               >
                 <i className="bx bx-credit-card text-lg mr-2"></i> Payments
