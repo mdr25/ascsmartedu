@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from "react";
-import API from "../../_api"; // Import API instance
+import API from "../../_api";
 
 export default function AdminDashboard() {
   const token = localStorage.getItem("token");
   const role = localStorage.getItem("role");
 
   if (!token || role !== "admin") {
-    navigate("/login"); // Redirect ke login kalau bukan admin
+    navigate("/login"); // Proteksi tambahan.
   }
 
   const [dashboardData, setDashboardData] = useState(null);
