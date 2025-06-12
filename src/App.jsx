@@ -12,7 +12,9 @@ import AdminClasses from "./pages/admin/classes";
 import AdminPayments from "./pages/admin/payments";
 import TeacherLayout from "./layouts/teacher";
 import StudentLayout from "./layouts/student";
-// import UserCreate from "./pages/admin/users/create";
+import UsersCreate from "./pages/admin/users/create";
+import ClassCreate from "./pages/admin/classes/create";
+import ClassUpdate from "./pages/admin/classes/edit";
 
 function App() {
   return (
@@ -54,11 +56,13 @@ function App() {
 
             <Route path="users">
               <Route index element={<AdminUsers />} />
-              {/* <Route path="create" element={<UserCreate />} /> */}
+              <Route path="create" element={<UsersCreate />} />
             </Route>
 
             <Route path="classes">
               <Route index element={<AdminClasses />} />
+              <Route path="create" element={<ClassCreate />} />
+              <Route path="edit/:id" element={<ClassUpdate />} />
             </Route>
 
             <Route path="payments">
