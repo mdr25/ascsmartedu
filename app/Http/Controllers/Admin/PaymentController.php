@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Payment;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class PaymentController extends Controller
 {
@@ -32,7 +33,16 @@ class PaymentController extends Controller
         // Jika status paid, tambahkan kelas ke user (pivot class_user)
         if ($request->status === 'paid' && $payment->class_id) {
             $user = $payment->user;
-            $user->classes()->syncWithoutDetaching([$payment->class_id]);
+            $classId = $payment->class_id;
+
+            // Sync tanpa detach agar tidak hapus data yang sudah ada
+            $attached = $user->classes()->syncWithoutDetaching([$classId]);
+
+            // Cek apakah class baru ditambahkan (untuk mencegah double increment)
+            if (isset($attached['attached']) && count($attached['attached']) > 0) {
+                // Tambahkan total_student di tabel classes
+                DB::table('classes')->where('id', $classId)->increment('total_student');
+            }
         }
 
         return response()->json([
@@ -40,6 +50,24 @@ class PaymentController extends Controller
             'payment' => $payment
         ]);
     }
+
+
+    // public function updateStatus(Request $request, $id)
+    // {
+    //     $payment = Payment::findOrFail($id);
+    //     $payment->update(['status' => $request->status]);
+
+    //     // Jika status paid, tambahkan kelas ke user (pivot class_user)
+    //     if ($request->status === 'paid' && $payment->class_id) {
+    //         $user = $payment->user;
+    //         $user->classes()->syncWithoutDetaching([$payment->class_id]);
+    //     }
+
+    //     return response()->json([
+    //         'message' => 'Payment Status Updated Successfully',
+    //         'payment' => $payment
+    //     ]);
+    // }
 
     public function destroy($id)
     {
