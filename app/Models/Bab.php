@@ -10,7 +10,7 @@ class Bab extends Model
 
     protected $fillable = ['mapel_id', 'nama_bab', 'order'];
 
-    public function mapel()
+    public function mata_pelajaran()
     {
         return $this->belongsTo(Mapel::class, 'mapel_id');
     }
