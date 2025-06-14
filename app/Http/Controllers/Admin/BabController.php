@@ -10,45 +10,50 @@ use Illuminate\Support\Facades\Validator;
 class BabController extends Controller
 {
     public function index(Request $request)
-    {
-        $query = Bab::with('mata_pelajaran.classes.jenjang_kelas');
+{
+    $query = Bab::with('mata_pelajaran.classes.jenjangKelas');
 
-        if ($request->has('mapel_id')) {
-            $query->where('mapel_id', $request->mapel_id);
-        }
-
-        return response()->json($query->latest()->get());
+    if ($request->has('mapel_id')) {
+        $query->where('mapel_id', $request->mapel_id);
     }
 
-    public function store(Request $request)
-    {
-        $validator = Validator::make($request->all(), [
-            'mapel_id' => 'required|exists:mata_pelajaran,id',
-            'nama_bab' => 'required|string|max:100',
-        ]);
+    return response()->json($query->latest()->get());
+}
 
-        if ($validator->fails()) {
-            return response()->json(['errors' => $validator->errors()], 422);
-        }
+public function store(Request $request)
+{
+    $validator = Validator::make($request->all(), [
+        'mapel_id' => 'required|exists:mata_pelajaran,id',
+        'nama_bab' => 'required|string|max:100', 
+    ]);
 
-        $bab = Bab::create($validator->validated());
-
-        return response()->json(['message' => 'Bab berhasil dibuat', 'data' => $bab]);
+    if ($validator->fails()) {
+        return response()->json(['errors' => $validator->errors()], 422);
     }
 
+    $bab = Bab::create($validator->validated());
+
+    $bab->load('mata_pelajaran.classes.jenjangKelas');
+
+    return response()->json(['message' => 'Bab berhasil dibuat', 'data' => $bab]);
+}
+
+
+    // Tampilkan detail bab berdasarkan ID
     public function show($id)
     {
-        $bab = Bab::with('mata_pelajaran.classes.jenjang_kelas')->findOrFail($id);
+        $bab = Bab::with('mata_pelajaran.classes.jenjangKelas')->findOrFail($id);
+
         return response()->json($bab);
     }
 
+    // Update bab berdasarkan ID
     public function update(Request $request, $id)
     {
         $bab = Bab::findOrFail($id);
 
         $validator = Validator::make($request->all(), [
-            // 'mapel_id' => 'sometimes|exists:mata_pelajaran,id',
-            'nama_bab' => 'sometimes|string|max:100'
+            'nama_bab' => 'sometimes|required|string|max:100'
         ]);
 
         if ($validator->fails()) {
@@ -57,9 +62,12 @@ class BabController extends Controller
 
         $bab->update($validator->validated());
 
+        $bab->load('mata_pelajaran.classes.jenjangKelas');
+
         return response()->json(['message' => 'Bab berhasil diupdate', 'data' => $bab]);
     }
 
+    // Hapus bab berdasarkan ID
     public function destroy($id)
     {
         $bab = Bab::findOrFail($id);
