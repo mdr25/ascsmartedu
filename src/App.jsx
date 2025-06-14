@@ -12,7 +12,7 @@ import AdminDashboard from "./pages/admin";
 import AdminUsers from "./pages/admin/users";
 import AdminClasses from "./pages/admin/classes";
 import AdminPayments from "./pages/admin/payments";
-import UsersCreate from "./pages/admin/users/create";
+// import UsersCreate from "./pages/admin/users/create";
 import ClassCreate from "./pages/admin/classes/create";
 import ClassUpdate from "./pages/admin/classes/edit";
 import ClassDetail from "./pages/admin/classes/detail";
@@ -30,6 +30,10 @@ import StudentDashboard from "./pages/student";
 import StudentClasses from "./pages/student/classes";
 import StudentAttendances from "./pages/student/attendances";
 import StudentPayments from "./pages/student/payments";
+import AboutPage from "./pages/public/about";
+import ProgramPage from "./pages/public/program";
+import MethodPage from "./pages/public/studymethod";
+
 
 function App() {
   return (
@@ -40,6 +44,9 @@ function App() {
           <Route element={<PublicLayout />}>
             <Route index element={<Home />} />
           </Route>
+          <Route path="/about" element={<AboutPage />} />
+          <Route path="/programs" element={<ProgramPage />} />
+          <Route path="/metode" element={<MethodPage />} />
 
           <Route
             path="register"
@@ -69,10 +76,10 @@ function App() {
           >
             <Route index element={<AdminDashboard />} />
 
-            <Route path="users">
+            {/* <Route path="users">
               <Route index element={<AdminUsers />} />
               <Route path="create" element={<UsersCreate />} />
-            </Route>
+            </Route> */}
 
             <Route path="classes">
               <Route index element={<AdminClasses />} />
