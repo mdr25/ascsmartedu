@@ -25,11 +25,32 @@ export default function AdminClasses() {
   };
 
   const fetchData = async () => {
-    setLoading(true);
-    const data = await getClasses();
-    setClasses(data);
-    setLoading(false);
+  setLoading(true);
+  const data = await getClasses();
+
+  const jenjangOrder = {
+    SD: 1,
+    SMP: 2,
+    SMA: 3,
   };
+
+  const sortedData = [...data].sort((a, b) => {
+    const jenjangA = a.jenjang_kelas?.nama_jenjang || "";
+    const jenjangB = b.jenjang_kelas?.nama_jenjang || "";
+
+    const jenjangComparison =
+      (jenjangOrder[jenjangA] || 999) - (jenjangOrder[jenjangB] || 999);
+
+    if (jenjangComparison !== 0) return jenjangComparison;
+
+    // Kalau jenjang sama, urutkan berdasarkan nama kelas
+    return a.class_name.localeCompare(b.class_name);
+  });
+
+  setClasses(sortedData);
+  setLoading(false);
+};
+
 
   const handleDelete = async (id, name) => {
     const confirmed = window.confirm(`Yakin ingin menghapus kelas "${name}"?`);

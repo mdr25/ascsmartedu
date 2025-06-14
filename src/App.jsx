@@ -15,6 +15,11 @@ import AdminPayments from "./pages/admin/payments";
 import UsersCreate from "./pages/admin/users/create";
 import ClassCreate from "./pages/admin/classes/create";
 import ClassUpdate from "./pages/admin/classes/edit";
+import ClassDetail from "./pages/admin/classes/detail";
+import MapelIndex from "./pages/admin/mapels";
+import BabIndex from "./pages/admin/mapels/bab";
+import SubbabIndex from "./pages/admin/mapels/subbab";
+import ContentIndex from "./pages/admin/mapels/content";
 
 // Pengajar
 import TeacherLayout from "./layouts/teacher";
@@ -73,6 +78,15 @@ function App() {
               <Route index element={<AdminClasses />} />
               <Route path="create" element={<ClassCreate />} />
               <Route path="edit/:id" element={<ClassUpdate />} />
+              <Route path=":id">
+                <Route index element={<ClassDetail />} />
+                <Route path="mapel">
+                  <Route index element={<MapelIndex />} />
+                  <Route path=":mapel/bab" element={<BabIndex />} />
+                  <Route path=":mapel/bab/:babId/subbab" element={<SubbabIndex />} />
+                  <Route path=":mapel/bab/:babId/subbab/:subbabId/content" element={<ContentIndex />} />
+                </Route>
+              </Route>
             </Route>
 
             <Route path="payments">

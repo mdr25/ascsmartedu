@@ -110,3 +110,26 @@ export async function getJenjangKelas() {
   }
 }
 
+export async function getClassDetail(id) {
+  try {
+    const token = localStorage.getItem("token");
+    const response = await api.get(`/admin/classes/${id}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    const classDetail = response.data.data;
+    if (!classDetail) throw new Error("Detail kelas tidak ditemukan");
+
+    return classDetail;
+  } catch (error) {
+    console.error("Gagal mengambil detail kelas:", error.response?.data || error.message);
+    throw error;
+  }
+  
+}
+
+
+
+
