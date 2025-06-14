@@ -11,7 +11,7 @@ class SubbabController extends Controller
 {
     public function index(Request $request)
     {
-        $query = Subbab::with('bab.mata_pelajaran.classes.jenjang_kelas');
+        $query = Subbab::with('bab.mata_pelajaran.classes.jenjangKelas');
 
         if ($request->has('bab_id')) {
             $query->where('bab_id', $request->bab_id);
@@ -38,7 +38,7 @@ class SubbabController extends Controller
 
     public function show($id)
     {
-        $subbab = Subbab::with('bab.mata_pelajaran.classes.jenjang_kelas')->findOrFail($id);
+        $subbab = Subbab::with('bab.mata_pelajaran.classes.jenjangKelas')->findOrFail($id);
         return response()->json($subbab);
     }
 
