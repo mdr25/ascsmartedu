@@ -11,7 +11,7 @@ class ContentController extends Controller
 {
     public function index(Request $request)
     {
-        $query = Konten::with(['bab.mata_pelajaran.classes.jenjang_kelas', 'subbab.bab']);
+        $query = Konten::with(['bab.mata_pelajaran.classes.jenjangKelas', 'subbab.bab']);
 
         if ($request->has('bab_id')) {
             $query->where('bab_id', $request->bab_id);
