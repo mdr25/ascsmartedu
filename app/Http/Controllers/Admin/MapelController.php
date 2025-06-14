@@ -8,10 +8,22 @@ use App\Models\Mapel;
 
 class MapelController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $mapels = Mapel::all();
-        return response()->json($mapels);
+        $query = Mapel::query();
+
+        if ($request->has('classes_id')) {
+            $query->where('classes_id', $request->classes_id);
+        }
+
+        return response()->json($query->get());
+    }
+
+    public function show($id)
+    {
+        $mapel = Mapel::with('classes')->findOrFail($id);
+
+        return response()->json($mapel);
     }
 
     public function store(Request $request)
