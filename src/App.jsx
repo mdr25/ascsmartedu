@@ -30,10 +30,10 @@ import StudentDashboard from "./pages/student";
 import StudentClasses from "./pages/student/classes";
 import StudentAttendances from "./pages/student/attendances";
 import StudentPayments from "./pages/student/payments";
+import MyClasses from "./pages/student/classes/myclasses";
 import AboutPage from "./pages/public/about";
 import ProgramPage from "./pages/public/program";
 import MethodPage from "./pages/public/studymethod";
-
 
 function App() {
   return (
@@ -90,8 +90,14 @@ function App() {
                 <Route path="mapel">
                   <Route index element={<MapelIndex />} />
                   <Route path=":mapel/bab" element={<BabIndex />} />
-                  <Route path=":mapel/bab/:babId/subbab" element={<SubbabIndex />} />
-                  <Route path=":mapel/bab/:babId/subbab/:subbabId/content" element={<ContentIndex />} />
+                  <Route
+                    path=":mapel/bab/:babId/subbab"
+                    element={<SubbabIndex />}
+                  />
+                  <Route
+                    path=":mapel/bab/:babId/subbab/:subbabId/content"
+                    element={<ContentIndex />}
+                  />
                 </Route>
               </Route>
             </Route>
@@ -124,6 +130,10 @@ function App() {
 
             <Route path="classes">
               <Route index element={<StudentClasses />} />
+            </Route>
+
+            <Route path="myclasses">
+              <Route index element={<MyClasses />} />
             </Route>
 
             <Route path="attendances">

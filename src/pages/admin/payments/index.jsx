@@ -67,7 +67,7 @@ export default function AdminPayments() {
       {filteredPayments.length === 0 ? (
         <div className="text-center text-gray-400">Tidak ada pembayaran.</div>
       ) : (
-        <div className="overflow-x-auto">
+        <div className="overflow-x-auto rounded-lg">
           <table className="min-w-full bg-white shadow text-sm border">
             <thead className="bg-gray-100 text-sm text-left">
               <tr>
@@ -90,7 +90,7 @@ export default function AdminPayments() {
                   </td>
                   <td className="p-3">
                     <span
-                      className={`px-2 py-1 rounded text-xs font-medium ${
+                      className={`px-2 py-1 rounded text-xs font-medium capitalize ${
                         p.status === "paid"
                           ? "bg-green-100 text-green-600"
                           : "bg-yellow-100 text-yellow-700"

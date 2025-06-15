@@ -46,7 +46,7 @@ export default function StudentLayout() {
               />
             </Link>
             <Link
-              to="/admin/purchase"
+              to="/siswa/classes"
               className="inline-block mt-8 text-white text-sm py-2 px-7 bg-orange-500 rounded-md hover:bg-orange-400 transition"
             >
               Purchase Course
@@ -70,6 +70,12 @@ export default function StudentLayout() {
                 className="flex items-center my-2 text-[#bbbec5] hover:text-black transition pl-6 pr-4 py-2"
               >
                 <i className="bx bx-user text-lg mr-2"></i> Classes
+              </Link>
+              <Link
+                to="/siswa/myclasses"
+                className="flex items-center my-2 text-[#bbbec5] hover:text-black transition pl-6 pr-4 py-2"
+              >
+                <i className="bx bx-folder text-lg mr-2"></i> My Classes
               </Link>
               <Link
                 to="/siswa/attendances"

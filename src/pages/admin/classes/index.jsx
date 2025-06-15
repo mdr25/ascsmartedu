@@ -61,8 +61,8 @@ export default function AdminClasses() {
       alert(`Kelas "${name}" berhasil dihapus.`);
       fetchData();
     } catch {
-  alert(`Gagal menghapus kelas "${name}".`);
-}
+      alert(`Gagal menghapus kelas "${name}".`);
+    }
   };
 
   useEffect(() => {
@@ -105,7 +105,9 @@ export default function AdminClasses() {
 
       {/* Loading State */}
       {loading ? (
-        <div className="text-center text-gray-500">Memuat data kelas...</div>
+        <div className="flex items-center justify-center p-6">
+          <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-orange-500"></div>
+        </div>
       ) : filteredClasses.length === 0 ? (
         <div className="text-center text-gray-400">Tidak ada kelas.</div>
       ) : (

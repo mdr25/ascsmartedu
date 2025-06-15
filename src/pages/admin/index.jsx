@@ -35,7 +35,15 @@ export default function AdminDashboard() {
     fetchData();
   }, []);
 
-  if (loading) return <p className="text-center">Loading...</p>;
+  if (loading)
+    return (
+      <div
+        className="fixed top-0 left-0 h-full w-full flex items-center justify-center overflow-hidden"
+        style={{ background: "rgba(255, 255, 255, 0.5)" }}
+      >
+        <div className="animate-spin h-5 w-5 border-b-2 border-orange-500 rounded-full"></div>
+      </div>
+    );
   if (error) return <p className="text-center text-red-500">{error}</p>;
 
   const {
