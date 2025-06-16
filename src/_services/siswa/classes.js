@@ -1,17 +1,59 @@
 import api from "../../_api";
 
-export async function getStudentClassDetail(id) {
-  try {
-    const token = localStorage.getItem("student_token");
-    const response = await api.get(`/student/classes/${id}`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
+// 🔹 Ambil semua kelas berdasarkan jenjang
+export const getAllClassesByJenjang = async (jenjangId) => {
+  const res = await api.get(`/student/jenjang/${jenjangId}/classes`);
+  return res.data;
+};
 
-    return response.data.data;
-  } catch (error) {
-    console.error("❌ Gagal ambil detail kelas siswa:", error.response?.data || error.message);
-    throw error;
+// 🔹 Ambil semua kelas yang sudah dibeli user
+export const getStudentClasses = async () => {
+  const res = await api.get(`/student/classes`);
+  return res.data;
+};
+
+// 🔹 Ambil detail kelas
+export const getStudentClassDetail = async (classId) => {
+  const res = await api.get(`/student/classes/${classId}`);
+  return res.data.data; // karena response-nya nested di `data`
+};
+
+// 🔹 Ambil jadwal kelas
+export const getClassSchedule = async (classId) => {
+  const res = await api.get(`/student/classes/${classId}/schedule`);
+  return res.data;
+};
+
+// 🔹 Ambil daftar mapel berdasarkan classId
+export const getMapelByClassId = async (classId) => {
+  const res = await api.get(`/student/classes/${classId}/mapel`);
+  return res.data;
+};
+
+// 🔹 Ambil daftar bab berdasarkan mapelId
+export const getBabByMapelId = async (mapelId) => {
+  const res = await api.get(`/student/mapel/${mapelId}/bab`);
+  return res.data;
+};
+
+export const getSubbabByBabId = async (babId) => {
+  try {
+    const res = await api.get(`/student/bab/${babId}/subbab`);
+    return res.data?.data || [];
+  } catch (err) {
+    console.error("Gagal mengambil subbab:", err.response?.data || err.message);
+    throw err;
   }
-}
+};
+
+// 🔹 Ambil konten berdasarkan subbabId
+export const getKontenBySubbabId = async (subbabId) => {
+  const res = await api.get(`/student/subbab/${subbabId}/konten`);
+  return res.data;
+};
+
+// 🔹 Ambil konten langsung dari bab (tanpa subbab)
+export const getKontenByBabId = async (babId) => {
+  const res = await api.get(`/student/bab/${babId}/konten`);
+  return res.data;
+};

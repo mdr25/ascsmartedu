@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { getMapelByClassId } from "../../../_services/mapel";
-import { getClassDetail } from "../../../_services/classes";
+import {
+  getStudentClassDetail,
+  getMapelByClassId,
+} from "../../../_services/siswa/classes";
 
 const StudentMapelIndex = () => {
   const { id: classId } = useParams();
@@ -12,20 +14,30 @@ const StudentMapelIndex = () => {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    fetchAllData();
+    if (classId) fetchAllData();
   }, [classId]);
 
   const fetchAllData = async () => {
     setIsLoading(true);
     try {
-      const [classInfo, mapel] = await Promise.all([
-        getClassDetail(classId),
+      const [classInfo, mapelResponse] = await Promise.all([
+        getStudentClassDetail(classId),
         getMapelByClassId(classId),
       ]);
+
+      console.log("Class ID dari URL Params:", classId);
+      console.log("Data Class:", classInfo);
+      console.log("Response Mapel:", mapelResponse);
+
       setClassData(classInfo);
-      setMapelList(mapel);
+      setMapelList(Array.isArray(mapelResponse) ? mapelResponse : mapelResponse?.data || []);
     } catch (err) {
       console.error("Gagal memuat data:", err);
+      console.error("Detail error:", err.response?.data);
+      if (err.response?.status === 403) {
+        alert("Kamu belum membeli kelas ini.");
+        navigate("/student/classes");
+      }
     } finally {
       setIsLoading(false);
     }
@@ -39,14 +51,14 @@ const StudentMapelIndex = () => {
           onClick={() => navigate("/student/classes")}
           className="text-teal-700 hover:underline"
         >
-          {classData?.jenjang_kelas?.nama_jenjang || "Jenjang"}
+          {classData?.jenjang_kelas?.nama_jenjang || "-"}
         </button>
         <span>&gt;</span>
         <button
           onClick={() => navigate(`/student/classes/${classId}`)}
           className="text-teal-700 hover:underline"
         >
-          {classData?.class_name || "Kelas"}
+          {classData?.class_name || "-"}
         </button>
         <span>&gt;</span>
         <span className="text-black font-semibold">Mata Pelajaran</span>
@@ -86,7 +98,7 @@ const StudentMapelIndex = () => {
                       }
                       className="text-sm text-teal-700 hover:underline"
                     >
-                      {mapel.nama_mapel}
+                      {mapel.nama_mapel || "Mata Pelajaran"}
                     </button>
                   </div>
                 </div>
