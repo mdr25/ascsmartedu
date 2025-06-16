@@ -21,6 +21,7 @@ class MapelController extends Controller
 
     public function show($id)
     {
+        // Ambil data mapel sekaligus relasi kelas-nya
         $mapel = Mapel::with('classes')->findOrFail($id);
 
         return response()->json($mapel);
