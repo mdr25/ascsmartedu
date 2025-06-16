@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import API from "../../_api";
 
 export default function Login() {
@@ -13,27 +13,33 @@ export default function Login() {
 
   const handleLogin = async (e) => {
     e.preventDefault();
-    setErrorMessage(""); // Reset error sebelum mencoba login
+    setErrorMessage("");
 
     try {
       const response = await API.post("/login", loginData);
       const { token, user } = response.data;
+      const role = user.role.toLowerCase(); // Pastikan lowercase agar konsisten
 
-      localStorage.setItem("name", user.name);
-      localStorage.setItem("role", user.role);
+      // Simpan ke localStorage
       localStorage.setItem("token", token);
+      localStorage.setItem("role", role);
+      localStorage.setItem("name", user.name);
 
-      if (user.role === "admin") {
-        navigate("/admin");
-      } else if (user.role === "pengajar") {
-        navigate("/pengajar");
-      } else if (user.role === "siswa") {
-        navigate("/siswa");
-      } else {
-        navigate("/");
+      // Redirect berdasarkan role
+      switch (role) {
+        case "admin":
+          navigate("/admin");
+          break;
+        case "pengajar":
+          navigate("/teacher");
+          break;
+        case "siswa":
+          navigate("/student");
+          break;
+        default:
+          navigate("/");
       }
     } catch (error) {
-      console.error("Error login:", error.response?.data || error.message);
       setErrorMessage(
         error.response?.data?.message || "Terjadi kesalahan saat login"
       );
@@ -44,24 +50,24 @@ export default function Login() {
     <div
       className="w-full min-h-screen flex items-center justify-center px-12"
       style={{
-        backgroundImage: "url('../../src/assets/login-bg.png')",
+        backgroundImage: "url('/src/assets/login-bg.png')",
         backgroundSize: "cover",
         backgroundPosition: "center",
         backgroundRepeat: "no-repeat",
         backgroundAttachment: "fixed",
       }}
     >
-      {/* Bagian Kiri - Tempat Background */}{" "}
       <div className="w-1/2 hidden md:block"></div>
-      {/* Logo di Pojok Kiri Atas */}
+
+      {/* Logo kiri atas */}
       <div className="absolute top-0 left-0 py-4 px-8">
-        <img src="../../src/assets/logoasc.png" alt="Logo" className="w-48" />
+        <img src="/src/assets/logoasc.png" alt="Logo" className="w-48" />
       </div>
-      <div className="w-[400px] p-8 bg-white bg-opacity-90 rounded-lg">
+
+      <div className="w-[400px] p-8 bg-white bg-opacity-90 rounded-lg shadow-lg">
         <h2 className="text-2xl font-bold text-gray-700 text-center mb-6">
           Sign In
         </h2>
-
         <form className="space-y-4" onSubmit={handleLogin}>
           <div>
             <label className="block text-gray-600 font-medium">Email</label>
@@ -75,9 +81,7 @@ export default function Login() {
             />
           </div>
           <div>
-            <label className="block text-gray-600 font-medium">
-              Kata Sandi
-            </label>
+            <label className="block text-gray-600 font-medium">Kata Sandi</label>
             <input
               type="password"
               name="password"
@@ -86,10 +90,11 @@ export default function Login() {
               className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-orange-500"
               required
             />
-            {errorMessage && (
-              <p className="text-red-500 text-sm mt-2">{errorMessage}</p>
-            )}
           </div>
+
+          {errorMessage && (
+            <p className="text-red-500 text-sm mt-2">{errorMessage}</p>
+          )}
 
           <button
             type="submit"
@@ -97,11 +102,12 @@ export default function Login() {
           >
             Log In
           </button>
+
           <p className="text-center text-sm text-gray-500 mt-3">
             Belum punya akun?{" "}
-            <a href="/register" className="text-teal-600 font-medium">
+            <Link to="/register" className="text-teal-600 font-medium hover:underline">
               Daftar Sekarang
-            </a>
+            </Link>
           </p>
         </form>
       </div>
