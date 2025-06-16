@@ -1,6 +1,7 @@
-// src/layout/Admin.jsx
 import { useEffect, useState } from "react";
 import { Link, Outlet, useNavigate } from "react-router-dom";
+import logoasc from "../assets/logoasc.png";
+import profile from "../assets/profile.jpg";
 
 export default function StudentLayout() {
   const navigate = useNavigate();
@@ -23,226 +24,200 @@ export default function StudentLayout() {
     setIsDropdownOpen(!isDropdownOpen);
   };
 
-  const toggleNotif = () => {
-    const menu = document.getElementById("notif-menu");
-    if (menu) menu.classList.toggle("hidden");
-  };
-
   return (
-    <div className="Nothing">
+    <div className="flex">
       {/* Sidebar Kiri */}
-      <div
-        id="sliders"
-        className="w-[240px] h-screen fixed bg-[#f9f9fc] transition-all z-10 flex flex-col"
-      >
+      <aside className="w-[240px] h-screen fixed left-0 top-0 bg-[#f9f9fc] z-10 flex flex-col">
         {/* Logo & Purchase */}
-        <div className="py-8">
-          <div className="text-center py-6 px-3">
-            <Link to="/admin">
-              <img
-                src="src\assets\logoasc.png"
-                alt="Logo ASC"
-                className="h-[30px] mx-auto"
-              />
-            </Link>
-            <Link
-              to="/siswa/classes"
-              className="inline-block mt-8 text-white text-sm py-2 px-7 bg-orange-500 rounded-md hover:bg-orange-400 transition"
-            >
-              Purchase Course
-            </Link>
-          </div>
+        <div className="py-8 px-3 text-center">
+          <Link to="/student">
+            <img src={logoasc} alt="Logo ASC" className="h-[30px] mx-auto" />
+          </Link>
+          <Link
+            to="/student/payments/purchaseCourse"
+            className="inline-block mt-8 text-white text-sm py-2 px-7 bg-orange-500 rounded-md hover:bg-orange-400 transition"
+          >
+            Purchase Course
+          </Link>
         </div>
 
         {/* Navigasi */}
-        <div className="flex-1 flex flex-col overflow-y-auto pl-1 text-sm">
-          <nav className="flex flex-col flex-grow">
-            <div>
-              <Link
-                to="/siswa"
-                className="flex items-center mt-3 text-black font-medium border-r-4 border-teal-500 pl-6 pr-4 py-2"
-              >
-                <i className="bx bx-layout text-teal-500 text-lg mr-2"></i>{" "}
-                Dashboard
-              </Link>
-              <Link
-                to="/siswa/classes"
-                className="flex items-center my-2 text-[#bbbec5] hover:text-black transition pl-6 pr-4 py-2"
-              >
-                <i className="bx bx-user text-lg mr-2"></i> Classes
-              </Link>
-              <Link
-                to="/siswa/myclasses"
-                className="flex items-center my-2 text-[#bbbec5] hover:text-black transition pl-6 pr-4 py-2"
-              >
-                <i className="bx bx-folder text-lg mr-2"></i> My Classes
-              </Link>
-              <Link
-                to="/siswa/attendances"
-                className="flex items-center text-[#bbbec5] hover:text-black transition pl-6 pr-4 py-2"
-              >
-                <i className="bx bx-book-open text-lg mr-2"></i> Attendance
-              </Link>
-              <Link
-                to="/siswa/payments"
-                className="flex items-center my-2 text-[#bbbec5] hover:text-black transition pl-6 pr-4 py-2"
-              >
-                <i className="bx bx-credit-card text-lg mr-2"></i> Payments
-              </Link>
-            </div>
+        <nav className="flex-1 flex flex-col overflow-y-auto text-sm pl-1">
+          <Link
+            to="/student"
+            className="flex items-center mt-3 text-black font-medium border-r-4 border-teal-500 pl-6 pr-4 py-2"
+          >
+            <i className="bx bx-layout text-teal-500 text-lg mr-2"></i> Dashboard
+          </Link>
+          <Link
+            to="/student/classes"
+            className="flex items-center my-2 text-[#bbbec5] hover:text-black transition pl-6 pr-4 py-2"
+          >
+            <i className="bx bx-user text-lg mr-2"></i> Classes
+          </Link>
+          <Link
+            to="/student/attendances"
+            className="flex items-center text-[#bbbec5] hover:text-black transition pl-6 pr-4 py-2"
+          >
+            <i className="bx bx-book-open text-lg mr-2"></i> Attendance
+          </Link>
+          <Link
+            to="/student/payments"
+            className="flex items-center my-2 text-[#bbbec5] hover:text-black transition pl-6 pr-4 py-2"
+          >
+            <i className="bx bx-credit-card text-lg mr-2"></i> Payments
+          </Link>
 
-            {/* Spacer supaya Logout di bawah */}
-            <div className="flex-grow"></div>
+          <div className="flex-grow"></div>
 
-            {/* Logout */}
-            <div>
-              <button
-                onClick={handleLogout}
-                className="flex items-center text-[#bbbec5] hover:text-black transition pl-6 pr-4 py-2"
-              >
-                <i className="bx bx-log-out text-lg mr-2"></i> Logout
-              </button>
-            </div>
-          </nav>
-        </div>
-      </div>
+          <button
+            onClick={handleLogout}
+            className="flex items-center text-[#bbbec5] hover:text-black transition pl-6 pr-4 py-2"
+          >
+            <i className="bx bx-log-out text-lg mr-2"></i> Logout
+          </button>
+        </nav>
+      </aside>
 
       {/* Sidebar Kanan */}
-      <div
-        id="sliders"
-        className="fixed right-0 w-[290px] h-screen bg-[#f8f8fc] text-[#1e3953] transition-all z-10"
-      >
-        {/* Header */}
-        <div className="py-8">
-          <div className="p-6">
-            <div className="flex items-center">
-              <img
-                src="src/assets/profile.jpg"
-                alt="Profile"
-                className="w-[50px] h-[50px] rounded-[18px]"
-              />
-              <div className="ml-3 relative">
-                {/* Tombol Profile */}
-                <button
-                  className="font-bold text-[#1e3953] flex items-center"
-                  onClick={toggleDropdown}
-                >
-                  {userName || "User"}
-                  <i className="bx bx-chevron-down text-lg ml-1"></i>
-                </button>
+      <aside className="fixed right-0 top-0 w-[290px] h-screen bg-[#f8f8fc] text-[#1e3953] z-10">
+        {/* Header Profile */}
+        <div className="p-6 pt-8">
+          <div className="flex items-center relative">
+            <img
+              src={profile}
+              alt="Profile"
+              className="w-[50px] h-[50px] rounded-[18px]"
+            />
+            <div className="ml-3 relative">
+              <button
+                className="font-bold text-[#1e3953] flex items-center"
+                onClick={toggleDropdown}
+              >
+                {userName || "User"}
+                <i className="bx bx-chevron-down text-lg ml-1"></i>
+              </button>
 
-                {/* Dropdown Menu */}
-                {isDropdownOpen && (
-                  <ul className="absolute bg-white shadow rounded-md mt-2 w-44 z-20">
-                    <li>
-                      <Link
-                        to="/profile"
-                        className="block px-4 py-2 hover:bg-gray-100 text-sm flex items-center"
-                      >
-                        <i className="bx bx-user-circle mr-2 text-lg align-text-top"></i>{" "}
-                        Profile
-                      </Link>
-                    </li>
-                    <li>
-                      <Link
-                        to="/settings"
-                        className="block px-4 py-2 hover:bg-gray-100 text-sm flex items-center"
-                      >
-                        <i className="bx bx-cog mr-2 text-lg align-text-top"></i>{" "}
-                        Settings
-                      </Link>
-                    </li>
-                    <li>
-                      <button
-                        onClick={handleLogout}
-                        className="block w-full text-left px-4 py-2 hover:bg-gray-100 text-sm flex items-center"
-                      >
-                        <i className="bx bx-log-out-circle mr-2 text-lg align-text-top"></i>{" "}
-                        Logout
-                      </button>
-                    </li>
-                  </ul>
-                )}
-              </div>
+              {isDropdownOpen && (
+                <ul className="absolute right-0 mt-2 w-44 bg-white shadow rounded-md z-50">
+                  <li>
+                    <Link
+                      to="/profile"
+                      className="block px-4 py-2 hover:bg-gray-100 text-sm flex items-center"
+                    >
+                      <i className="bx bx-user-circle mr-2 text-lg"></i> Profile
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      to="/settings"
+                      className="block px-4 py-2 hover:bg-gray-100 text-sm flex items-center"
+                    >
+                      <i className="bx bx-cog mr-2 text-lg"></i> Settings
+                    </Link>
+                  </li>
+                  <li>
+                    <button
+                      onClick={handleLogout}
+                      className="w-full text-left px-4 py-2 hover:bg-gray-100 text-sm flex items-center"
+                    >
+                      <i className="bx bx-log-out-circle mr-2 text-lg"></i> Logout
+                    </button>
+                  </li>
+                </ul>
+              )}
             </div>
           </div>
         </div>
 
-        {/* Body */}
+        {/* Sidebar Content */}
         <div className="p-4 text-sm">
-          {/* Progress */}
-          <h5 className="text-lg font-semibold m-0">Progress</h5>
+          <h5 className="text-lg font-semibold">Progress</h5>
 
           {/* UI/UX */}
-          <div className="flex mt-4">
-            <i className="bx bx-pencil text-[#5e81f4] bg-[#d0d9fa] text-xl p-2 rounded"></i>
-            <div className="ml-3 flex-1">
-              <h6 className="text-base mb-2 pr-12">UI/UX Design</h6>
-              <div className="w-full h-[10px] bg-[#d0d9fa] rounded-full">
-                <div
-                  className="h-full rounded-full bg-[#5e81f4]"
-                  style={{ width: "75%" }}
-                ></div>
-              </div>
-            </div>
-          </div>
+          <ProgressItem
+            icon="bx-pencil"
+            label="UI/UX Design"
+            bg="#d0d9fa"
+            color="#5e81f4"
+            width="75%"
+          />
 
           {/* Photography */}
-          <div className="flex mt-4">
-            <i className="bx bx-camera text-[#0cc3e7] bg-[#c4e7f8] text-xl p-2 rounded"></i>
-            <div className="ml-3 flex-1">
-              <h6 className="text-base mb-2 pr-12">Photography</h6>
-              <div className="w-full h-[10px] bg-[#c4e7f8] rounded-full">
-                <div
-                  className="h-full rounded-full bg-[#0cc3e7]"
-                  style={{ width: "30%" }}
-                ></div>
-              </div>
-            </div>
-          </div>
+          <ProgressItem
+            icon="bx-camera"
+            label="Photography"
+            bg="#c4e7f8"
+            color="#0cc3e7"
+            width="30%"
+          />
 
           {/* Animation */}
-          <div className="flex mt-4">
-            <i className="bx bx-pyramid text-[#ffae33] bg-[#ffefd6] text-xl p-2 rounded"></i>
-            <div className="ml-3 flex-1">
-              <h6 className="text-base mb-2 pr-[71px]">Animation</h6>
-              <div className="w-full h-[10px] bg-[#f1dae5] rounded-full">
-                <div
-                  className="h-full rounded-full bg-[#ffae33]"
-                  style={{ width: "60%" }}
-                ></div>
-              </div>
-            </div>
-          </div>
+          <ProgressItem
+            icon="bx-pyramid"
+            label="Animation"
+            bg="#ffefd6"
+            color="#ffae33"
+            width="60%"
+          />
 
-          {/* Upcoming Task */}
           <h5 className="mt-10 text-lg font-semibold">Upcoming Task</h5>
 
           {/* Task 1 */}
-          <div className="flex items-center mt-4">
-            <i className="bx bx-chat text-[#5e81f4] bg-[#d0d9fa] text-xl px-2 py-2 rounded"></i>
-            <div className="ml-3">
-              <h6 className="text-base m-0">UI/UX - Discussion</h6>
-              <small className="text-gray-500">03 Nov 2021, Wednesday</small>
-            </div>
-          </div>
+          <UpcomingTask
+            icon="bx-chat"
+            color="#5e81f4"
+            bg="#d0d9fa"
+            title="UI/UX - Discussion"
+            date="03 Nov 2021, Wednesday"
+          />
 
           {/* Task 2 */}
-          <div className="flex items-center mt-4">
-            <i className="bx bx-cube-alt text-[#ffae33] bg-[#ffefd6] text-xl px-2 py-2 rounded"></i>
-            <div className="ml-3">
-              <h6 className="text-base m-0">3D Animation</h6>
-              <small className="text-gray-500">04 Nov 2021, Thursday</small>
-            </div>
-          </div>
+          <UpcomingTask
+            icon="bx-cube-alt"
+            color="#ffae33"
+            bg="#ffefd6"
+            title="3D Animation"
+            date="04 Nov 2021, Thursday"
+          />
         </div>
-      </div>
-      {/* Akhir Sidebar Kanan */}
+      </aside>
 
-      {/* Main Page */}
-      <main className="main-pages relative ml-[240px] mr-[290px] px-8 py-2 transition-all z-[1]">
+      {/* Main Content */}
+      <main className="flex-1 ml-[240px] mr-[290px] px-8 py-4 transition-all z-[1]">
         <Outlet />
       </main>
+    </div>
+  );
+}
+
+// Komponen progress
+function ProgressItem({ icon, label, bg, color, width }) {
+  return (
+    <div className="flex mt-4">
+      <i className={`bx ${icon} text-[${color}] bg-[${bg}] text-xl p-2 rounded`}></i>
+      <div className="ml-3 flex-1">
+        <h6 className="text-base mb-2 pr-12">{label}</h6>
+        <div className={`w-full h-[10px] bg-[${bg}] rounded-full`}>
+          <div
+            className={`h-full rounded-full bg-[${color}]`}
+            style={{ width }}
+          ></div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// Komponen task
+function UpcomingTask({ icon, color, bg, title, date }) {
+  return (
+    <div className="flex items-center mt-4">
+      <i className={`bx ${icon} text-[${color}] bg-[${bg}] text-xl px-2 py-2 rounded`}></i>
+      <div className="ml-3">
+        <h6 className="text-base m-0">{title}</h6>
+        <small className="text-gray-500">{date}</small>
+      </div>
     </div>
   );
 }
