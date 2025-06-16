@@ -12,7 +12,8 @@ use App\Http\Controllers\Admin\{
     BabController,
     SubbabController,
     ContentController,
-    ContentOrderController
+    ContentOrderController,
+    UserRoleController
 };
 
 Route::middleware(['auth:sanctum', 'role:admin'])->prefix('admin')->group(function () {
@@ -21,7 +22,7 @@ Route::middleware(['auth:sanctum', 'role:admin'])->prefix('admin')->group(functi
 
     // User & Role Management
     Route::apiResource('users', UserController::class)->except('show');
-    Route::get('roles', [UserController::class, 'allRoles']);
+    Route::get('roles', [UserRoleController::class, 'allRoles']);
 
     // Jenjang & Kelas
     Route::apiResource('jenjang', JenjangController::class);
