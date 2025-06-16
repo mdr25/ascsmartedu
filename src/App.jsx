@@ -1,6 +1,5 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import ProtectedAuthRoute from "./components/ProtectedAuthRoute";
-import ProtectedRoute from "../src/components/ProtectedRoute";
+import RouteGuard from "./components/routeGuard";
 import Login from "./pages/auth/login";
 import Home from "./pages/public";
 import PublicLayout from "./layouts/public";
@@ -12,7 +11,6 @@ import AdminDashboard from "./pages/admin";
 import AdminUsers from "./pages/admin/users";
 import AdminClasses from "./pages/admin/classes";
 import AdminPayments from "./pages/admin/payments";
-// import UsersCreate from "./pages/admin/users/create";
 import ClassCreate from "./pages/admin/classes/create";
 import ClassUpdate from "./pages/admin/classes/edit";
 import ClassDetail from "./pages/admin/classes/detail";
@@ -23,6 +21,7 @@ import ContentIndex from "./pages/admin/mapels/content";
 
 // Pengajar
 import TeacherLayout from "./layouts/teacher";
+import PengajarDashboard from "./pages/teacher";
 
 // Siswa
 import StudentLayout from "./layouts/student";
@@ -30,57 +29,36 @@ import StudentDashboard from "./pages/student";
 import StudentClasses from "./pages/student/classes";
 import StudentAttendances from "./pages/student/attendances";
 import StudentPayments from "./pages/student/payments";
-import MyClasses from "./pages/student/classes/myclasses";
 import AboutPage from "./pages/public/about";
 import ProgramPage from "./pages/public/program";
 import MethodPage from "./pages/public/studymethod";
+import PurchaseCourse from "./pages/student/payments/purchasecourse";
+import StudentClassDetail from "./pages/student/classes/detailclass";
+import StudentMapelIndex from "./pages/student/mapels";
 
 function App() {
   return (
-    <>
-      <BrowserRouter>
-        <Routes>
-          {/* Public Routes */}
-          <Route element={<PublicLayout />}>
-            <Route index element={<Home />} />
-          </Route>
+    <BrowserRouter>
+      <Routes>
+        {/* Public Routes */}
+        <Route element={<PublicLayout />}>
+          <Route index element={<Home />} />
           <Route path="/about" element={<AboutPage />} />
           <Route path="/programs" element={<ProgramPage />} />
           <Route path="/metode" element={<MethodPage />} />
+        </Route>
 
-          <Route
-            path="register"
-            element={
-              <ProtectedAuthRoute>
-                <Register />
-              </ProtectedAuthRoute>
-            }
-          />
-          <Route
-            path="login"
-            element={
-              <ProtectedAuthRoute>
-                <Login />
-              </ProtectedAuthRoute>
-            }
-          />
+        {/* Auth Routes */}
+        <Route element={<RouteGuard type="auth" />}>
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+        </Route>
 
-          {/* Admin Routes */}
-          <Route
-            path="admin"
-            element={
-              <ProtectedRoute allowedRoles={["admin"]}>
-                <AdminLayout />
-              </ProtectedRoute>
-            }
-          >
+        {/* Admin Routes */}
+        <Route element={<RouteGuard allowedRoles={["admin"]} />}>
+          <Route path="/admin" element={<AdminLayout />}>
             <Route index element={<AdminDashboard />} />
-
-            {/* <Route path="users">
-              <Route index element={<AdminUsers />} />
-              <Route path="create" element={<UsersCreate />} />
-            </Route> */}
-
+            <Route path="users" element={<AdminUsers />} />
             <Route path="classes">
               <Route index element={<AdminClasses />} />
               <Route path="create" element={<ClassCreate />} />
@@ -101,52 +79,37 @@ function App() {
                 </Route>
               </Route>
             </Route>
-
-            <Route path="payments">
-              <Route index element={<AdminPayments />} />
-            </Route>
+            <Route path="payments" element={<AdminPayments />} />
           </Route>
+        </Route>
 
-          {/* Pengajar Route */}
-          <Route
-            path="pengajar"
-            element={
-              <ProtectedRoute allowedRoles={["pengajar"]}>
-                <TeacherLayout />
-              </ProtectedRoute>
-            }
-          />
+        {/* Teacher Routes */}
+        <Route element={<RouteGuard allowedRoles={["pengajar"]} />}>
+          <Route path="/teacher" element={<TeacherLayout />}>
+            <Route index element={<PengajarDashboard />} />
+          </Route>
+        </Route>
 
-          {/* Siswa Route */}
-          <Route
-            path="siswa"
-            element={
-              <ProtectedRoute allowedRoles={["siswa"]}>
-                <StudentLayout />
-              </ProtectedRoute>
-            }
-          >
+        {/* Student Routes */}
+        <Route element={<RouteGuard allowedRoles={["siswa"]} />}>
+          <Route path="/student" element={<StudentLayout />}>
             <Route index element={<StudentDashboard />} />
-
             <Route path="classes">
               <Route index element={<StudentClasses />} />
+              <Route path=":id">
+                <Route index element={<StudentClassDetail />} />
+                <Route path="mapel" element={<StudentMapelIndex />} />
+              </Route>
             </Route>
-
-            <Route path="myclasses">
-              <Route index element={<MyClasses />} />
-            </Route>
-
-            <Route path="attendances">
-              <Route index element={<StudentAttendances />} />
-            </Route>
-
+            <Route path="attendances" element={<StudentAttendances />} />
             <Route path="payments">
               <Route index element={<StudentPayments />} />
+              <Route path="purchaseCourse" element={<PurchaseCourse />} />
             </Route>
           </Route>
-        </Routes>
-      </BrowserRouter>
-    </>
+        </Route>
+      </Routes>
+    </BrowserRouter>
   );
 }
 
