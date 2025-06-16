@@ -41,18 +41,18 @@ export const createUser = async (userData) => {
   }
 };
 
-// ✅ Ambil satu kelas (jika masih dipakai)
-export async function getClassById(id) {
+// ✅ Ambil satu user
+export async function getUserById(id) {
   try {
     const token = localStorage.getItem("token");
-    const response = await api.get(`/admin/classes/${id}`, {
+    const response = await api.get(`/admin/users/${id}`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
     });
     return response.data.data;
   } catch (error) {
-    console.error("Gagal mengambil data kelas:", error);
+    console.error("Gagal mengambil data user:", error);
     throw error;
   }
 }
@@ -78,3 +78,36 @@ export async function getRoles() {
     return [];
   }
 }
+
+// Buat edit/update user
+export async function updateUser(id, data) {
+  try {
+    const token = localStorage.getItem("token");
+    const response = await api.put(`/admin/users/${id}`, data, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Gagal update user:", error);
+    throw error;
+  }
+}
+
+// delete user by ID
+export const deleteUser = async (id) => {
+  try {
+    const token = localStorage.getItem("token");
+    const response = await api.delete(`/admin/users/${id}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Gagal menghapus user:", error.response?.data || error.message);
+    throw error;
+  }
+};

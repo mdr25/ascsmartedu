@@ -1,37 +1,53 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import API from "../../../_api"; // Import API
+import API from "../../../_api";
+import { deleteUser } from "../../../_services/users";
 
 export default function AdminUsers() {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [ setError] = useState("");
+  const [error, setError] = useState("");
   const [activeTab, setActiveTab] = useState("all");
   const [activeDropdown, setActiveDropdown] = useState(null);
-
-  useEffect(() => {
-    const fetchUsers = async () => {
-      try {
-        const token = localStorage.getItem("token");
-        const response = await API.get("/admin/users", {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-
-        setUsers(response.data);
-      } catch {
-        setError("Gagal mengambil data pengguna!");
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchUsers();
-  }, []);
 
   const rolesMap = {
     1: "Siswa",
     2: "Pengajar",
     3: "Admin",
+  };
+
+  // Ambil data user dari API
+  const fetchUsers = async () => {
+    setLoading(true);
+    try {
+      const token = localStorage.getItem("token");
+      const response = await API.get("/admin/users", {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      setUsers(response.data);
+    } catch {
+      setError("Gagal mengambil data pengguna!");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchUsers();
+  }, []);
+
+  // Hapus user
+  const handleDelete = async (id, name) => {
+    const confirmed = window.confirm(`Yakin ingin menghapus user "${name}"?`);
+    if (!confirmed) return;
+
+    try {
+      await deleteUser(id);
+      alert(`User "${name}" berhasil dihapus.`);
+      fetchUsers(); // Refresh data
+    } catch {
+      alert(`Gagal menghapus user "${name}".`);
+    }
   };
 
   const filteredUsers =
@@ -44,7 +60,6 @@ export default function AdminUsers() {
       {/* Header */}
       <div className="flex items-center justify-between mb-6">
         <h2 className="text-xl font-bold">User Management</h2>
-
         <Link
           to="/admin/users/create"
           className="bg-orange-500 text-white px-4 py-2 rounded hover:bg-orange-400 text-sm"
@@ -75,6 +90,11 @@ export default function AdminUsers() {
         ))}
       </div>
 
+      {/* Error message */}
+      {error && (
+        <div className="text-sm text-red-600 mb-4">{error}</div>
+      )}
+
       {/* Table */}
       <div className="overflow-x-auto rounded-lg relative">
         {loading && (
@@ -82,6 +102,7 @@ export default function AdminUsers() {
             <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-orange-500"></div>
           </div>
         )}
+
         <table className="min-w-full bg-white shadow text-sm border">
           <thead className="bg-gray-100 text-sm">
             <tr>
@@ -101,9 +122,7 @@ export default function AdminUsers() {
                   <td className="p-3">{user.email}</td>
                   <td className="p-3">{user.phone_number || "-"}</td>
                   <td className="p-3">{user.address || "-"}</td>
-                  <td className="p-3">
-                    {rolesMap[user.roles_id] || "Unknown"}
-                  </td>
+                  <td className="p-3">{rolesMap[user.roles_id] || "Unknown"}</td>
                   <td className="p-3 text-right">
                     <div className="relative">
                       <button
@@ -125,10 +144,7 @@ export default function AdminUsers() {
                             Edit
                           </Link>
                           <button
-                            onClick={() => {
-                              alert(`User ${user.name} dihapus`);
-                              setActiveDropdown(null);
-                            }}
+                            onClick={() => handleDelete(user.id, user.name)}
                             className="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-gray-100"
                           >
                             Hapus
