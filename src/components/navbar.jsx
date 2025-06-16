@@ -3,34 +3,22 @@ import { Link, useNavigate } from "react-router-dom";
 
 export default function Navbar() {
   const navigate = useNavigate();
-  const [isLoggedIn, setIsLoggedIn] = useState(null); // null sebagai nilai awal untuk deteksi loading
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userRole, setUserRole] = useState("");
 
-  const updateAuthStatus = () => {
+  useEffect(() => {
     const token = localStorage.getItem("token");
     const role = localStorage.getItem("role");
-
-    setIsLoggedIn(!!token);
-    setUserRole(role || "");
-  };
-
-  useEffect(() => {
-    updateAuthStatus();
-
-    window.addEventListener("storage", updateAuthStatus);
-    document.addEventListener("visibilitychange", updateAuthStatus);
-
-    return () => {
-      window.removeEventListener("storage", updateAuthStatus);
-      document.removeEventListener("visibilitychange", updateAuthStatus);
-    };
+    if (token) {
+      setIsLoggedIn(true);
+      setUserRole(role);
+    }
   }, []);
 
   const handleLogout = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("role");
     setIsLoggedIn(false);
-    setUserRole("");
     navigate("/login");
   };
 
@@ -53,24 +41,30 @@ export default function Navbar() {
         <nav className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between p-4 bg-white shadow-lg">
           <div className="flex items-center gap-2">
             <img
-              src="/assets/logoasc.png" // pastikan path ini benar di production
+              src="src/assets/logoasc.png"
               alt="logo"
               className="w-auto h-8"
             />
           </div>
           <ul className="hidden md:flex gap-6 text-gray-600">
             <li>
-              <a href="#about" className="hover:text-teal-600">About Us</a>
+              <a href="about" className="hover:text-teal-600">
+                About Us
+              </a>
             </li>
             <li>
-              <a href="#programs" className="hover:text-teal-600">Program</a>
+              <a href="programs" className="hover:text-teal-600">
+                Program
+              </a>
             </li>
             <li>
-              <a href="#metode" className="hover:text-teal-600">Metode Belajar</a>
+              <a href="metode" className="hover:text-teal-600">
+                Metode Belajar
+              </a>
             </li>
           </ul>
           <div className="hidden md:flex gap-3">
-            {isLoggedIn === null ? null : isLoggedIn ? (
+            {isLoggedIn ? (
               <>
                 <Link to={getDashboardPath(userRole)}>
                   <button className="border border-gray-300 px-4 py-1 rounded hover:bg-gray-50 transition">
