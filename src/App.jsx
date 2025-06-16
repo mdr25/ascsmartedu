@@ -9,6 +9,7 @@ import Register from "./pages/auth/register";
 import AdminLayout from "./layouts/admin";
 import AdminDashboard from "./pages/admin";
 import AdminUsers from "./pages/admin/users";
+import UserCreate from "./pages/admin/users/create";
 import AdminClasses from "./pages/admin/classes";
 import AdminPayments from "./pages/admin/payments";
 import ClassCreate from "./pages/admin/classes/create";
@@ -64,7 +65,8 @@ function App() {
 
             <Route path="users">
               <Route index element={<AdminUsers />} />
-              {/* <Route path="create" element={<UsersCreate />} /> */}
+              <Route path="create" element={<UserCreate />} />
+              {/* <Route path="edit/:id" element={<UserUpdate />} /> */}
             </Route>
 
             <Route path="classes">
