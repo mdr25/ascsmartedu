@@ -1,50 +1,42 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react"; // 
 import { Link } from "react-router-dom";
-
-const dummyPayments = [
-  {
-    id: 1,
-    user: { name: "Siswa1" },
-    class: { class_name: "Kelas 3" },
-    total_amount: "250000.00",
-    payment_date: null,
-    payment_method: "Transfer",
-    payment_proof: "bukti-transfer.jpg",
-    status: "paid",
-  },
-  {
-    id: 2,
-    user: { name: "Siswa2" },
-    class: { class_name: "Kelas Fisika" },
-    total_amount: "250000.00",
-    payment_date: null,
-    payment_method: "Transfer",
-    payment_proof: null,
-    status: "unpaid",
-  },
-];
+import { getPayments } from "../../../_services/payments"; // 
 
 export default function AdminPayments() {
   const [activeTab, setActiveTab] = useState("All");
-
+  const [payments, setPayments] = useState([]); 
+  const [loading, setLoading] = useState(true); 
   const statusOptions = ["All", "paid", "unpaid"];
 
   const filteredPayments =
     activeTab === "All"
-      ? dummyPayments
-      : dummyPayments.filter((p) => p.status === activeTab);
+      ? payments // 
+      : payments.filter((p) => p.status === activeTab); 
+
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const data = await getPayments(); 
+        setPayments(data); 
+      } catch (err) {
+        console.error("Gagal mengambil data pembayaran", err); 
+      } finally {
+        setLoading(false); 
+      }
+    }
+
+    fetchData(); 
+  }, []);
 
   return (
     <div className="p-6">
       <div className="flex items-center justify-between mb-6">
         <h2 className="text-xl font-bold">Daftar Pembayaran</h2>
-
         <span className="opacity-0 bg-orange-500 text-white px-4 py-2 rounded hover:bg-orange-400 text-sm">
           + Tambah Kelas
         </span>
       </div>
 
-      {/* Tabs */}
       <div className="flex space-x-3 mb-4 text-sm">
         {statusOptions.map((status) => (
           <button
@@ -63,8 +55,9 @@ export default function AdminPayments() {
         ))}
       </div>
 
-      {/* Table */}
-      {filteredPayments.length === 0 ? (
+      {loading ? ( 
+        <div className="text-center text-gray-400">Memuat data...</div>
+      ) : filteredPayments.length === 0 ? (
         <div className="text-center text-gray-400">Tidak ada pembayaran.</div>
       ) : (
         <div className="overflow-x-auto rounded-lg">
