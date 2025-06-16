@@ -30,9 +30,10 @@ Route::middleware(['auth:sanctum', 'role:admin'])->prefix('admin')->group(functi
     // Pengajar
     Route::get('teachers', [TeacherController::class, 'index']);
     Route::post('classes/{classId}/assign-teacher', [ClassController::class, 'assignTeacher']);
-    Route::delete('classes/{classId}/remove-teacher', [ClassController::class, 'removeTeacher']);
+    Route::delete('/classes/{id}/removeTeacher', [ClassController::class, 'removeTeacher']);
     Route::post('classes/{classId}/add-assistant-teacher', [ClassController::class, 'addAssistantTeacher']);
     Route::delete('classes/{classId}/remove-assistant-teacher/{teacherId}', [ClassController::class, 'removeAssistantTeacher']);
+    Route::delete('/classes/{classId}/students/{studentId}', [ClassController::class, 'removeStudent']);
 
     // Materi
     Route::apiResource('mapel', MapelController::class);
@@ -49,36 +50,8 @@ Route::middleware(['auth:sanctum', 'role:admin'])->prefix('admin')->group(functi
     Route::get('payments', [PaymentController::class, 'index']);
     Route::get('payments/{id}', [PaymentController::class, 'show']);
     Route::patch('payments/{id}/status', [PaymentController::class, 'updateStatus']);
+    Route::patch('payments/{id}/verify', [PaymentController::class, 'verify']);
 });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
