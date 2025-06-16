@@ -5,7 +5,7 @@ import API from "../../../_api"; // Import API
 export default function AdminUsers() {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
+  const [ setError] = useState("");
   const [activeTab, setActiveTab] = useState("all");
   const [activeDropdown, setActiveDropdown] = useState(null);
 
@@ -18,7 +18,7 @@ export default function AdminUsers() {
         });
 
         setUsers(response.data);
-      } catch (err) {
+      } catch {
         setError("Gagal mengambil data pengguna!");
       } finally {
         setLoading(false);
