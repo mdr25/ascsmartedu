@@ -11,8 +11,8 @@ class ClassController extends Controller
 {
     public function index()
     {
-        $classes = ClassModel::with(['jenjangKelas', 'teacher'])->get();
-
+        $classes = ClassModel::with(['jenjangKelas', 'teacher', 'students'])->get();
+    
         return response()->json([
             'status' => 'success',
             'message' => 'Data kelas berhasil diambil',
@@ -20,25 +20,41 @@ class ClassController extends Controller
         ], 200);
     }
 
-    public function show($id)
+    public function getByJenjang($jenjangId)
     {
-        $class = ClassModel::with(['jenjangKelas', 'teacher', 'teachers'])->findOrFail($id);
+        $jenjang = JenjangKelas::with('classes')->findOrFail($jenjangId);
 
         return response()->json([
-            'status' => 'success',
-            'message' => 'Detail kelas berhasil diambil',
-            'data' => [
-                'class_id' => $class->id,
-                'class_name' => $class->class_name,
-                'jenjang_kelas' => $class->jenjangKelas,
-                'description' => $class->description,
-                'teacher' => $class->teacher, // pengajar utama
-                'assistant_teachers' => $class->teachers, // pengajar pendamping (pivot)
-            ]
+            'jenjang' => $jenjang->nama_jenjang,
+            'classes' => $jenjang->classes
         ]);
     }
 
+    public function show($id)
+{
+    $class = ClassModel::with([
+        'jenjangKelas',
+        'teacher',
+        'teachers',
+        'mapel',
+        'students.user'
+    ])->findOrFail($id);
 
+    return response()->json([
+        'status' => 'success',
+        'message' => 'Detail kelas berhasil diambil',
+        'data' => [
+            'class_id' => $class->id,
+            'class_name' => $class->class_name,
+            'jenjang_kelas' => $class->jenjangKelas,
+            'description' => $class->description,
+            'teacher' => $class->teacher,
+            'assistant_teachers' => $class->teachers,
+            'lessons' => $class->mapel,
+            'students' => $class->students->pluck('user')->filter()->values(),
+        ]
+    ]);
+}
 
     public function store(Request $request)
     {
@@ -47,7 +63,6 @@ class ClassController extends Controller
             'jenjang_kelas_id' => 'required|integer|exists:jenjang_kelas,id',
             'price' => 'required|numeric|min:0',
             'description' => 'nullable|string',
-            // 'teacher_id' => 'nullable|exists:users,id', // aktifkan jika mau assign pengajar
         ]);
 
         $class = ClassModel::create($validated);
@@ -60,21 +75,31 @@ class ClassController extends Controller
 
     public function update(Request $request, $id)
     {
-        $class = ClassModel::findOrFail($id);
-
-        $validated = $request->validate([
+        $request->validate([
             'class_name' => 'required|string|max:255',
-            'jenjang_kelas_id' => 'required|integer|exists:jenjang_kelas,id',
-            'price' => 'required|numeric|min:0',
+            'jenjang_kelas_id' => 'required|exists:jenjang_kelas,id',
+            'price' => 'nullable|numeric',
             'description' => 'nullable|string',
-            // 'teacher_id' => 'nullable|exists:users,id',
+            'teacher_id' => 'nullable|exists:users,id',
         ]);
 
-        $class->update($validated);
+        $kelas = ClassModel::findOrFail($id);
+
+        $kelas->class_name = $request->class_name;
+        $kelas->jenjang_kelas_id = $request->jenjang_kelas_id;
+
+        // Hindari NULL untuk price jika tidak dikirim
+        if ($request->has('price')) {
+            $kelas->price = $request->price;
+        }
+
+        $kelas->description = $request->description ?? $kelas->description;
+        $kelas->teacher_id = $request->teacher_id ?? $kelas->teacher_id;
+        $kelas->save();
 
         return response()->json([
-            'message' => 'Kelas berhasil diupdate',
-            'class' => $class,
+            'message' => 'Kelas berhasil diperbarui',
+            'data' => $kelas
         ]);
     }
 
@@ -86,10 +111,10 @@ class ClassController extends Controller
         return response()->json(['message' => 'Kelas berhasil dihapus']);
     }
 
-    // Assign pengajar utama (update kolom teacher_id)
     public function assignTeacher(Request $request, $classId)
     {
         $request->validate(['teacher_id' => 'required|exists:users,id']);
+
         $class = ClassModel::findOrFail($classId);
         $class->teacher_id = $request->teacher_id;
         $class->save();
@@ -97,28 +122,43 @@ class ClassController extends Controller
         return response()->json(['message' => 'Pengajar utama berhasil di-assign']);
     }
 
-    public function removeTeacher($classId)
+    public function removeTeacher($id)
+{
+    $class = ClassModel::findOrFail($id);
+
+    $class->teacher_id = null;
+    $class->save();
+
+    return response()->json([
+        'status' => 'success',
+        'message' => 'Pengajar utama berhasil dihapus dari kelas.',
+    ]);
+}
+
+
+    public function removeStudent($classId, $studentId)
     {
         $class = ClassModel::findOrFail($classId);
-        $class->teacher_id = null;
-        $class->save();
-
-        return response()->json(['message' => 'Pengajar utama berhasil dihapus dari kelas']);
+        $class->students()->detach($studentId);
+    
+        return response()->json(['message' => 'Siswa berhasil dihapus dari kelas']);
     }
 
-    // Assign pengajar pendamping (pivot)
-    public function addAssistantTeacher(Request $request, $classId)
-    {
-        $request->validate(['teacher_id' => 'required|exists:users,id']);
-        $class = ClassModel::findOrFail($classId);
-        $class->teachers()->syncWithoutDetaching([$request->teacher_id]);
-        return response()->json(['message' => 'Pengajar pendamping berhasil di-assign']);
-    }
+    // public function addAssistantTeacher(Request $request, $classId)
+    // {
+    //     $request->validate(['teacher_id' => 'required|exists:users,id']);
 
-    public function removeAssistantTeacher($classId, $teacherId)
-    {
-        $class = ClassModel::findOrFail($classId);
-        $class->teachers()->detach($teacherId);
-        return response()->json(['message' => 'Pengajar pendamping berhasil dihapus dari kelas']);
-    }
+    //     $class = ClassModel::findOrFail($classId);
+    //     $class->teachers()->syncWithoutDetaching([$request->teacher_id]);
+
+    //     return response()->json(['message' => 'Pengajar pendamping berhasil di-assign']);
+    // }
+
+    // public function removeAssistantTeacher($classId, $teacherId)
+    // {
+    //     $class = ClassModel::findOrFail($classId);
+    //     $class->teachers()->detach($teacherId);
+
+    //     return response()->json(['message' => 'Pengajar pendamping berhasil dihapus dari kelas']);
+    // }
 }
