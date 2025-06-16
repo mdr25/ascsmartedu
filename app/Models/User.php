@@ -18,6 +18,7 @@ class User extends Authenticatable
         'address',
         'roles_id'
     ];
+
     protected $hidden = ['password'];
 
     // Relasi ke role
@@ -26,25 +27,25 @@ class User extends Authenticatable
         return $this->belongsTo(Role::class, 'roles_id');
     }
 
-    // Relasi ke kelas yang dibeli siswa
+    // Kelas yang dibeli siswa
     public function classes()
     {
         return $this->belongsToMany(ClassModel::class, 'class_user', 'user_id', 'class_id')->withTimestamps();
     }
 
-    // Relasi ke kelas yang diampu pengajar (jika pakai class_teacher)
+    // Kelas sebagai pengajar pendamping
     public function teachingClasses()
     {
-        // Jika pakai pivot class_teacher
-        return $this->belongsToMany(
-            ClassModel::class,
-            'class_teacher',
-            'teacher_id',
-            'class_id'
-        );
+        return $this->belongsToMany(ClassModel::class, 'class_teacher', 'user_id', 'class_id');
     }
 
-    // Relasi ke pembayaran
+    // Kelas sebagai pengajar utama
+    public function mainTeachingClasses()
+    {
+        return $this->hasMany(ClassModel::class, 'teacher_id');
+    }
+
+    // Riwayat pembayaran
     public function payments()
     {
         return $this->hasMany(Payment::class, 'user_id');
