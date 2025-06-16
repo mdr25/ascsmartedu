@@ -21,7 +21,8 @@ Route::middleware(['auth:sanctum', 'role:admin'])->prefix('admin')->group(functi
     Route::get('dashboard', [DashboardController::class, 'index']);
 
     // User & Role Management
-    Route::apiResource('users', UserController::class)->except('show');
+    // Route::apiResource('users', UserController::class)->except('show');
+    Route::apiResource('users', UserController::class);
     Route::get('roles', [UserRoleController::class, 'allRoles']);
 
     // Jenjang & Kelas

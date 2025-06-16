@@ -54,4 +54,11 @@ class UserController extends Controller
         $roles = Role::all();
         return response()->json(['data' => $roles]);
     }
+
+public function show($id)
+{
+    $user = User::findOrFail($id);
+    return response()->json(['data' => $user]);
+}
+
 }
