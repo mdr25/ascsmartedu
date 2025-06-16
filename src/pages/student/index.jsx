@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
-import API from "../../_api"; // Import API
 import { Link } from "react-router-dom";
+import api from "../../_api";
 
 const pastelColors = [
   "bg-pink-100",
@@ -21,12 +21,11 @@ export default function StudentDashboard() {
     const fetchData = async () => {
       try {
         const token = localStorage.getItem("token");
-
-        const response = await API.get("/student/dashboard", {
+        const response = await api.get("/student/dashboard", {
           headers: { Authorization: `Bearer ${token}` },
         });
         setDashboardData(response.data);
-      } catch (err) {
+      } catch {
         setError("Gagal mengambil data dashboard!");
       } finally {
         setLoading(false);
@@ -36,16 +35,31 @@ export default function StudentDashboard() {
     fetchData();
   }, []);
 
+  const getGreeting = () => {
+    const hour = new Date().getHours();
+    if (hour < 12) return "Selamat pagi";
+    if (hour < 17) return "Selamat siang";
+    if (hour < 20) return "Selamat sore";
+    return "Selamat malam";
+  };
+
   if (loading)
     return <p className="text-center text-lg text-gray-600">Loading...</p>;
   if (error) return <p className="text-center text-lg text-red-500">{error}</p>;
 
-  const { name, classes, today_schedule, recent_attendance } = dashboardData;
+  const {
+    name = "Siswa",
+    classes = [],
+    today_schedule = [],
+    recent_attendance = [],
+  } = dashboardData || {};
 
   return (
     <div className="container mx-auto p-6">
       {/* Header */}
-      <h1 className="text-3xl font-bold text-gray-800 mb-6">Hi, {name}! 👋</h1>
+      <h1 className="text-3xl font-bold text-gray-800 mb-6">
+        {getGreeting()}, {name}! 👋
+      </h1>
 
       {/* Kelas yang Diikuti */}
       <div className="bg-white shadow-lg rounded-lg p-4">
@@ -61,17 +75,14 @@ export default function StudentDashboard() {
         {classes.length > 0 ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mt-4">
             {classes.map((cls, index) => {
-              const colorClass = pastelColors[index % pastelColors.length]; // Background banner
+              const colorClass = pastelColors[index % pastelColors.length];
               return (
                 <Link
                   key={cls.id}
                   to={`/siswa/classes/${cls.id}`}
                   className="block bg-gray-100 rounded-lg shadow-md overflow-hidden hover:scale-105 transition transform duration-200"
                 >
-                  {/* Banner */}
                   <div className={`h-[70px] w-full ${colorClass}`}></div>
-
-                  {/* Card Content */}
                   <div className="p-4">
                     <div className="text-sm text-gray-500 mb-1">
                       {cls.jenjang_kelas || "Jenjang tidak tersedia"}
@@ -84,7 +95,7 @@ export default function StudentDashboard() {
                     </p>
                     <p className="text-sm text-gray-700">
                       <span className="text-gray-500">Siswa:</span>{" "}
-                      {cls.total_student}
+                      {cls.total_student || 0}
                     </p>
                     <p className="text-sm text-gray-700">
                       <span className="text-gray-500">Pengajar:</span>{" "}
@@ -111,8 +122,7 @@ export default function StudentDashboard() {
           <ul className="mt-3">
             {today_schedule.map((jadwal, index) => (
               <li key={index} className="border-b py-2 text-gray-600">
-                🕒 {jadwal.course_name} ({jadwal.start_time} - {jadwal.end_time}
-                )
+                🕒 {jadwal.course_name} ({jadwal.start_time} - {jadwal.end_time})
               </li>
             ))}
           </ul>
