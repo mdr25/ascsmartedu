@@ -10,7 +10,7 @@ use App\Http\Controllers\Pengajar\{
     BankSoalController
 };
 
-Route::middleware(['auth:sanctum', 'role:Pengajar'])->prefix('teacher')->group(function () {
+Route::middleware(['auth:sanctum', 'role:pengajar'])->prefix('teacher')->group(function () {
     // Dashboard & Profil
     Route::get('dashboard', [DashboardController::class, 'index']);
     Route::get('profile', [ProfileController::class, 'show']);
