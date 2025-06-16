@@ -21,4 +21,9 @@ class Schedule extends Model
     {
         return $this->belongsTo(ClassModel::class, 'classes_id');
     }
+
+    public function attendance()
+    {
+        return $this->hasMany(Attendance::class, 'schedule_id');
+    }
 }

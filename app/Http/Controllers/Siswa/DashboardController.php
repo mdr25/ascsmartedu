@@ -19,7 +19,19 @@ class DashboardController extends Controller
         $today = Carbon::today()->toDateString();
 
         // List kelas yang sudah dibeli user
-        $classes = $user->classes()->get(['id', 'class_name']);
+        $classes = $user->classes()
+            ->with(['jenjangKelas', 'teacher']) // Biarkan Laravel mengambil data relasi
+            ->withCount('students')
+            ->get()
+            ->map(fn($class) => [
+                'id' => $class->id,
+                'class_name' => $class->class_name,
+                'description' => $class->description ?? '-',
+                'jenjang_kelas' => $class->jenjangKelas?->nama_jenjang ?? 'Tidak tersedia',
+                'teacher' => $class->teacher?->name ?? 'Belum ditentukan',
+                'total_student' => $class->students_count
+            ]);
+
 
         // Jadwal hari ini dari semua kelas yang dibeli
         $todaySchedule = Schedule::whereIn('classes_id', $classes->pluck('id'))
@@ -27,11 +39,6 @@ class DashboardController extends Controller
             ->select('classes_id', 'course_name', 'start_time', 'end_time')
             ->get();
 
-        // Total konten belajar dari semua kelas yang dibeli
-        $classIds = $classes->pluck('id')->toArray();
-        $totalKonten = Konten::whereHas('bab.mapel', function ($q) use ($classIds) {
-            $q->whereIn('classes_id', $classIds);
-        })->count();
 
         // Riwayat absensi 3 hari terakhir dari semua kelas
         $recentAttendance = Attendance::where('users_id', $user->id)
@@ -43,7 +50,6 @@ class DashboardController extends Controller
             'name' => $user->name,
             'classes' => $classes,
             'today_schedule' => $todaySchedule,
-            'total_konten' => $totalKonten,
             'recent_attendance' => $recentAttendance
         ]);
     }

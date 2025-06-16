@@ -21,7 +21,7 @@ Route::middleware(['auth:sanctum', 'role:siswa'])->prefix('student')->group(func
     // Pembayaran kelas
     Route::post('payments', [PaymentController::class, 'create']);
     Route::get('payments', [PaymentController::class, 'history']);
-     Route::get('my-classes', [PaymentController::class, 'myClasses']);
+    Route::get('my-classes', [PaymentController::class, 'myClasses']);
 
     Route::get('jenjang', [JenjangController::class, 'index']);
     Route::get('jenjang/{jenjangId}/classes', [AdminClassController::class, 'getByJenjang']);
@@ -44,7 +44,7 @@ Route::middleware(['auth:sanctum', 'role:siswa'])->prefix('student')->group(func
     Route::get('contents/{id}', [ContentController::class, 'show']);
 
     // Absensi
-    Route::get('classes/{classId}/attendance', [AttendanceController::class, 'index']);
-    Route::put('classes/{classId}/attendance/{attendanceId}', [AttendanceController::class, 'update']);
+    Route::get('attendance', [AttendanceController::class, 'index']);
+    Route::put('attendance/{classId}/{attendanceId}', [AttendanceController::class, 'update']);
     Route::get('classes/{classId}/attendance/history', [AttendanceController::class, 'history']);
 });

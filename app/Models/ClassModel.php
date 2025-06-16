@@ -43,8 +43,12 @@ class ClassModel extends Model
     }
 
     public function getStudentCountAttribute()
-{
-    return $this->students()->count(); 
-}
+    {
+        return $this->students()->count();
+    }
 
+    public function schedules()
+    {
+        return $this->hasMany(Schedule::class, 'classes_id');
+    }
 }

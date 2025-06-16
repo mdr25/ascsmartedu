@@ -9,18 +9,18 @@ use Carbon\Carbon;
 
 class AttendanceController extends Controller
 {
-    public function index($classId, Request $request)
+    public function index(Request $request)
     {
         $user = $request->user();
 
-        $attendances = Attendance::where('users_id', $user->id)
-            ->whereHas(
-                'schedule',
-                fn($q) =>
-                $q->where('classes_id', $classId)
-            )->get();
+        $classes = $user->classes()->with([
+            'jenjangKelas:id,nama_jenjang', // Tambahin ini supaya jenjang kelas ikut dikirim
+            'schedules' => function ($query) {
+                $query->with('attendance');
+            }
+        ])->get();
 
-        return response()->json($attendances);
+        return response()->json($classes);
     }
 
     public function update($classId, $attendanceId, Request $request)
@@ -55,7 +55,10 @@ class AttendanceController extends Controller
 
         $attendance->update(['status' => 'Hadir']);
 
-        return response()->json(['message' => 'Absen berhasil.']);
+        return response()->json([
+            'message' => 'Absen berhasil.',
+            'attendance' => $attendance,
+        ]);
     }
 
     public function history($classId, Request $request)
