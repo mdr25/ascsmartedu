@@ -25,32 +25,29 @@ export default function AdminClasses() {
   };
 
   const fetchData = async () => {
-  setLoading(true);
-  const data = await getClasses();
+    setLoading(true);
+    try {
+      const data = await getClasses();
 
-  const jenjangOrder = {
-    SD: 1,
-    SMP: 2,
-    SMA: 3,
+      const jenjangOrder = { SD: 1, SMP: 2, SMA: 3 };
+
+      const sortedData = [...data].sort((a, b) => {
+        const jenjangA = a.jenjang_kelas?.nama_jenjang || "";
+        const jenjangB = b.jenjang_kelas?.nama_jenjang || "";
+
+        const jenjangComparison =
+          (jenjangOrder[jenjangA] || 999) - (jenjangOrder[jenjangB] || 999);
+
+        if (jenjangComparison !== 0) return jenjangComparison;
+        return a.class_name.localeCompare(b.class_name);
+      });
+
+      setClasses(sortedData);
+    } catch (error) {
+      console.error("Gagal memuat kelas:", error);
+    }
+    setLoading(false);
   };
-
-  const sortedData = [...data].sort((a, b) => {
-    const jenjangA = a.jenjang_kelas?.nama_jenjang || "";
-    const jenjangB = b.jenjang_kelas?.nama_jenjang || "";
-
-    const jenjangComparison =
-      (jenjangOrder[jenjangA] || 999) - (jenjangOrder[jenjangB] || 999);
-
-    if (jenjangComparison !== 0) return jenjangComparison;
-
-    // Kalau jenjang sama, urutkan berdasarkan nama kelas
-    return a.class_name.localeCompare(b.class_name);
-  });
-
-  setClasses(sortedData);
-  setLoading(false);
-};
-
 
   const handleDelete = async (id, name) => {
     const confirmed = window.confirm(`Yakin ingin menghapus kelas "${name}"?`);
@@ -103,17 +100,18 @@ export default function AdminClasses() {
         ))}
       </div>
 
-      {/* Loading State */}
+      {/* Loading or Empty */}
       {loading ? (
-        <div className="flex items-center justify-center p-6">
-          <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-orange-500"></div>
-        </div>
+        <div className="text-center text-gray-500">Memuat data kelas...</div>
       ) : filteredClasses.length === 0 ? (
         <div className="text-center text-gray-400">Tidak ada kelas.</div>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5">
           {filteredClasses.map((cls, index) => {
             const colorClass = pastelColors[index % pastelColors.length];
+            const studentCount = cls.students?.length || 0;
+
+            console.log(`Kelas: ${cls.class_name}`, cls.students);
 
             return (
               <div
@@ -170,7 +168,7 @@ export default function AdminClasses() {
                     </p>
                     <p className="text-sm text-gray-700">
                       <span className="text-gray-500">Siswa:</span>{" "}
-                      {cls.total_student}
+                      {studentCount}
                     </p>
                     <p className="text-sm text-gray-700">
                       <span className="text-gray-500">Pengajar:</span>{" "}
