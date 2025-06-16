@@ -65,7 +65,7 @@ export default function AdminLayout() {
               </Link>
               <Link
                 to="/admin/classes"
-                className="flex items-center text-[#bbbec5] hover:text-black transition pl-6 pr-4 py-2"
+                className="flex items-center my-2 text-[#bbbec5] hover:text-black transition pl-6 pr-4 py-2"
               >
                 <i className="bx bx-book-open text-lg mr-2"></i> Classes
               </Link>

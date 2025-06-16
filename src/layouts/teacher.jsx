@@ -71,16 +71,16 @@ export default function TeacherLayout() {
                 <i className="bx bx-user text-lg mr-2"></i> Classes
               </Link>
               <Link
-                to="/teacher/classes"
-                className="flex items-center text-[#bbbec5] hover:text-black transition pl-6 pr-4 py-2"
-              >
-                <i className="bx bx-book-open text-lg mr-2"></i> Jadwal Kelas
-              </Link>
-              <Link
-                to="/admin/payments"
+                to="/teacher/schedules"
                 className="flex items-center my-2 text-[#bbbec5] hover:text-black transition pl-6 pr-4 py-2"
               >
-                <i className="bx bx-credit-card text-lg mr-2"></i> Payments
+                <i className="bx bx-book-open text-lg mr-2"></i> Schedules
+              </Link>
+              <Link
+                to="/admin/attendances"
+                className="flex items-center my-2 text-[#bbbec5] hover:text-black transition pl-6 pr-4 py-2"
+              >
+                <i className="bx bx-credit-card text-lg mr-2"></i> Attendances
               </Link>
             </div>
 

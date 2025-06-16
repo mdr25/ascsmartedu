@@ -57,10 +57,16 @@ export default function StudentLayout() {
             <i className="bx bx-user text-lg mr-2"></i> Classes
           </Link>
           <Link
-            to="/student/attendances"
-            className="flex items-center text-[#bbbec5] hover:text-black transition pl-6 pr-4 py-2"
+            to="/student/schedules"
+            className="flex items-center  my-2 text-[#bbbec5] hover:text-black transition pl-6 pr-4 py-2"
           >
-            <i className="bx bx-book-open text-lg mr-2"></i> Attendance
+            <i className="bx bx-user text-lg mr-2"></i> Schedules
+          </Link>
+          <Link
+            to="/student/attendances"
+            className="flex items-center my-2 text-[#bbbec5] hover:text-black transition pl-6 pr-4 py-2"
+          >
+            <i className="bx bx-book-open text-lg mr-2"></i> Attendances
           </Link>
           <Link
             to="/student/payments"
