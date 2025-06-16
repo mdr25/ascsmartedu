@@ -83,6 +83,7 @@ export default function AdminPayments() {
                 <th className="p-3">Jenjang</th>
                 <th className="p-3">Metode</th>
                 <th className="p-3">Jumlah</th>
+                <th className="p-3">Tanggal</th>
                 <th className="p-3">Status</th>
                 <th className="p-3 text-center">Aksi</th>
               </tr>
@@ -98,6 +99,13 @@ export default function AdminPayments() {
                   <td className="p-3">{p.payment_method}</td>
                   <td className="p-3 text-green-600 font-semibold">
                     Rp{Number(p.total_amount).toLocaleString()}
+                  </td>
+                  <td className="p-3 text-gray-600">
+                    {new Date(p.created_at).toLocaleDateString("id-ID", {
+                      day: "2-digit",
+                      month: "long",
+                      year: "numeric",
+                    })}
                   </td>
                   <td className="p-3">
                     <span
@@ -129,89 +137,91 @@ export default function AdminPayments() {
       )}
 
       {modalOpen && selectedPayment && (
-  <div className="fixed inset-0 bg-black bg-opacity-40 flex justify-center items-center z-50">
-    <div className="bg-white rounded-xl shadow-lg w-full max-w-md p-6 relative">
-      {/* Tombol Tutup */}
-      <button
-        onClick={() => setModalOpen(false)}
-        className="absolute top-3 right-4 text-gray-500 hover:text-gray-700 text-xl"
-      >
-        &times;
-      </button>
-
-      {/* Judul */}
-      <h2 className="text-xl font-bold text-gray-800 mb-4">Detail Pembayaran</h2>
-
-      <div className="border-b border-gray-200 mb-4"></div>
-
-      {/* Konten */}
-      <div className="space-y-3 text-sm text-gray-700">
-        <div className="flex justify-between">
-          <span className="font-medium">Siswa:</span>
-          <span>{selectedPayment.user?.name || "-"}</span>
-        </div>
-        <div className="flex justify-between">
-          <span className="font-medium">Kelas:</span>
-          <span>{selectedPayment.class?.class_name || "-"}</span>
-        </div>
-        <div className="flex justify-between">
-          <span className="font-medium">Jenjang:</span>
-          <span>{selectedPayment.class?.jenjang_kelas?.nama_jenjang || "-"}</span>
-        </div>
-        <div className="flex justify-between">
-          <span className="font-medium">Metode:</span>
-          <span>{selectedPayment.payment_method || "-"}</span>
-        </div>
-        <div className="flex justify-between">
-          <span className="font-medium">Jumlah:</span>
-          <span className="text-green-600 font-semibold">
-            Rp{Number(selectedPayment.total_amount).toLocaleString()}
-          </span>
-        </div>
-        <div className="flex justify-between items-center">
-          <span className="font-medium">Status:</span>
-          <span
-            className={`px-2 py-0.5 rounded text-xs font-semibold ${
-              selectedPayment.status === "paid"
-                ? "bg-green-100 text-green-700"
-                : "bg-yellow-100 text-yellow-700"
-            }`}
-          >
-            {selectedPayment.status}
-          </span>
-        </div>
-        <div className="flex justify-between items-start">
-          <span className="font-medium">Bukti:</span>
-          {selectedPayment.payment_proof ? (
-            <a
-              href={selectedPayment.payment_proof}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-blue-600 underline text-sm"
+        <div className="fixed inset-0 bg-black bg-opacity-40 flex justify-center items-center z-50">
+          <div className="bg-white rounded-xl shadow-lg w-full max-w-md p-6 relative">
+            {/* Tombol Tutup */}
+            <button
+              onClick={() => setModalOpen(false)}
+              className="absolute top-3 right-4 text-gray-500 hover:text-gray-700 text-xl"
             >
-              Klik untuk lihat bukti
-            </a>
-          ) : (
-            <span className="text-gray-400 text-sm">Tidak ada</span>
-          )}
+              &times;
+            </button>
+
+            {/* Judul */}
+            <h2 className="text-xl font-bold text-gray-800 mb-4">
+              Detail Pembayaran
+            </h2>
+
+            <div className="border-b border-gray-200 mb-4"></div>
+
+            {/* Konten */}
+            <div className="space-y-3 text-sm text-gray-700">
+              <div className="flex justify-between">
+                <span className="font-medium">Siswa:</span>
+                <span>{selectedPayment.user?.name || "-"}</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="font-medium">Kelas:</span>
+                <span>{selectedPayment.class?.class_name || "-"}</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="font-medium">Jenjang:</span>
+                <span>
+                  {selectedPayment.class?.jenjang_kelas?.nama_jenjang || "-"}
+                </span>
+              </div>
+              <div className="flex justify-between">
+                <span className="font-medium">Metode:</span>
+                <span>{selectedPayment.payment_method || "-"}</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="font-medium">Jumlah:</span>
+                <span className="text-green-600 font-semibold">
+                  Rp{Number(selectedPayment.total_amount).toLocaleString()}
+                </span>
+              </div>
+              <div className="flex justify-between items-center">
+                <span className="font-medium">Status:</span>
+                <span
+                  className={`px-2 py-0.5 rounded text-xs font-semibold ${
+                    selectedPayment.status === "paid"
+                      ? "bg-green-100 text-green-700"
+                      : "bg-yellow-100 text-yellow-700"
+                  }`}
+                >
+                  {selectedPayment.status}
+                </span>
+              </div>
+              <div className="flex justify-between items-start">
+                <span className="font-medium">Bukti:</span>
+                {selectedPayment.payment_proof ? (
+                  <a
+                    href={selectedPayment.payment_proof}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-blue-600 underline text-sm"
+                  >
+                    Klik untuk lihat bukti
+                  </a>
+                ) : (
+                  <span className="text-gray-400 text-sm">Tidak ada</span>
+                )}
+              </div>
+            </div>
+
+            {/* Tombol Verifikasi */}
+            {selectedPayment.status === "unpaid" && (
+              <button
+                onClick={() => handleVerify(selectedPayment.id)}
+                disabled={loading}
+                className="mt-6 w-full bg-green-500 hover:bg-green-400 text-white py-2 rounded-md font-medium text-sm"
+              >
+                {loading ? "Memverifikasi..." : "Verifikasi Pembayaran"}
+              </button>
+            )}
+          </div>
         </div>
-      </div>
-
-      {/* Tombol Verifikasi */}
-      {selectedPayment.status === "unpaid" && (
-        <button
-          onClick={() => handleVerify(selectedPayment.id)}
-          disabled={loading}
-          className="mt-6 w-full bg-green-500 hover:bg-green-400 text-white py-2 rounded-md font-medium text-sm"
-        >
-          {loading ? "Memverifikasi..." : "Verifikasi Pembayaran"}
-        </button>
       )}
-    </div>
-  </div>
-)}
-
-
     </div>
   );
 }
