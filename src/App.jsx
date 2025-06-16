@@ -58,7 +58,12 @@ function App() {
         <Route element={<RouteGuard allowedRoles={["admin"]} />}>
           <Route path="/admin" element={<AdminLayout />}>
             <Route index element={<AdminDashboard />} />
-            <Route path="users" element={<AdminUsers />} />
+
+            <Route path="users">
+              <Route index element={<AdminUsers />} />
+              {/* <Route path="create" element={<UsersCreate />} /> */}
+            </Route>
+
             <Route path="classes">
               <Route index element={<AdminClasses />} />
               <Route path="create" element={<ClassCreate />} />

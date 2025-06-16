@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import api from "../../_api";
+import API from "../../_api";
 
 const pastelColors = [
   "bg-pink-100",
@@ -21,7 +21,7 @@ export default function StudentDashboard() {
     const fetchData = async () => {
       try {
         const token = localStorage.getItem("token");
-        const response = await api.get("/student/dashboard", {
+        const response = await API.get("/student/dashboard", {
           headers: { Authorization: `Bearer ${token}` },
         });
         setDashboardData(response.data);
@@ -79,7 +79,7 @@ export default function StudentDashboard() {
               return (
                 <Link
                   key={cls.id}
-                  to={`/siswa/classes/${cls.id}`}
+                  to={`/student/classes/${cls.id}`}
                   className="block bg-gray-100 rounded-lg shadow-md overflow-hidden hover:scale-105 transition transform duration-200"
                 >
                   <div className={`h-[70px] w-full ${colorClass}`}></div>
@@ -122,7 +122,8 @@ export default function StudentDashboard() {
           <ul className="mt-3">
             {today_schedule.map((jadwal, index) => (
               <li key={index} className="border-b py-2 text-gray-600">
-                🕒 {jadwal.course_name} ({jadwal.start_time} - {jadwal.end_time})
+                🕒 {jadwal.course_name} ({jadwal.start_time} - {jadwal.end_time}
+                )
               </li>
             ))}
           </ul>
