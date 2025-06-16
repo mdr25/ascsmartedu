@@ -43,12 +43,6 @@ export default function AdminLayout() {
             <Link to="/admin">
               <img src={logoasc} alt="Logo ASC" className="h-[30px] mx-auto" />
             </Link>
-            {/* <Link
-              to="/admin/purchase"
-              className="inline-block mt-8 text-white text-sm py-2 px-7 bg-orange-500 rounded-md hover:bg-orange-400 transition"
-            >
-              Purchase Course
-            </Link> */}
           </div>
         </div>
 

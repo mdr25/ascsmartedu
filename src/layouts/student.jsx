@@ -1,4 +1,4 @@
-// src/layout/StudentLayout.jsx
+
 import { useEffect, useState } from "react";
 import { Link, Outlet, useNavigate } from "react-router-dom";
 import logoasc from "../assets/logoasc.png";

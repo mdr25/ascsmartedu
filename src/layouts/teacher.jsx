@@ -1,4 +1,3 @@
-// src/layout/Admin.jsx
 import { useEffect, useState } from "react";
 import { Link, Outlet, useNavigate } from "react-router-dom";
 
