@@ -40,6 +40,7 @@ import StudentBabIndex from "./pages/student/mapels/bab";
 import StudentSubbabIndex from "./pages/student/mapels/subbab";
 import StudentContentIndex from "./pages/student/mapels/content";
 
+
 function App() {
   return (
     <BrowserRouter>
