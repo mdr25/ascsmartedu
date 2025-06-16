@@ -111,7 +111,7 @@ export default function AdminLayout() {
               <img
                 src={profile}
                 alt="Profile"
-                className="h-[30px] w-[30px] rounded-full object-cover"
+                className="w-[50px] h-[50px] rounded-[18px]"
               />
 
               {/* Nama dan Dropdown */}

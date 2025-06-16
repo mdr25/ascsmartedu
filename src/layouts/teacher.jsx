@@ -59,23 +59,23 @@ export default function TeacherLayout() {
           <nav className="flex flex-col flex-grow">
             <div>
               <Link
-                to="/admin"
+                to="/teacher"
                 className="flex items-center mt-3 text-black font-medium border-r-4 border-teal-500 pl-6 pr-4 py-2"
               >
                 <i className="bx bx-layout text-teal-500 text-lg mr-2"></i>{" "}
                 Dashboard
               </Link>
               <Link
-                to="/admin/users"
+                to="/teacher/classes"
                 className="flex items-center my-2 text-[#bbbec5] hover:text-black transition pl-6 pr-4 py-2"
               >
-                <i className="bx bx-user text-lg mr-2"></i> Users
+                <i className="bx bx-user text-lg mr-2"></i> Classes
               </Link>
               <Link
-                to="/admin/classes"
+                to="/teacher/classes"
                 className="flex items-center text-[#bbbec5] hover:text-black transition pl-6 pr-4 py-2"
               >
-                <i className="bx bx-book-open text-lg mr-2"></i> Classes
+                <i className="bx bx-book-open text-lg mr-2"></i> Jadwal Kelas
               </Link>
               <Link
                 to="/admin/payments"

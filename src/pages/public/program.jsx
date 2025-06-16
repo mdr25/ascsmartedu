@@ -11,7 +11,6 @@ export default function ProgramPage() {
        <Navbar />
        <Programs />
       </main>
-      <Footer />
     </div>
   );
 }

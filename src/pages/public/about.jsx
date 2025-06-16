@@ -10,7 +10,6 @@ export default function AboutPage() {
        <Navbar />
        <About />
       </main>
-      <Footer />
     </div>
   );
 }

@@ -130,6 +130,23 @@ export async function getClassDetail(id) {
   
 }
 
+export const getAvailableTeachers = async () => {
+  try {
+    const token = localStorage.getItem("token");
+    const response = await api.get("/admin/teachers", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        Accept: "application/json",
+      },
+    });
+
+    return response.data;
+  } catch (error) {
+    console.error("Gagal mengambil data pengajar:", error.response?.data || error.message);
+    throw error;
+  }
+};
+
 
 
 

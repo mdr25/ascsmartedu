@@ -1,14 +1,14 @@
-import { Navigate } from "react-router-dom";
+// import { Navigate } from "react-router-dom";
 
-const ProtectedRoute = ({ children, allowedRoles }) => {
-  const token = localStorage.getItem("token");
-  const userRole = localStorage.getItem("role");
+// const ProtectedRoute = ({ children, allowedRoles }) => {
+//   const token = localStorage.getItem("token");
+//   const userRole = localStorage.getItem("role");
 
-  if (!token || !allowedRoles.includes(userRole)) {
-    return <Navigate to="/login" />;
-  }
+//   if (!token || !allowedRoles.includes(userRole)) {
+//     return <Navigate to="/login" />;
+//   }
 
-  return children;
-};
+//   return children;
+// };
 
-export default ProtectedRoute;
+// export default ProtectedRoute;

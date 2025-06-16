@@ -22,13 +22,26 @@ export default function Navbar() {
     navigate("/login");
   };
 
+  const getDashboardPath = (role) => {
+    switch (role) {
+      case "admin":
+        return "/admin";
+      case "guru":
+        return "/teacher";
+      case "siswa":
+        return "/student";
+      default:
+        return "/";
+    }
+  };
+
   return (
     <>
       <header>
         <nav className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between p-4 bg-white shadow-lg">
           <div className="flex items-center gap-2">
             <img
-              src="src\assets\logoasc.png"
+              src="src/assets/logoasc.png"
               alt="logo"
               className="w-auto h-8"
             />
@@ -53,7 +66,7 @@ export default function Navbar() {
           <div className="hidden md:flex gap-3">
             {isLoggedIn ? (
               <>
-                <Link to={`/${userRole}`}>
+                <Link to={getDashboardPath(userRole)}>
                   <button className="border border-gray-300 px-4 py-1 rounded hover:bg-gray-50 transition">
                     Dashboard
                   </button>
