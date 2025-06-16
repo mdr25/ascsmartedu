@@ -11,7 +11,6 @@ export default function MethodPage() {
        <Navbar />
        <Features />
       </main>
-      <Footer />
     </div>
   );
 }
