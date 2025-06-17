@@ -91,9 +91,7 @@ export default function AdminUsers() {
       </div>
 
       {/* Error message */}
-      {error && (
-        <div className="text-sm text-red-600 mb-4">{error}</div>
-      )}
+      {error && <div className="text-sm text-red-600 mb-4">{error}</div>}
 
       {/* Table */}
       <div className="overflow-x-auto rounded-lg relative">
@@ -104,11 +102,12 @@ export default function AdminUsers() {
         )}
 
         <table className="min-w-full bg-white shadow text-sm border">
-          <thead className="bg-gray-100 text-sm">
+          <thead className="bg-gray-100 text-sm text-left">
             <tr>
               <th className="p-3">Name</th>
               <th className="p-3">Email</th>
               <th className="p-3">Phone</th>
+              <th className="p-3">Gender</th>
               <th className="p-3">Address</th>
               <th className="p-3">Role</th>
               <th className="p-3 text-right">Action</th>
@@ -121,8 +120,17 @@ export default function AdminUsers() {
                   <td className="p-3">{user.name}</td>
                   <td className="p-3">{user.email}</td>
                   <td className="p-3">{user.phone_number || "-"}</td>
+                  <td className="p-3">
+                    {user.gender === "M"
+                      ? "Laki-laki"
+                      : user.gender === "F"
+                      ? "Perempuan"
+                      : "-"}
+                  </td>
                   <td className="p-3">{user.address || "-"}</td>
-                  <td className="p-3">{rolesMap[user.roles_id] || "Unknown"}</td>
+                  <td className="p-3">
+                    {rolesMap[user.roles_id] || "Unknown"}
+                  </td>
                   <td className="p-3 text-right">
                     <div className="relative">
                       <button

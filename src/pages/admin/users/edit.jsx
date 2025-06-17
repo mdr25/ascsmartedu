@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { getRoles, getUserById, updateUser } from "../../../_services/users";
+import { getUserById, updateUser } from "../../../_services/users";
 
 export default function UserEdit() {
   const navigate = useNavigate();
@@ -13,23 +13,21 @@ export default function UserEdit() {
     phone_number: "",
     gender: "",
     address: "",
-    roles_id: "",
   });
 
-  const [rolesOptions, setRolesOptions] = useState([]);
+  
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-  // Ambil data user + role saat halaman pertama kali dibuka
+  // Ambil data user saat halaman pertama kali dibuka
   useEffect(() => {
     const fetchInitialData = async () => {
       try {
-        const [rolesData, user] = await Promise.all([
-          getRoles(),
+        const [user] = await Promise.all([
           getUserById(id),
         ]);
 
-        setRolesOptions(rolesData);
+        
         setFormData({
           name: user.name,
           email: user.email,
@@ -37,11 +35,10 @@ export default function UserEdit() {
           phone_number: user.phone_number,
           gender: user.gender,
           address: user.address,
-          roles_id: String(user.roles_id),
         });
       } catch (err) {
         console.error("Gagal memuat data:", err);
-        setError("Gagal memuat data user atau role.");
+        setError("Gagal memuat data user");
       }
     };
 
@@ -59,17 +56,10 @@ export default function UserEdit() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const {
-      name,
-      email,
-      password,
-      phone_number,
-      gender,
-      address,
-      roles_id,
-    } = formData;
+    const { name, email, password, phone_number, gender, address } =
+      formData;
 
-    if (!name || !email || !phone_number || !gender || !address || !roles_id) {
+    if (!name || !email || !phone_number || !gender || !address ) {
       setError("Semua field wajib diisi kecuali password.");
       return;
     }
@@ -84,7 +74,6 @@ export default function UserEdit() {
         phone_number,
         gender,
         address,
-        roles_id: parseInt(roles_id),
       };
 
       if (password) {
@@ -139,9 +128,7 @@ export default function UserEdit() {
 
           {/* Password (opsional) */}
           <div className="space-y-1">
-            <label className="block text-sm font-medium">
-              Password (kosongkan jika tidak diubah)
-            </label>
+            <label className="block text-sm font-medium">Password</label>
             <input
               type="password"
               name="password"
@@ -149,6 +136,9 @@ export default function UserEdit() {
               onChange={handleChange}
               className="text-sm w-full border p-2 rounded-lg"
             />
+            <p className="text-xs text-red-500 mt-1 italic">
+              * Kosongkan jika tidak ingin mengubah password
+            </p>
           </div>
 
           {/* Phone */}
@@ -190,25 +180,6 @@ export default function UserEdit() {
               rows="3"
               className="text-sm w-full border p-2 rounded-lg"
             />
-          </div>
-
-          {/* Roles */}
-          <div className="space-y-1">
-            <label className="block text-sm font-medium">Role</label>
-            <select
-              name="roles_id"
-              value={formData.roles_id}
-              onChange={handleChange}
-              required
-              className="text-sm w-full border p-2 rounded-lg"
-            >
-              <option value="">-- Pilih Role --</option>
-              {rolesOptions.map((role) => (
-                <option key={role.id} value={role.id}>
-                  {role.name_role}
-                </option>
-              ))}
-            </select>
           </div>
 
           {/* Tombol */}

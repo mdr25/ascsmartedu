@@ -39,6 +39,7 @@ import StudentMapelIndex from "./pages/student/mapels";
 import StudentBabIndex from "./pages/student/mapels/bab";
 import StudentSubbabIndex from "./pages/student/mapels/subbab";
 import StudentContentIndex from "./pages/student/mapels/content";
+import UserEdit from "./pages/admin/users/edit";
 
 
 function App() {
@@ -67,7 +68,7 @@ function App() {
             <Route path="users">
               <Route index element={<AdminUsers />} />
               <Route path="create" element={<UserCreate />} />
-              {/* <Route path="edit/:id" element={<UserUpdate />} /> */}
+              <Route path="edit/:id" element={<UserEdit />} />
             </Route>
 
             <Route path="classes">
