@@ -1,6 +1,5 @@
-
 import { useEffect, useState } from "react";
-import { Link, Outlet, useNavigate } from "react-router-dom";
+import { NavLink, Outlet, useNavigate } from "react-router-dom";
 import logoasc from "../assets/logoasc.png";
 import profile from "../assets/profile.jpg";
 
@@ -31,49 +30,74 @@ export default function StudentLayout() {
       <aside className="w-[240px] h-screen fixed left-0 top-0 bg-[#f9f9fc] z-10 flex flex-col">
         {/* Logo & Purchase */}
         <div className="py-8 px-3 text-center">
-          <Link to="/student">
+          <NavLink to="/student">
             <img src={logoasc} alt="Logo ASC" className="h-[30px] mx-auto" />
-          </Link>
-          <Link
+          </NavLink>
+          <NavLink
             to="/student/payments/purchaseCourse"
             className="inline-block mt-8 text-white text-sm py-2 px-7 bg-orange-500 rounded-md hover:bg-orange-400 transition"
           >
             Purchase Course
-          </Link>
+          </NavLink>
         </div>
 
         {/* Navigasi */}
         <nav className="flex-1 flex flex-col overflow-y-auto text-sm pl-1">
-          <Link
+          <NavLink
             to="/student"
-            className="flex items-center mt-3 text-black font-medium border-r-4 border-teal-500 pl-6 pr-4 py-2"
+            end
+            className={({ isActive }) =>
+              isActive
+                ? "flex items-center mt-3 text-black font-medium border-r-4 border-teal-500 pl-6 pr-4 py-2"
+                : "flex items-center mt-3 text-[#bbbec5] hover:text-black transition pl-6 pr-4 py-2"
+            }
           >
-            <i className="bx bx-layout text-teal-500 text-lg mr-2"></i> Dashboard
-          </Link>
-          <Link
+            <i className="bx bx-layout text-lg mr-2"></i> Dashboard
+          </NavLink>
+
+          <NavLink
             to="/student/classes"
-            className="flex items-center my-2 text-[#bbbec5] hover:text-black transition pl-6 pr-4 py-2"
+            className={({ isActive }) =>
+              isActive
+                ? "flex items-center my-2 text-black font-medium border-r-4 border-teal-500 pl-6 pr-4 py-2"
+                : "flex items-center my-2 text-[#bbbec5] hover:text-black transition pl-6 pr-4 py-2"
+            }
           >
             <i className="bx bx-user text-lg mr-2"></i> Classes
-          </Link>
-          <Link
+          </NavLink>
+
+          <NavLink
             to="/student/schedules"
-            className="flex items-center  my-2 text-[#bbbec5] hover:text-black transition pl-6 pr-4 py-2"
+            className={({ isActive }) =>
+              isActive
+                ? "flex items-center my-2 text-black font-medium border-r-4 border-teal-500 pl-6 pr-4 py-2"
+                : "flex items-center my-2 text-[#bbbec5] hover:text-black transition pl-6 pr-4 py-2"
+            }
           >
             <i className="bx bx-user text-lg mr-2"></i> Schedules
-          </Link>
-          <Link
+          </NavLink>
+
+          <NavLink
             to="/student/attendances"
-            className="flex items-center my-2 text-[#bbbec5] hover:text-black transition pl-6 pr-4 py-2"
+            className={({ isActive }) =>
+              isActive
+                ? "flex items-center my-2 text-black font-medium border-r-4 border-teal-500 pl-6 pr-4 py-2"
+                : "flex items-center my-2 text-[#bbbec5] hover:text-black transition pl-6 pr-4 py-2"
+            }
           >
             <i className="bx bx-book-open text-lg mr-2"></i> Attendances
-          </Link>
-          <Link
+          </NavLink>
+
+          <NavLink
             to="/student/payments"
-            className="flex items-center my-2 text-[#bbbec5] hover:text-black transition pl-6 pr-4 py-2"
+            className={({ isActive }) =>
+              isActive
+                ? "flex items-center my-2 text-black font-medium border-r-4 border-teal-500 pl-6 pr-4 py-2"
+                : "flex items-center my-2 text-[#bbbec5] hover:text-black transition pl-6 pr-4 py-2"
+            }
           >
             <i className="bx bx-credit-card text-lg mr-2"></i> Payments
-          </Link>
+          </NavLink>
 
           <div className="flex-grow"></div>
 
@@ -108,20 +132,28 @@ export default function StudentLayout() {
               {isDropdownOpen && (
                 <ul className="absolute right-0 mt-2 w-44 bg-white shadow rounded-md z-50">
                   <li>
-                    <Link
+                    <NavLink
                       to="/student/profile"
-                      className="block px-4 py-2 hover:bg-gray-100 text-sm flex items-center"
+                      className={({ isActive }) =>
+                        "block px-4 py-2 hover:bg-gray-100 text-sm flex items-center" +
+                        (isActive ? " font-semibold bg-gray-200" : "")
+                      }
+                      onClick={() => setIsDropdownOpen(false)}
                     >
                       <i className="bx bx-user-circle mr-2 text-lg"></i> Profile
-                    </Link>
+                    </NavLink>
                   </li>
                   <li>
-                    <Link
+                    <NavLink
                       to="/student/settings"
-                      className="block px-4 py-2 hover:bg-gray-100 text-sm flex items-center"
+                      className={({ isActive }) =>
+                        "block px-4 py-2 hover:bg-gray-100 text-sm flex items-center" +
+                        (isActive ? " font-semibold bg-gray-200" : "")
+                      }
+                      onClick={() => setIsDropdownOpen(false)}
                     >
                       <i className="bx bx-cog mr-2 text-lg"></i> Settings
-                    </Link>
+                    </NavLink>
                   </li>
                   <li>
                     <button
@@ -202,7 +234,9 @@ export default function StudentLayout() {
 function ProgressItem({ icon, label, bg, color, width }) {
   return (
     <div className="flex mt-4">
-      <i className={`bx ${icon} text-[${color}] bg-[${bg}] text-xl p-2 rounded`}></i>
+      <i
+        className={`bx ${icon} text-[${color}] bg-[${bg}] text-xl p-2 rounded`}
+      ></i>
       <div className="ml-3 flex-1">
         <h6 className="text-base mb-2 pr-12">{label}</h6>
         <div className={`w-full h-[10px] bg-[${bg}] rounded-full`}>
@@ -220,7 +254,9 @@ function ProgressItem({ icon, label, bg, color, width }) {
 function UpcomingTask({ icon, color, bg, title, date }) {
   return (
     <div className="flex items-center mt-4">
-      <i className={`bx ${icon} text-[${color}] bg-[${bg}] text-xl px-2 py-2 rounded`}></i>
+      <i
+        className={`bx ${icon} text-[${color}] bg-[${bg}] text-xl px-2 py-2 rounded`}
+      ></i>
       <div className="ml-3">
         <h6 className="text-base m-0">{title}</h6>
         <small className="text-gray-500">{date}</small>
