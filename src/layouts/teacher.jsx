@@ -37,7 +37,7 @@ export default function TeacherLayout() {
         {/* Logo & Purchase */}
         <div className="py-8">
           <div className="text-center py-6 px-3">
-            <Link to="/admin">
+            <Link to="/teacher">
               <img
                 src="src\assets\logoasc.png"
                 alt="Logo ASC"
@@ -45,7 +45,7 @@ export default function TeacherLayout() {
               />
             </Link>
             {/* <Link
-              to="/admin/purchase"
+              to="/teacher/purchase"
               className="inline-block mt-8 text-white text-sm py-2 px-7 bg-orange-500 rounded-md hover:bg-orange-400 transition"
             >
               Purchase Course
@@ -70,17 +70,17 @@ export default function TeacherLayout() {
               >
                 <i className="bx bx-user text-lg mr-2"></i> Classes
               </Link>
+              {/* <Link
+                to="/teacher/schedules"
+                className="flex items-center my-2 text-[#bbbec5] hover:text-black transition pl-6 pr-4 py-2"
+              >
+                <i className="bx bx-book-open text-lg mr-2"></i> Schedules
+              </Link> */}
               <Link
                 to="/teacher/schedules"
                 className="flex items-center my-2 text-[#bbbec5] hover:text-black transition pl-6 pr-4 py-2"
               >
                 <i className="bx bx-book-open text-lg mr-2"></i> Schedules
-              </Link>
-              <Link
-                to="/admin/attendances"
-                className="flex items-center my-2 text-[#bbbec5] hover:text-black transition pl-6 pr-4 py-2"
-              >
-                <i className="bx bx-credit-card text-lg mr-2"></i> Attendances
               </Link>
             </div>
 
@@ -233,7 +233,7 @@ export default function TeacherLayout() {
       {/* Akhir Sidebar Kanan */}
 
       {/* Main Page */}
-      <main className="main-pages relative ml-[240px] mr-[290px] px-8 py-2 transition-all z-[1]">
+      <main className="main-pages relative ml-[240px] mr-[290px] px-8 py-4 transition-all z-[1]">
         <Outlet />
       </main>
     </div>
