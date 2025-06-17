@@ -5,6 +5,10 @@ use App\Http\Controllers\Pengajar\{
     DashboardController,
     ProfileController,
     ClassController,
+    MapelController,
+    BabController,
+    SubbabController,
+    ContentController,
     AttendanceController,
     ScheduleController,
     BankSoalController
@@ -21,12 +25,23 @@ Route::middleware(['auth:sanctum', 'role:pengajar'])->prefix('teacher')->group(f
     Route::get('classes/{id}', [ClassController::class, 'show']); // opsional
     Route::get('classes/{id}/students', [ClassController::class, 'students']);
 
-    // Jadwal & Absensi
-    Route::get('classes/{id}/schedules', [ScheduleController::class, 'index']);
+    // Materi
+    Route::apiResource('mapel', MapelController::class);
+    Route::apiResource('bab', BabController::class);
+    Route::apiResource('subbab', SubbabController::class);
+    Route::apiResource('content', ContentController::class);
+
+    // Absensi
+    Route::get('schedules', [ScheduleController::class, 'index']);
     Route::post('schedules', [ScheduleController::class, 'store']);
-    Route::get('classes/{id}/attendance', [AttendanceController::class, 'index']);
-    Route::post('classes/{id}/attendance', [AttendanceController::class, 'store']);
-    Route::put('attendance/{id}', [AttendanceController::class, 'update']);
+    Route::get('schedules/{id}', [AttendanceController::class, 'attendanceRecap']);
+    Route::put('attendance/{classId}/{attendanceId}', [AttendanceController::class, 'update']);
+
+    // Route::get('classes/{id}/schedules', [ScheduleController::class, 'index']);
+    // Route::post('schedules', [ScheduleController::class, 'store']);
+    // Route::get('classes/{id}/attendance', [AttendanceController::class, 'index']);
+    // Route::post('classes/{id}/attendance', [AttendanceController::class, 'store']);
+    // Route::put('attendance/{id}', [AttendanceController::class, 'update']);
 
     // Bank Soal
     Route::get('bank_soal', [BankSoalController::class, 'index']);

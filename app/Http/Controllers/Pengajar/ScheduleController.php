@@ -6,31 +6,29 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use App\Models\ClassModel;
 use App\Models\User;
 use App\Models\Attendance;
 
 class ScheduleController extends Controller
 {
+
     // List jadwal per kelas
-    public function index($classId)
+    public function index()
     {
-        $user = Auth::user();
+        $teacher = Auth::user();
 
-        // Validasi pengajar hanya bisa akses kelas yang diajar
-        $isTeaching = DB::table('class_teacher')
-            ->where('teacher_id', $user->id)
-            ->where('class_id', $classId)
-            ->exists();
+        // Ambil semua kelas di mana teacher_id = id guru yang login
+        $classes = ClassModel::where('teacher_id', $teacher->id)
+            ->with([
+                'jenjangKelas:id,nama_jenjang',
+                'schedules',
+                //  => function ($query) {
+                //     $query->with(['attendance']);
+                // }
+            ])->get();
 
-        if (!$isTeaching) {
-            return response()->json(['message' => 'Anda tidak mengajar kelas ini'], 403);
-        }
-
-        $schedules = DB::table('schedules')
-            ->where('classes_id', $classId)
-            ->get();
-
-        return response()->json($schedules);
+        return response()->json($classes);
     }
 
     // Buat jadwal baru
@@ -44,19 +42,10 @@ class ScheduleController extends Controller
             'classes_id' => 'required|exists:classes,id',
         ]);
 
-        // (Opsional) Validasi pengajar hanya bisa buat jadwal di kelas yang diajar
-        // $user = $request->user();
-        // if (!$user->teachingClasses()->where('classes.id', $validated['classes_id'])->exists()) {
-        //     return response()->json(['message' => 'Anda tidak mengajar kelas ini'], 403);
-        // }
-
         $user = Auth::user();
-        $isTeaching = DB::table('class_teacher')
-            ->where('teacher_id', $user->id)
-            ->where('class_id', $validated['classes_id'])
-            ->exists();
+        $class = ClassModel::where('id', $validated['classes_id'])->where('teacher_id', $user->id)->first();
 
-        if (!$isTeaching) {
+        if (!$class) {
             return response()->json(['message' => 'Anda tidak mengajar kelas ini'], 403);
         }
 
@@ -102,3 +91,27 @@ class ScheduleController extends Controller
         ], 201);
     }
 }
+
+
+
+
+// public function index($classId)
+    // {
+    //     $user = Auth::user();
+
+    //     // Validasi pengajar hanya bisa akses kelas yang diajar
+    //     $isTeaching = DB::table('class_teacher')
+    //         ->where('teacher_id', $user->id)
+    //         ->where('class_id', $classId)
+    //         ->exists();
+
+    //     if (!$isTeaching) {
+    //         return response()->json(['message' => 'Anda tidak mengajar kelas ini'], 403);
+    //     }
+
+    //     $schedules = DB::table('schedules')
+    //         ->where('classes_id', $classId)
+    //         ->get();
+
+    //     return response()->json($schedules);
+    // }

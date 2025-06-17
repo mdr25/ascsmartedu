@@ -32,8 +32,8 @@ Route::middleware(['auth:sanctum', 'role:siswa'])->prefix('student')->group(func
     Route::get('/all-classes', [ClassController::class, 'allClasses']);
 
     // Struktur materi (akses setelah beli kelas)
-    Route::get('classes/{classId}/mapel', [ClassController::class, 'listMapel']);
     Route::get('classes/{id}', [ClassController::class, 'show']);
+    Route::get('classes/{classId}/mapel', [ClassController::class, 'listMapel']);
     Route::get('mapel/{mapelId}/bab', [ClassController::class, 'listBab']);
     Route::get('bab/{babId}/subbab', [ClassController::class, 'listSubbab']);
     Route::get('subbab/{subbabId}/konten', [ClassController::class, 'listKonten']);
