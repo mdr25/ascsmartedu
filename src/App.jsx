@@ -38,6 +38,7 @@ import TeacherBabIndex from "./pages/teacher/mapels/bab";
 import TeacherSubbabIndex from "./pages/teacher/mapels/subbab";
 import TeacherContentIndex from "./pages/teacher/mapels/content";
 // import TeacherPayments from "./pages/teacher/payments";
+import TeacherProfile from "./pages/teacher/profile";
 
 // Siswa
 import StudentLayout from "./layouts/student";
@@ -135,6 +136,7 @@ function App() {
                 <Route index element={<TeacherScheduleDetail />} />
               </Route>
             </Route>
+            <Route path="profile" element={<TeacherProfile />} />
           </Route>
         </Route>
 
