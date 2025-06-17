@@ -227,7 +227,7 @@ export default function AdminLayout() {
       {/* Akhir Sidebar Kanan */}
 
       {/* Main Page */}
-      <main className="main-pages relative ml-[240px] mr-[290px] px-8 py-2 transition-all z-[1]">
+      <main className="main-pages relative ml-[240px] mr-[290px] px-8 py-4 transition-all z-[1]">
         <Outlet />
       </main>
     </div>

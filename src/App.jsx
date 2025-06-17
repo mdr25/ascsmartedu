@@ -5,6 +5,11 @@ import Home from "./pages/public";
 import PublicLayout from "./layouts/public";
 import Register from "./pages/auth/register";
 
+// Public
+import AboutPage from "./pages/public/about";
+import ProgramPage from "./pages/public/program";
+import MethodPage from "./pages/public/studymethod";
+
 // Admin
 import AdminLayout from "./layouts/admin";
 import AdminDashboard from "./pages/admin";
@@ -22,25 +27,31 @@ import ContentIndex from "./pages/admin/mapels/content";
 
 // Pengajar
 import TeacherLayout from "./layouts/teacher";
-import PengajarDashboard from "./pages/teacher";
+import TeacherDashboard from "./pages/teacher";
+// import TeacherAttendances from "./pages/teacher/attendances";
+import TeacherSchedules from "./pages/teacher/schedules";
+import TeacherScheduleDetail from "./pages/teacher/schedules/detail";
+import TeacherClasses from "./pages/teacher/classes";
+import TeacherClassDetail from "./pages/teacher/classes/detailclass";
+import TeacherMapelIndex from "./pages/teacher/mapels";
+import TeacherBabIndex from "./pages/teacher/mapels/bab";
+import TeacherSubbabIndex from "./pages/teacher/mapels/subbab";
+import TeacherContentIndex from "./pages/teacher/mapels/content";
+// import TeacherPayments from "./pages/teacher/payments";
 
 // Siswa
 import StudentLayout from "./layouts/student";
 import StudentDashboard from "./pages/student";
-import StudentClasses from "./pages/student/classes";
 import StudentAttendances from "./pages/student/attendances";
 import StudentPayments from "./pages/student/payments";
-import AboutPage from "./pages/public/about";
-import ProgramPage from "./pages/public/program";
-import MethodPage from "./pages/public/studymethod";
 import PurchaseCourse from "./pages/student/payments/purchasecourse";
+import StudentClasses from "./pages/student/classes";
 import StudentClassDetail from "./pages/student/classes/detailclass";
 import StudentMapelIndex from "./pages/student/mapels";
 import StudentBabIndex from "./pages/student/mapels/bab";
 import StudentSubbabIndex from "./pages/student/mapels/subbab";
 import StudentContentIndex from "./pages/student/mapels/content";
 import UserEdit from "./pages/admin/users/edit";
-
 
 function App() {
   return (
@@ -98,7 +109,31 @@ function App() {
         {/* Teacher Routes */}
         <Route element={<RouteGuard allowedRoles={["pengajar"]} />}>
           <Route path="/teacher" element={<TeacherLayout />}>
-            <Route index element={<PengajarDashboard />} />
+            <Route index element={<TeacherDashboard />} />
+            <Route path="classes">
+              <Route index element={<TeacherClasses />} />
+              <Route path=":id">
+                <Route index element={<TeacherClassDetail />} />
+                <Route path="mapel">
+                  <Route index element={<TeacherMapelIndex />} />
+                  <Route path=":mapel/bab" element={<TeacherBabIndex />} />
+                  <Route
+                    path=":mapel/bab/:babId/subbab"
+                    element={<TeacherSubbabIndex />}
+                  />
+                  <Route
+                    path=":mapel/bab/:babId/subbab/:subbabId/content"
+                    element={<TeacherContentIndex />}
+                  />
+                </Route>
+              </Route>
+            </Route>
+            <Route path="schedules">
+              <Route index element={<TeacherSchedules />} />
+              <Route path=":id">
+                <Route index element={<TeacherScheduleDetail />} />
+              </Route>
+            </Route>
           </Route>
         </Route>
 

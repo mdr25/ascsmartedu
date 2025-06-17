@@ -66,7 +66,7 @@ export default function StudentDashboard() {
         <div className="flex items-center justify-between mb-2">
           <h2 className="text-lg font-semibold text-gray-700">Kelas Kamu</h2>
           <Link
-            to="/siswa/myclasses"
+            to="/student/classes"
             className="block bg-orange-500 hover:bg-orange-400 text-white font-semibold px-4 py-2 rounded-lg shadow-md"
           >
             Lihat Kelas Saya
@@ -99,7 +99,7 @@ export default function StudentDashboard() {
                     </p>
                     <p className="text-sm text-gray-700">
                       <span className="text-gray-500">Pengajar:</span>{" "}
-                      {cls.teacher?.name || (
+                      {cls.teacher || (
                         <span className="italic text-gray-400">
                           Belum ditentukan
                         </span>
