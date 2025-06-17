@@ -52,6 +52,7 @@ import StudentBabIndex from "./pages/student/mapels/bab";
 import StudentSubbabIndex from "./pages/student/mapels/subbab";
 import StudentContentIndex from "./pages/student/mapels/content";
 import UserEdit from "./pages/admin/users/edit";
+import StudentProfile from "./pages/student/profile";
 
 function App() {
   return (
@@ -164,6 +165,7 @@ function App() {
               <Route index element={<StudentPayments />} />
               <Route path="purchaseCourse" element={<PurchaseCourse />} />
             </Route>
+            <Route path="profile" element={<StudentProfile />} />
           </Route>
         </Route>
       </Routes>
