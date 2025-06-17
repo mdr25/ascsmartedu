@@ -109,7 +109,7 @@ export default function StudentLayout() {
                 <ul className="absolute right-0 mt-2 w-44 bg-white shadow rounded-md z-50">
                   <li>
                     <Link
-                      to="/profile"
+                      to="/student/profile"
                       className="block px-4 py-2 hover:bg-gray-100 text-sm flex items-center"
                     >
                       <i className="bx bx-user-circle mr-2 text-lg"></i> Profile
@@ -117,7 +117,7 @@ export default function StudentLayout() {
                   </li>
                   <li>
                     <Link
-                      to="/settings"
+                      to="/student/settings"
                       className="block px-4 py-2 hover:bg-gray-100 text-sm flex items-center"
                     >
                       <i className="bx bx-cog mr-2 text-lg"></i> Settings

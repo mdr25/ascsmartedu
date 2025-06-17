@@ -129,7 +129,7 @@ export default function TeacherLayout() {
                   <ul className="absolute bg-white shadow rounded-md mt-2 w-44 z-20">
                     <li>
                       <Link
-                        to="/profile"
+                        to="/teacher/profile"
                         className="block px-4 py-2 hover:bg-gray-100 text-sm flex items-center"
                       >
                         <i className="bx bx-user-circle mr-2 text-lg align-text-top"></i>{" "}
