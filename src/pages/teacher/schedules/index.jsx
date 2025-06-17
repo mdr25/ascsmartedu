@@ -25,7 +25,7 @@ export default function TeacherSchedules() {
           headers: { Authorization: `Bearer ${token}` },
         });
         setClasses(response.data);
-      } catch (err) {
+      } catch {
         setError("Gagal mengambil data jadwal!");
       } finally {
         setLoading(false);
