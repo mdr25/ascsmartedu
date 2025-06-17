@@ -60,9 +60,11 @@ export default function Login() {
       <div className="w-1/2 hidden md:block"></div>
 
       {/* Logo kiri atas */}
-      <div className="absolute top-0 left-0 py-4 px-8">
-        <img src="/src/assets/logoasc.png" alt="Logo" className="w-48" />
-      </div>
+     <div className="absolute top-0 left-0 py-4 px-8">
+  <Link to="/">
+    <img src="/src/assets/logoasc.png" alt="Logo" className="w-48" />
+  </Link>
+</div>
 
       <div className="w-[400px] p-8 bg-white bg-opacity-90 rounded-lg shadow-lg">
         <h2 className="text-2xl font-bold text-gray-700 text-center mb-6">

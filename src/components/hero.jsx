@@ -1,4 +1,8 @@
+import { useNavigate } from "react-router-dom";
+
 export default function Hero() {
+  const navigate = useNavigate();
+
   return (
     <section className="w-full bg-white ">
       <section className="px-4 py-10 flex flex-col-reverse md:flex-row items-center justify-between max-w-7xl mx-auto gap-8">
@@ -16,10 +20,16 @@ export default function Hero() {
             berprestasi!
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center md:justify-start">
-            <button className="bg-[#FF6103] hover:bg-orange-700 text-white px-6 py-3 rounded-lg font-semibold transition duration-300">
+            <button
+              onClick={() => navigate("/contact")}
+              className="bg-[#FF6103] hover:bg-orange-700 text-white px-6 py-3 rounded-lg font-semibold transition duration-300"
+            >
               Contact Kami
             </button>
-            <button className="bg-[#08797F] hover:bg-teal-800 text-white px-6 py-3 rounded-lg font-semibold transition duration-300">
+            <button
+              onClick={() => navigate("/register")}
+              className="bg-[#08797F] hover:bg-teal-800 text-white px-6 py-3 rounded-lg font-semibold transition duration-300"
+            >
               Daftar Sekarang
             </button>
           </div>
@@ -27,7 +37,7 @@ export default function Hero() {
 
         {/* Image */}
         <img
-          src="src\assets\pic1.jpg"
+          src="src/assets/pic1.jpg"
           alt="students"
           className="w-full max-w-[600px] h-auto rounded-2xl shadow-md"
         />

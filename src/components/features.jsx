@@ -1,3 +1,11 @@
+import React from 'react';
+
+// Import gambar lokal
+import pic1 from '../assets/pic_tatap.jpg';
+import pic2 from '../assets/pic_latihan.jpg';
+import pic3 from '../assets/pic_ortu.jpg';
+
+
 const features = [
   {
     title: 'Tatap Muka Interaktif',
@@ -5,7 +13,7 @@ const features = [
     bgColor: 'bg-teal-600/90',
     border: 'border border-white',
     fontFamily: 'font-montserrat',
-    img: 'https://placehold.co/360x240',
+    img: pic1,
     imgClass: 'rounded-[20px]'
   },
   {
@@ -13,7 +21,7 @@ const features = [
     desc: 'Siswa rutin mengerjakan soal untuk mengasah pemahaman materi. Ujian berkala dilakukan untuk mengevaluasi progres belajar.',
     bgColor: 'bg-orange-600/90',
     fontFamily: 'font-montserrat',
-    img: 'https://placehold.co/391x237',
+    img: pic2,
     imgClass: 'rounded-[20px]'
   },
   {
@@ -21,7 +29,7 @@ const features = [
     desc: 'Perkembangan siswa dicatat dan dilaporkan secara berkala. Orang tua dapat memantau hasil belajar dan progres akademik anak.',
     bgColor: 'bg-teal-600/90',
     fontFamily: 'font-plus-jakarta-sans',
-    img: 'https://placehold.co/355x237',
+    img: pic3,
     imgClass: 'rounded-[10px]'
   }
 ];
@@ -58,7 +66,7 @@ export default function Features() {
               {/* Image */}
               <div className="relative w-full h-60">
                 <img 
-                  src="src\assets\pic1.jpg" 
+                  src={feature.img} 
                   alt={feature.title}
                   className={`w-full h-full object-cover ${feature.imgClass}`}
                 />

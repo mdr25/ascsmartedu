@@ -40,11 +40,11 @@ export default function Navbar() {
       <header>
         <nav className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between p-4 bg-white shadow-lg">
           <div className="flex items-center gap-2">
-            <img
-              src="src/assets/logoasc.png"
-              alt="logo"
-              className="w-auto h-8"
-            />
+            <div className="absolute top-0 left-0 py-4 px-8">
+             <Link to="/">
+               <img src="/src/assets/logoasc.png" alt="Logo" className="w-48" />
+             </Link>
+           </div>
           </div>
           <ul className="hidden md:flex gap-6 text-gray-600">
             <li>

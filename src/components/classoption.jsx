@@ -19,7 +19,10 @@ const options = [
   },
 ];
 
+import {useNavigate } from "react-router-dom";
+
 export default function ClassOptions() {
+  const navigate = useNavigate();
   return (
     <section className="w-full px-4 py-10 bg-white relative">
       {/* Title */}
@@ -55,7 +58,8 @@ export default function ClassOptions() {
         ))}
         <div className="mt-10 flex justify-center">
       </div>
-         <button className="w-full sm:w-72 h-14 bg-teal-600 rounded-lg text-white text-xl sm:text-2xl font-bold font-montserrat shadow-md transition hover:bg-teal-700">
+         <button onClick={() => navigate("/register")}
+         className="w-full sm:w-72 h-14 bg-teal-600 rounded-lg text-white text-xl sm:text-2xl font-bold font-montserrat shadow-md transition hover:bg-teal-700">
           Daftar Sekarang
         </button>
       </div>
