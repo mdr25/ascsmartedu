@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { getStudentClassDetail } from "../../../_services/siswa/classes";
+import foto_profile from "../../../assets/foto_profile.jpg"; // Gambar profil default
 
 export default function StudentClassDetail() {
   const { id } = useParams();
@@ -14,7 +15,6 @@ export default function StudentClassDetail() {
       try {
         const data = await getStudentClassDetail(id);
 
-        // Sorting dan menghapus duplikat berdasarkan ID
         const sortedTeachers = [...(data.teachers || [])]
           .filter((v, i, a) => a.findIndex(t => t.id === v.id) === i)
           .sort((a, b) => a.name.localeCompare(b.name));
@@ -141,6 +141,11 @@ export default function StudentClassDetail() {
 function PersonCard({ person }) {
   return (
     <div className="flex items-center space-x-3 mb-2 hover:bg-gray-200 p-2 rounded cursor-pointer">
+      <img
+        src={foto_profile}
+        alt={person.name}
+        className="w-8 h-8 rounded-full object-cover"
+      />
       <span className="text-sm">{person.name}</span>
     </div>
   );

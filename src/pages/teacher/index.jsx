@@ -16,6 +16,7 @@ export default function TeacherDashboard() {
   const [dashboardData, setDashboardData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [role, setRole] = useState("");
 
   useEffect(() => {
     const fetchData = async () => {
@@ -25,6 +26,10 @@ export default function TeacherDashboard() {
           headers: { Authorization: `Bearer ${token}` },
         });
         setDashboardData(response.data);
+
+        const roleData = localStorage.getItem("role");
+        if (roleData)
+          setRole(roleData.charAt(0).toUpperCase() + roleData.slice(1));
       } catch {
         setError("Gagal mengambil data dashboard!");
       } finally {
@@ -34,8 +39,6 @@ export default function TeacherDashboard() {
 
     fetchData();
   }, []);
-
-  console.log(dashboardData);
 
   const getGreeting = () => {
     const hour = new Date().getHours();
@@ -47,7 +50,8 @@ export default function TeacherDashboard() {
 
   if (loading)
     return <p className="text-center text-lg text-gray-600">Loading...</p>;
-  if (error) return <p className="text-center text-lg text-red-500">{error}</p>;
+  if (error)
+    return <p className="text-center text-lg text-red-500">{error}</p>;
 
   const {
     name = "Pengajar",
@@ -57,40 +61,34 @@ export default function TeacherDashboard() {
   } = dashboardData || {};
 
   return (
-    <div className="container mx-auto p-6">
+    <div className="container mx-auto px-4 py-6 space-y-8">
       {/* Header */}
-      <h1 className="text-3xl font-bold text-gray-800 mb-6">
-        {getGreeting()}, {name}!
+      <h1 className="text-3xl font-bold text-gray-800">
+        {getGreeting()}, {role} {name}!
       </h1>
 
-      {/* Kelas yang Diajar */}
-      <div className="bg-white shadow-lg rounded-lg p-4">
-        <h2 className="text-lg font-semibold text-gray-700">
-          Kelas yang Anda Ajar
-        </h2>
+      {/* Section: Kelas yang Diajar */}
+      <section className="bg-white rounded-2xl shadow p-6 space-y-4">
+        <h2 className="text-xl font-semibold text-gray-800">Kelas yang Anda Ajar</h2>
         {classes.length > 0 ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mt-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {classes.map((cls, index) => {
               const colorClass = pastelColors[index % pastelColors.length];
               return (
                 <Link
                   key={cls.id}
                   to={`/teacher/classes/${cls.id}`}
-                  className="block bg-gray-100 rounded-lg shadow-md overflow-hidden hover:scale-105 transition transform duration-200"
+                  className="group block rounded-xl overflow-hidden shadow-sm hover:shadow-md transition"
                 >
-                  <div className={`h-[70px] w-full ${colorClass}`}></div>
-                  <div className="p-4">
-                    <p className="text-sm text-gray-500">{cls.jenjang_kelas}</p>
-                    <h3 className="text-lg font-semibold text-gray-800">
+                  <div className={`h-20 ${colorClass}`}></div>
+                  <div className="bg-white p-4 space-y-1">
+                    <p className="text-xs text-gray-500">{cls.jenjang_kelas}</p>
+                    <h3 className="text-lg font-bold text-gray-800 group-hover:text-teal-600">
                       {cls.class_name}
                     </h3>
-                    <p className="text-sm text-gray-600 mt-1">
-                      {cls.description}
-                    </p>
-
+                    <p className="text-sm text-gray-600">{cls.description}</p>
                     <p className="text-sm text-gray-700">
-                      <span className="text-gray-500">Siswa: </span>
-                      {cls.total_student}
+                      <span className="font-medium">Siswa:</span> {cls.total_student}
                     </p>
                   </div>
                 </Link>
@@ -98,65 +96,62 @@ export default function TeacherDashboard() {
             })}
           </div>
         ) : (
-          <p className="text-gray-500 mt-3">Belum mengajar kelas.</p>
+          <p className="text-gray-500">Belum mengajar kelas.</p>
         )}
-      </div>
+      </section>
 
-      {/* Jadwal Mengajar Hari Ini */}
-      <div className="mt-6 bg-white shadow-lg rounded-lg p-4">
-        <h2 className="text-lg font-semibold text-gray-700">
-          Jadwal Mengajar Hari Ini
-        </h2>
+      {/* Section: Jadwal Mengajar Hari Ini */}
+      <section className="bg-white rounded-2xl shadow p-6 space-y-4">
+        <h2 className="text-xl font-semibold text-gray-800">Jadwal Mengajar Hari Ini</h2>
         {today_schedule.length > 0 ? (
-          <ul className="mt-3">
-            {today_schedule.map((jadwal) => (
+          <ul className="space-y-3">
+            {today_schedule.map((jadwal, index) => (
               <li
-                key={jadwal.classes_id}
-                className="border-b py-2 text-gray-600"
+                key={index}
+                className="bg-gray-50 hover:bg-gray-100 px-4 py-3 rounded-md shadow-sm border flex justify-between items-center"
               >
-                {jadwal.course_name} ({jadwal.start_time} - {jadwal.end_time})
+                <div className="text-sm font-medium text-gray-800">
+                  {jadwal.course_name}
+                </div>
+                <div className="text-sm text-gray-600 whitespace-nowrap">
+                  {jadwal.start_time} - {jadwal.end_time}
+                </div>
               </li>
             ))}
           </ul>
         ) : (
-          <p className="text-gray-500 mt-3">
-            Tidak ada jadwal mengajar hari ini.
-          </p>
+          <p className="text-gray-500">Tidak ada jadwal mengajar hari ini.</p>
         )}
-      </div>
+      </section>
 
-      {/* Riwayat Kehadiran Siswa */}
-      <div className="mt-6 bg-white shadow-lg rounded-lg p-4">
-        <h2 className="text-lg font-semibold text-gray-700">
-          Riwayat Kehadiran Siswa
-        </h2>
+      {/* Section: Riwayat Kehadiran */}
+      <section className="bg-white rounded-2xl shadow p-6 space-y-4">
+        <h2 className="text-xl font-semibold text-gray-800">Riwayat Kehadiran Siswa</h2>
         {recent_attendance.length > 0 ? (
-          <ul className="mt-3 space-y-2">
+          <ul className="space-y-2">
             {recent_attendance.flatMap((absensiList) =>
               absensiList.map((absensi, index) => (
                 <li
                   key={index}
-                  className={`py-2 px-4 rounded-md ${
+                  className={`py-2 px-4 rounded-md text-sm shadow-sm ${
                     absensi.status === "Hadir"
-                      ? "bg-green-50 text-green-700"
+                      ? "bg-green-100 text-green-800"
                       : absensi.status === "Izin"
-                      ? "bg-yellow-50 text-yellow-700"
+                      ? "bg-yellow-100 text-yellow-800"
                       : absensi.status === "Sakit"
-                      ? "bg-blue-50 text-blue-700"
-                      : "bg-red-50 text-red-600"
+                      ? "bg-blue-100 text-blue-800"
+                      : "bg-red-100 text-red-800"
                   }`}
                 >
-                  {absensi.date} – {absensi.name} ({absensi.status})
+                  <strong>{absensi.date}</strong> – {absensi.name} ({absensi.status})
                 </li>
               ))
             )}
           </ul>
         ) : (
-          <p className="text-gray-500 mt-3">
-            Belum ada riwayat kehadiran siswa.
-          </p>
+          <p className="text-gray-500">Belum ada riwayat kehadiran siswa.</p>
         )}
-      </div>
+      </section>
     </div>
   );
 }

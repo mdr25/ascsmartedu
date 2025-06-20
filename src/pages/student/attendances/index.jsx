@@ -126,7 +126,7 @@ export default function StudentAttendances() {
                 {/* Jenjang: */}
                 {cls.jenjang_kelas?.nama_jenjang || "Tidak tersedia"}
               </p>
-              <h3 className="text-xl font-bold text-gray-800">
+              <h3 className=" font-bold text-gray-800">
                 {cls.class_name}
               </h3>
               {/* <p className="text-gray-600">Total Siswa: {cls.total_student}</p> */}
@@ -138,7 +138,7 @@ export default function StudentAttendances() {
                 <h3 className="text-lg font-bold text-gray-800 mb-2">
                   Jadwal & Kehadiran
                 </h3>
-                <table className="min-w-full bg-white shadow text-sm border">
+                <table className="text-sm min-w-full bg-white shadow text-sm border">
                   <thead className="bg-gray-100 text-sm text-left">
                     <tr>
                       <th className="p-3">Tanggal</th>

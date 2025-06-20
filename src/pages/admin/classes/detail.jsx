@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import foto_profile from "../../../assets/foto_profile.jpg";
 import { useParams, useNavigate } from "react-router-dom";
 import {
   getAvailableTeachers,
@@ -198,7 +199,7 @@ export default function ClassDetail() {
                 <div className="flex items-center justify-between mb-2">
                   <div className="flex items-center space-x-3">
                     <img
-                      src={classData.teacher.avatar || "/default-avatar.png"}
+                      src={foto_profile}
                       alt={classData.teacher.name}
                       className="w-8 h-8 rounded-full object-cover"
                     />
@@ -233,10 +234,11 @@ export default function ClassDetail() {
                 >
                   <div className="flex items-center space-x-3">
                     <img
-                      src={student.avatar || "/default-avatar.png"}
+                      src={foto_profile}
                       alt={student.name}
                       className="w-8 h-8 rounded-full object-cover"
                     />
+                    
                     <span className="text-sm">{student.name}</span>
                   </div>
                   <button

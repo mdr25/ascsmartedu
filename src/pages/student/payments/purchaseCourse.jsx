@@ -195,7 +195,7 @@ export default function PurchaseCourse() {
                 <option value="">-- Pilih --</option>
                 <option value="Transfer">Transfer</option>
                 <option value="Qris">QRIS</option>
-                <option value="Virtual Account">Virtual Account</option>
+                <option value="Virtual Account">Tunai</option>
               </select>
             </div>
 

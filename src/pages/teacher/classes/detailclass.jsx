@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { getTeacherClassDetail } from "../../../_services/pengajar/classes";
+import foto_profile from "../../../assets/foto_profile.jpg"; // Gambar profil default
 
 export default function TeacherClassDetail() {
   const { id } = useParams();
@@ -35,7 +36,7 @@ export default function TeacherClassDetail() {
   }, [id, navigate]);
 
   if (!classData) {
-    return <div className="p-6 text-gray-500">🔄 Memuat detail kelas...</div>;
+    return <div className="p-6 text-gray-500">Memuat detail kelas...</div>;
   }
 
   const teachers = classData?.teachers || [];
@@ -141,6 +142,11 @@ export default function TeacherClassDetail() {
 function PersonCard({ person }) {
   return (
     <div className="flex items-center space-x-3 mb-2 hover:bg-gray-200 p-2 rounded cursor-pointer">
+      <img
+        src={foto_profile}
+        alt={person.name}
+        className="w-8 h-8 rounded-full object-cover"
+      />
       <span className="text-sm">{person.name}</span>
     </div>
   );
