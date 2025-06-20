@@ -1,18 +1,19 @@
-// src/layout/Admin.jsx
 import { useEffect, useState } from "react";
-import { Link, Outlet, useNavigate } from "react-router-dom";
+import { Link, Outlet, useNavigate, useLocation } from "react-router-dom";
 import logoasc from "../assets/logoasc.png";
 import foto_profile from "../assets/foto_profile.jpg";
 
 export default function AdminLayout() {
   const navigate = useNavigate();
+  const location = useLocation();
   const [userName, setUserName] = useState("");
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
+  // Update username setiap kali lokasi/route berubah
   useEffect(() => {
     const name = localStorage.getItem("name");
     if (name) setUserName(name);
-  }, []);
+  }, [location]);
 
   const handleLogout = () => {
     localStorage.removeItem("name");
@@ -25,10 +26,8 @@ export default function AdminLayout() {
     setIsDropdownOpen(!isDropdownOpen);
   };
 
-  const toggleNotif = () => {
-    const menu = document.getElementById("notif-menu");
-    if (menu) menu.classList.toggle("hidden");
-  };
+  const isActive = (path) =>
+    location.pathname === path || location.pathname.startsWith(path);
 
   return (
     <div className="Nothing">
@@ -37,7 +36,7 @@ export default function AdminLayout() {
         id="sliders"
         className="w-[240px] h-screen fixed bg-[#f9f9fc] transition-all z-10 flex flex-col"
       >
-        {/* Logo & Purchase */}
+        {/* Logo */}
         <div className="py-8">
           <div className="text-center py-6 px-3">
             <Link to="/admin">
@@ -52,35 +51,48 @@ export default function AdminLayout() {
             <div>
               <Link
                 to="/admin"
-                className="flex items-center mt-3 text-black font-medium border-r-4 border-teal-500 pl-6 pr-4 py-2"
+                className={`flex items-center mt-3 pl-6 pr-4 py-2 font-medium ${
+                  isActive("/admin") && location.pathname === "/admin"
+                    ? "text-black border-r-4 border-teal-500"
+                    : "text-[#bbbec5] hover:text-black"
+                }`}
               >
-                <i className="bx bx-layout text-teal-500 text-lg mr-2"></i>{" "}
-                Dashboard
+                <i className="bx bx-layout text-lg mr-2"></i> Dashboard
               </Link>
               <Link
                 to="/admin/users"
-                className="flex items-center my-2 text-[#bbbec5] hover:text-black transition pl-6 pr-4 py-2"
+                className={`flex items-center my-2 pl-6 pr-4 py-2 ${
+                  isActive("/admin/users")
+                    ? "text-black border-r-4 border-teal-500"
+                    : "text-[#bbbec5] hover:text-black"
+                }`}
               >
                 <i className="bx bx-user text-lg mr-2"></i> Users
               </Link>
               <Link
                 to="/admin/classes"
-                className="flex items-center my-2 text-[#bbbec5] hover:text-black transition pl-6 pr-4 py-2"
+                className={`flex items-center my-2 pl-6 pr-4 py-2 ${
+                  isActive("/admin/classes")
+                    ? "text-black border-r-4 border-teal-500"
+                    : "text-[#bbbec5] hover:text-black"
+                }`}
               >
                 <i className="bx bx-book-open text-lg mr-2"></i> Classes
               </Link>
               <Link
                 to="/admin/payments"
-                className="flex items-center my-2 text-[#bbbec5] hover:text-black transition pl-6 pr-4 py-2"
+                className={`flex items-center my-2 pl-6 pr-4 py-2 ${
+                  isActive("/admin/payments")
+                    ? "text-black border-r-4 border-teal-500"
+                    : "text-[#bbbec5] hover:text-black"
+                }`}
               >
                 <i className="bx bx-credit-card text-lg mr-2"></i> Payments
               </Link>
             </div>
 
-            {/* Spacer supaya Logout di bawah */}
             <div className="flex-grow"></div>
 
-            {/* Logout */}
             <div>
               <button
                 onClick={handleLogout}
@@ -94,22 +106,16 @@ export default function AdminLayout() {
       </div>
 
       {/* Sidebar Kanan */}
-      <div
-        id="sliders"
-        className="fixed right-0 w-[290px] h-screen bg-[#f8f8fc] text-[#1e3953] transition-all z-10"
-      >
+      <div className="fixed right-0 w-[290px] h-screen bg-[#f8f8fc] text-[#1e3953] transition-all z-10">
         {/* Header */}
         <div className="py-8">
           <div className="p-6">
             <div className="flex items-center">
-              
               <img
                 src={foto_profile}
                 alt="Profile"
                 className="w-[50px] h-[50px] rounded-[18px]"
               />
-
-              {/* Nama dan Dropdown */}
               <div className="ml-3 relative">
                 <button
                   className="font-bold text-[#1e3953] flex items-center"
@@ -119,7 +125,6 @@ export default function AdminLayout() {
                   <i className="bx bx-chevron-down text-lg ml-1"></i>
                 </button>
 
-                {/* Dropdown Menu */}
                 {isDropdownOpen && (
                   <ul className="absolute bg-white shadow rounded-md mt-2 w-44 z-20">
                     <li>
@@ -137,20 +142,9 @@ export default function AdminLayout() {
             </div>
           </div>
         </div>
-
-        {/* Body */}
-        <div className="p-4 text-sm">
-         
-
-          
-
-          
-          
-        </div>
       </div>
-      {/* Akhir Sidebar Kanan */}
 
-      {/* Main Page */}
+      {/* Main Content */}
       <main className="main-pages relative ml-[240px] mr-[290px] px-8 py-4 transition-all z-[1]">
         <Outlet />
       </main>

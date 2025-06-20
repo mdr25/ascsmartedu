@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
-import { NavLink, Outlet, useNavigate } from "react-router-dom";
+import { Link, Outlet, useNavigate, useLocation } from "react-router-dom";
 import logoasc from "../assets/logoasc.png";
 import foto_profile from "../assets/foto_profile.jpg";
 
-
 export default function StudentLayout() {
   const navigate = useNavigate();
+  const location = useLocation();
   const [userName, setUserName] = useState("");
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
@@ -25,78 +25,67 @@ export default function StudentLayout() {
     setIsDropdownOpen(!isDropdownOpen);
   };
 
+  const isActive = (path) => location.pathname === path || location.pathname.startsWith(path);
+
   return (
     <div className="flex">
       {/* Sidebar Kiri */}
       <aside className="w-[240px] h-screen fixed left-0 top-0 bg-[#f9f9fc] z-10 flex flex-col">
         {/* Logo & Purchase */}
         <div className="py-8 px-3 text-center">
-          <NavLink to="/student">
+          <Link to="/student">
             <img src={logoasc} alt="Logo ASC" className="h-[30px] mx-auto" />
-          </NavLink>
-          <NavLink
+          </Link>
+          <Link
             to="/student/payments/purchaseCourse"
             className="inline-block mt-8 text-white text-sm py-2 px-7 bg-orange-500 rounded-md hover:bg-orange-400 transition"
           >
             Purchase Course
-          </NavLink>
+          </Link>
         </div>
 
         {/* Navigasi */}
         <nav className="flex-1 flex flex-col overflow-y-auto text-sm pl-1">
-          <NavLink
+          <Link
             to="/student"
-            end
-            className={({ isActive }) =>
-              isActive
-                ? "flex items-center mt-3 text-black font-medium border-r-4 border-teal-500 pl-6 pr-4 py-2"
-                : "flex items-center mt-3 text-[#bbbec5] hover:text-black transition pl-6 pr-4 py-2"
-            }
+            className={`flex items-center mt-3 pl-6 pr-4 py-2 font-medium ${
+              isActive("/student") && location.pathname === "/student"
+                ? "text-black border-r-4 border-teal-500"
+                : "text-[#bbbec5] hover:text-black"
+            }`}
           >
             <i className="bx bx-layout text-lg mr-2"></i> Dashboard
-          </NavLink>
-
-          <NavLink
+          </Link>
+          <Link
             to="/student/classes"
-            className={({ isActive }) =>
-              isActive
-                ? "flex items-center my-2 text-black font-medium border-r-4 border-teal-500 pl-6 pr-4 py-2"
-                : "flex items-center my-2 text-[#bbbec5] hover:text-black transition pl-6 pr-4 py-2"
-            }
+            className={`flex items-center my-2 pl-6 pr-4 py-2 ${
+              isActive("/student/classes")
+                ? "text-black border-r-4 border-teal-500"
+                : "text-[#bbbec5] hover:text-black"
+            }`}
           >
             <i className="bx bx-user text-lg mr-2"></i> Classes
-          </NavLink>
-          <Link
-            to="/student/schedules"
-            className={({ isActive }) =>
-              isActive
-                ? "flex items-center my-2 text-black font-medium border-r-4 border-teal-500 pl-6 pr-4 py-2"
-                : "flex items-center my-2 text-[#bbbec5] hover:text-black transition pl-6 pr-4 py-2"
-            }
-          >
-            <i className="bx bx-user text-lg mr-2"></i> Schedules
           </Link>
           <Link
             to="/student/attendances"
-            className={({ isActive }) =>
-              isActive
-                ? "flex items-center my-2 text-black font-medium border-r-4 border-teal-500 pl-6 pr-4 py-2"
-                : "flex items-center my-2 text-[#bbbec5] hover:text-black transition pl-6 pr-4 py-2"
-            }
+            className={`flex items-center my-2 pl-6 pr-4 py-2 ${
+              isActive("/student/attendances")
+                ? "text-black border-r-4 border-teal-500"
+                : "text-[#bbbec5] hover:text-black"
+            }`}
           >
             <i className="bx bx-book-open text-lg mr-2"></i> Attendances
           </Link>
-
-          <NavLink
+          <Link
             to="/student/payments"
-            className={({ isActive }) =>
-              isActive
-                ? "flex items-center my-2 text-black font-medium border-r-4 border-teal-500 pl-6 pr-4 py-2"
-                : "flex items-center my-2 text-[#bbbec5] hover:text-black transition pl-6 pr-4 py-2"
-            }
+            className={`flex items-center my-2 pl-6 pr-4 py-2 ${
+              isActive("/student/payments")
+                ? "text-black border-r-4 border-teal-500"
+                : "text-[#bbbec5] hover:text-black"
+            }`}
           >
             <i className="bx bx-credit-card text-lg mr-2"></i> Payments
-          </NavLink>
+          </Link>
 
           <div className="flex-grow"></div>
 
@@ -111,10 +100,8 @@ export default function StudentLayout() {
 
       {/* Sidebar Kanan */}
       <aside className="fixed right-0 top-0 w-[290px] h-screen bg-[#f8f8fc] text-[#1e3953] z-10">
-        {/* Header Profile */}
         <div className="p-6 pt-8">
           <div className="flex items-center relative">
-            
             <img
               src={foto_profile}
               alt="Profile"
@@ -133,23 +120,11 @@ export default function StudentLayout() {
                 <ul className="absolute right-0 mt-2 w-44 bg-white shadow rounded-md z-50">
                   <li>
                     <Link
-                      to="/profile"
+                      to="/student/profile"
                       className="block px-4 py-2 hover:bg-gray-100 text-sm flex items-center"
                     >
                       <i className="bx bx-user-circle mr-2 text-lg"></i> Profile
                     </Link>
-                  </li>
-                  <li>
-                    <NavLink
-                      to="/student/settings"
-                      className={({ isActive }) =>
-                        "block px-4 py-2 hover:bg-gray-100 text-sm flex items-center" +
-                        (isActive ? " font-semibold bg-gray-200" : "")
-                      }
-                      onClick={() => setIsDropdownOpen(false)}
-                    >
-                      <i className="bx bx-cog mr-2 text-lg"></i> Settings
-                    </NavLink>
                   </li>
                   <li>
                     <button
@@ -175,12 +150,10 @@ export default function StudentLayout() {
 }
 
 // Komponen progress
-function ProgressItem({ icon, label, bg, color, width }) {
+export function ProgressItem({ icon, label, bg, color, width }) {
   return (
     <div className="flex mt-4">
-      <i
-        className={`bx ${icon} text-[${color}] bg-[${bg}] text-xl p-2 rounded`}
-      ></i>
+      <i className={`bx ${icon} text-[${color}] bg-[${bg}] text-xl p-2 rounded`}></i>
       <div className="ml-3 flex-1">
         <h6 className="text-base mb-2 pr-12">{label}</h6>
         <div className={`w-full h-[10px] bg-[${bg}] rounded-full`}>
@@ -195,12 +168,10 @@ function ProgressItem({ icon, label, bg, color, width }) {
 }
 
 // Komponen task
-function UpcomingTask({ icon, color, bg, title, date }) {
+export function UpcomingTask({ icon, color, bg, title, date }) {
   return (
     <div className="flex items-center mt-4">
-      <i
-        className={`bx ${icon} text-[${color}] bg-[${bg}] text-xl px-2 py-2 rounded`}
-      ></i>
+      <i className={`bx ${icon} text-[${color}] bg-[${bg}] text-xl px-2 py-2 rounded`}></i>
       <div className="ml-3">
         <h6 className="text-base m-0">{title}</h6>
         <small className="text-gray-500">{date}</small>

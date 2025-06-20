@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
-import { Link, Outlet, useNavigate } from "react-router-dom";
+import { Link, Outlet, useNavigate, useLocation } from "react-router-dom";
 import logoasc from "../assets/logoasc.png";
 import foto_profile from "../assets/foto_profile.jpg";
 
 export default function TeacherLayout() {
   const navigate = useNavigate();
+  const location = useLocation();
   const [userName, setUserName] = useState("");
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
@@ -29,13 +30,13 @@ export default function TeacherLayout() {
     if (menu) menu.classList.toggle("hidden");
   };
 
+  const isActive = (path) =>
+    location.pathname === path || location.pathname.startsWith(path);
+
   return (
     <div className="Nothing">
       {/* Sidebar Kiri */}
-      <div
-        id="sliders"
-        className="w-[240px] h-screen fixed bg-[#f9f9fc] transition-all z-10 flex flex-col"
-      >
+      <div className="w-[240px] h-screen fixed bg-[#f9f9fc] transition-all z-10 flex flex-col">
         {/* Logo & Purchase */}
         <div className="py-8">
           <div className="text-center py-6 px-3">
@@ -51,26 +52,31 @@ export default function TeacherLayout() {
             <div>
               <Link
                 to="/teacher"
-                className="flex items-center mt-3 text-black font-medium border-r-4 border-teal-500 pl-6 pr-4 py-2"
+                className={`flex items-center mt-3 pl-6 pr-4 py-2 font-medium ${
+                  isActive("/teacher") && location.pathname === "/teacher"
+                    ? "text-black border-r-4 border-teal-500"
+                    : "text-[#bbbec5] hover:text-black"
+                }`}
               >
-                <i className="bx bx-layout text-teal-500 text-lg mr-2"></i>{" "}
-                Dashboard
+                <i className="bx bx-layout text-lg mr-2"></i> Dashboard
               </Link>
               <Link
                 to="/teacher/classes"
-                className="flex items-center my-2 text-[#bbbec5] hover:text-black transition pl-6 pr-4 py-2"
+                className={`flex items-center my-2 pl-6 pr-4 py-2 ${
+                  isActive("/teacher/classes")
+                    ? "text-black border-r-4 border-teal-500"
+                    : "text-[#bbbec5] hover:text-black"
+                }`}
               >
                 <i className="bx bx-user text-lg mr-2"></i> Classes
               </Link>
-              {/* <Link
-                to="/teacher/schedules"
-                className="flex items-center my-2 text-[#bbbec5] hover:text-black transition pl-6 pr-4 py-2"
-              >
-                <i className="bx bx-book-open text-lg mr-2"></i> Schedules
-              </Link> */}
               <Link
                 to="/teacher/schedules"
-                className="flex items-center my-2 text-[#bbbec5] hover:text-black transition pl-6 pr-4 py-2"
+                className={`flex items-center my-2 pl-6 pr-4 py-2 ${
+                  isActive("/teacher/schedules")
+                    ? "text-black border-r-4 border-teal-500"
+                    : "text-[#bbbec5] hover:text-black"
+                }`}
               >
                 <i className="bx bx-book-open text-lg mr-2"></i> Schedules
               </Link>
@@ -93,10 +99,7 @@ export default function TeacherLayout() {
       </div>
 
       {/* Sidebar Kanan */}
-      <div
-        id="sliders"
-        className="fixed right-0 w-[290px] h-screen bg-[#f8f8fc] text-[#1e3953] transition-all z-10"
-      >
+      <div className="fixed right-0 w-[290px] h-screen bg-[#f8f8fc] text-[#1e3953] transition-all z-10">
         {/* Header */}
         <div className="py-8">
           <div className="p-6">
@@ -129,15 +132,6 @@ export default function TeacherLayout() {
                       </Link>
                     </li>
                     <li>
-                      <Link
-                        to="/settings"
-                        className="block px-4 py-2 hover:bg-gray-100 text-sm flex items-center"
-                      >
-                        <i className="bx bx-cog mr-2 text-lg align-text-top"></i>{" "}
-                        Settings
-                      </Link>
-                    </li>
-                    <li>
                       <button
                         onClick={handleLogout}
                         className="block w-full text-left px-4 py-2 hover:bg-gray-100 text-sm flex items-center"
@@ -152,8 +146,6 @@ export default function TeacherLayout() {
             </div>
           </div>
         </div>
-
-        
       </div>
       {/* Akhir Sidebar Kanan */}
 
