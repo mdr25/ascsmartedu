@@ -1,25 +1,37 @@
 const options = [
   {
-    name: 'ASC CENDEKIA',
-    grades: '(Kelas 1-6 SD)',
-    subjects: ['Matematika', 'IPS', 'IPA', 'Bahasa Inggris', 'Bahasa Indonesia'],
-    schedule: '3 Kali Sesi/Minggu',
+    name: "ASC CENDEKIA",
+    grades: "(Kelas 1-6 SD)",
+    subjects: [
+      "Matematika",
+      "IPS",
+      "IPA",
+      "Bahasa Inggris",
+      "Bahasa Indonesia",
+    ],
+    schedule: "3 Kali Sesi/Minggu",
   },
   {
-    name: 'ASC PRIMA',
-    grades: '(Kelas 7-9 SMP)',
-    subjects: ['Matematika', 'IPS', 'IPA', 'Bahasa Inggris', 'Bahasa Indonesia'],
-    schedule: '4 Kali Sesi/Minggu',
+    name: "ASC PRIMA",
+    grades: "(Kelas 7-9 SMP)",
+    subjects: [
+      "Matematika",
+      "IPS",
+      "IPA",
+      "Bahasa Inggris",
+      "Bahasa Indonesia",
+    ],
+    schedule: "4 Kali Sesi/Minggu",
   },
   {
-    name: 'ASC SATRIA',
-    grades: '(Kelas 10-12 SMA)',
-    subjects: ['Matematika', 'Biologi', 'Kimia', 'Fisika', 'Bahasa Inggris'],
-    schedule: '3 Kali Sesi/Minggu',
+    name: "ASC SATRIA",
+    grades: "(Kelas 10-12 SMA)",
+    subjects: ["Matematika", "Biologi", "Kimia", "Fisika", "Bahasa Inggris"],
+    schedule: "3 Kali Sesi/Minggu",
   },
 ];
 
-import {useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 export default function ClassOptions() {
   const navigate = useNavigate();
@@ -39,8 +51,12 @@ export default function ClassOptions() {
           >
             {/* Header */}
             <div className="bg-orange-600 px-4 py-3 rounded-t-xl">
-              <h4 className="text-white text-xl sm:text-2xl font-bold font-montserrat">{cls.name}</h4>
-              <p className="text-white text-sm sm:text-lg font-medium font-montserrat">{cls.grades}</p>
+              <h4 className="text-white text-xl sm:text-2xl font-bold font-montserrat">
+                {cls.name}
+              </h4>
+              <p className="text-white text-sm sm:text-lg font-medium font-montserrat">
+                {cls.grades}
+              </p>
             </div>
 
             {/* Subjects */}
@@ -56,10 +72,11 @@ export default function ClassOptions() {
             </p>
           </div>
         ))}
-        <div className="mt-10 flex justify-center">
-      </div>
-         <button onClick={() => navigate("/register")}
-         className="w-full sm:w-72 h-14 bg-teal-600 rounded-lg text-white text-xl sm:text-2xl font-bold font-montserrat shadow-md transition hover:bg-teal-700">
+        <div className="mt-10 flex justify-center"></div>
+        <button
+          onClick={() => navigate("/register")}
+          className="w-full sm:w-72 h-14 bg-teal-600 rounded-lg text-white text-xl sm:text-2xl font-bold font-montserrat shadow-md transition hover:bg-teal-700"
+        >
           Daftar Sekarang
         </button>
       </div>

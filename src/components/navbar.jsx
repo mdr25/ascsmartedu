@@ -38,7 +38,7 @@ export default function Navbar() {
   return (
     <>
       <header>
-        <nav className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between p-4 bg-white shadow-lg">
+ <nav className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between p-4 bg-white shadow-lg">
           <div className="flex items-center gap-2">
             <div className="absolute top-0 left-0 py-4 px-8">
              <Link to="/">
