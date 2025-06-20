@@ -21,7 +21,7 @@ const programData = [
     iconColor: 'bg-teal-100'
   }
 ];
-
+import picLevel1 from '../assets/pic_level1.jpg';
 export default function Programs() {
   return (
     <section className="w-full max-w-[1265px] mx-auto py-12 px-4">
@@ -41,7 +41,7 @@ export default function Programs() {
             <div className={`w-20 h-20 rounded-full ${program.iconColor} flex items-center justify-center mb-4`}>
               <img 
                 className="w-12 h-12" 
-                src="https://placehold.co/64x64" 
+                src={picLevel1} 
                 alt={program.title}
               />
             </div>
