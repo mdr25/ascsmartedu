@@ -54,8 +54,9 @@ export default function ClassOptions() {
           </div>
         ))}
         <div className="mt-10 flex justify-center">
-      </div>
-         <button className="w-full sm:w-72 h-14 bg-teal-600 rounded-lg text-white text-xl sm:text-2xl font-bold font-montserrat shadow-md transition hover:bg-teal-700">
+ </div>
+         <button onClick={() => navigate("/register")}
+         className="w-full sm:w-72 h-14 bg-teal-600 rounded-lg text-white text-xl sm:text-2xl font-bold font-montserrat shadow-md transition hover:bg-teal-700">
           Daftar Sekarang
         </button>
       </div>
