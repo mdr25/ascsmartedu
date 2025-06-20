@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import { NavLink, Outlet, useNavigate } from "react-router-dom";
 import logoasc from "../assets/logoasc.png";
-import profile from "../assets/profile.jpg";
+import foto_profile from "../assets/foto_profile.jpg";
+
 
 export default function StudentLayout() {
   const navigate = useNavigate();
@@ -65,8 +66,7 @@ export default function StudentLayout() {
           >
             <i className="bx bx-user text-lg mr-2"></i> Classes
           </NavLink>
-
-          <NavLink
+          <Link
             to="/student/schedules"
             className={({ isActive }) =>
               isActive
@@ -75,9 +75,8 @@ export default function StudentLayout() {
             }
           >
             <i className="bx bx-user text-lg mr-2"></i> Schedules
-          </NavLink>
-
-          <NavLink
+          </Link>
+          <Link
             to="/student/attendances"
             className={({ isActive }) =>
               isActive
@@ -86,7 +85,7 @@ export default function StudentLayout() {
             }
           >
             <i className="bx bx-book-open text-lg mr-2"></i> Attendances
-          </NavLink>
+          </Link>
 
           <NavLink
             to="/student/payments"
@@ -115,8 +114,9 @@ export default function StudentLayout() {
         {/* Header Profile */}
         <div className="p-6 pt-8">
           <div className="flex items-center relative">
+            
             <img
-              src={profile}
+              src={foto_profile}
               alt="Profile"
               className="w-[50px] h-[50px] rounded-[18px]"
             />
@@ -132,16 +132,12 @@ export default function StudentLayout() {
               {isDropdownOpen && (
                 <ul className="absolute right-0 mt-2 w-44 bg-white shadow rounded-md z-50">
                   <li>
-                    <NavLink
-                      to="/student/profile"
-                      className={({ isActive }) =>
-                        "block px-4 py-2 hover:bg-gray-100 text-sm flex items-center" +
-                        (isActive ? " font-semibold bg-gray-200" : "")
-                      }
-                      onClick={() => setIsDropdownOpen(false)}
+                    <Link
+                      to="/profile"
+                      className="block px-4 py-2 hover:bg-gray-100 text-sm flex items-center"
                     >
                       <i className="bx bx-user-circle mr-2 text-lg"></i> Profile
-                    </NavLink>
+                    </Link>
                   </li>
                   <li>
                     <NavLink
@@ -167,58 +163,6 @@ export default function StudentLayout() {
               )}
             </div>
           </div>
-        </div>
-
-        {/* Sidebar Content */}
-        <div className="p-4 text-sm">
-          <h5 className="text-lg font-semibold">Progress</h5>
-
-          {/* UI/UX */}
-          <ProgressItem
-            icon="bx-pencil"
-            label="UI/UX Design"
-            bg="#d0d9fa"
-            color="#5e81f4"
-            width="75%"
-          />
-
-          {/* Photography */}
-          <ProgressItem
-            icon="bx-camera"
-            label="Photography"
-            bg="#c4e7f8"
-            color="#0cc3e7"
-            width="30%"
-          />
-
-          {/* Animation */}
-          <ProgressItem
-            icon="bx-pyramid"
-            label="Animation"
-            bg="#ffefd6"
-            color="#ffae33"
-            width="60%"
-          />
-
-          <h5 className="mt-10 text-lg font-semibold">Upcoming Task</h5>
-
-          {/* Task 1 */}
-          <UpcomingTask
-            icon="bx-chat"
-            color="#5e81f4"
-            bg="#d0d9fa"
-            title="UI/UX - Discussion"
-            date="03 Nov 2021, Wednesday"
-          />
-
-          {/* Task 2 */}
-          <UpcomingTask
-            icon="bx-cube-alt"
-            color="#ffae33"
-            bg="#ffefd6"
-            title="3D Animation"
-            date="04 Nov 2021, Thursday"
-          />
         </div>
       </aside>
 

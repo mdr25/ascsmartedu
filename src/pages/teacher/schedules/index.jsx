@@ -25,7 +25,7 @@ export default function TeacherSchedules() {
           headers: { Authorization: `Bearer ${token}` },
         });
         setClasses(response.data);
-      } catch (err) {
+      } catch {
         setError("Gagal mengambil data jadwal!");
       } finally {
         setLoading(false);
@@ -55,15 +55,15 @@ export default function TeacherSchedules() {
 
   return (
     <div className="container mx-auto p-6">
-      <h2 className="text-2xl font-bold text-gray-800 mb-4">
-        📋 Jadwal Mengajar
+      <h2 className="text-xl font-bold text-gray-800 mb-4">
+        Jadwal Mengajar
       </h2>
 
       <button
         onClick={() => setShowModal(true)}
-        className="mb-6 bg-teal-600 hover:bg-teal-500 text-white px-4 py-2 rounded shadow text-sm font-semibold"
+        className="mb-6 px-4 py-2 text-sm bg-teal-600 hover:bg-teal-700 text-white px-4 py-2 rounded"
       >
-        ➕ Tambah Jadwal
+        + Tambah Jadwal
       </button>
 
       {classes.length > 0 ? (
@@ -75,14 +75,14 @@ export default function TeacherSchedules() {
                 onClick={() => navigate(`/teacher/schedules/${sched.id}`)}
                 className="cursor-pointer bg-white shadow-md rounded-lg p-4 hover:bg-gray-100 transition transform hover:scale-105"
               >
-                <p className="font-semibold text-gray-700">
+                <p className=" font-semibold text-gray-700">
                   🧑‍🏫 {cls.jenjang_kelas?.nama_jenjang} - {cls.class_name}
                 </p>
                 <hr className="border-gray-300 my-2" />
-                <p className="text-gray-600">
+                <p className="text-sm text-gray-600">
                   🗓️ {sched.date_sched} | {sched.course_name}
                 </p>
-                <p className="text-gray-600">
+                <p className="text-sm text-gray-600">
                   ⏰ {sched.start_time} - {sched.end_time}
                 </p>
               </div>
@@ -100,7 +100,7 @@ export default function TeacherSchedules() {
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
           <div className="bg-white rounded-lg p-6 w-full max-w-md shadow-lg">
             <h3 className="text-lg font-bold text-gray-800 mb-4">
-              📝 Tambah Jadwal
+              Tambah Jadwal
             </h3>
 
             <div className="space-y-3">

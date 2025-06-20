@@ -126,21 +126,6 @@ export default function UserEdit() {
             />
           </div>
 
-          {/* Password (opsional) */}
-          <div className="space-y-1">
-            <label className="block text-sm font-medium">Password</label>
-            <input
-              type="password"
-              name="password"
-              value={formData.password}
-              onChange={handleChange}
-              className="text-sm w-full border p-2 rounded-lg"
-            />
-            <p className="text-xs text-red-500 mt-1 italic">
-              * Kosongkan jika tidak ingin mengubah password
-            </p>
-          </div>
-
           {/* Phone */}
           <div className="space-y-1">
             <label className="block text-sm font-medium">No. Telepon</label>

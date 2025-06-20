@@ -126,16 +126,18 @@ export default function TeacherProfile() {
               className="w-full bg-gray-200 rounded px-3 py-2 focus:outline-teal-600"
             />
           </div>
-          <div>
-            <label className="block font-medium">Password</label>
+          <div className="space-y-1">
+            <label className="block text-sm font-medium">Password</label>
             <input
               type="password"
               name="password"
               value={form.password}
               onChange={handleChange}
-              placeholder="Kosongkan jika tidak ingin ganti"
-              className="w-full bg-gray-200 rounded px-3 py-2 focus:outline-teal-600"
+              className="text-sm w-full bg-gray-200 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-gray-400"
             />
+            <p className="text-xs text-red-500 mt-1 italic">
+              * Kosongkan jika tidak ingin mengubah password
+            </p>
           </div>
           <div>
             <label className="block font-medium">Jenis Kelamin</label>

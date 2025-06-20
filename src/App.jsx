@@ -167,7 +167,6 @@ function App() {
               <Route index element={<StudentPayments />} />
               <Route path="purchaseCourse" element={<PurchaseCourse />} />
             </Route>
-
             <Route path="profile" element={<StudentProfile />} />
           </Route>
         </Route>

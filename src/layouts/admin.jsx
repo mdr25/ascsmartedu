@@ -2,7 +2,7 @@
 import { useEffect, useState } from "react";
 import { Link, Outlet, useNavigate } from "react-router-dom";
 import logoasc from "../assets/logoasc.png";
-import profile from "../assets/profile.jpg";
+import foto_profile from "../assets/foto_profile.jpg";
 
 export default function AdminLayout() {
   const navigate = useNavigate();
@@ -102,8 +102,9 @@ export default function AdminLayout() {
         <div className="py-8">
           <div className="p-6">
             <div className="flex items-center">
+              
               <img
-                src={profile}
+                src={foto_profile}
                 alt="Profile"
                 className="w-[50px] h-[50px] rounded-[18px]"
               />
@@ -122,24 +123,6 @@ export default function AdminLayout() {
                 {isDropdownOpen && (
                   <ul className="absolute bg-white shadow rounded-md mt-2 w-44 z-20">
                     <li>
-                      <Link
-                        to="/profile"
-                        className="block px-4 py-2 hover:bg-gray-100 text-sm flex items-center"
-                      >
-                        <i className="bx bx-user-circle mr-2 text-lg align-text-top"></i>{" "}
-                        Profile
-                      </Link>
-                    </li>
-                    <li>
-                      <Link
-                        to="/settings"
-                        className="block px-4 py-2 hover:bg-gray-100 text-sm flex items-center"
-                      >
-                        <i className="bx bx-cog mr-2 text-lg align-text-top"></i>{" "}
-                        Settings
-                      </Link>
-                    </li>
-                    <li>
                       <button
                         onClick={handleLogout}
                         className="block w-full text-left px-4 py-2 hover:bg-gray-100 text-sm flex items-center"
@@ -157,71 +140,12 @@ export default function AdminLayout() {
 
         {/* Body */}
         <div className="p-4 text-sm">
-          {/* Progress */}
-          <h5 className="text-lg font-semibold m-0">Progress</h5>
+         
 
-          {/* UI/UX */}
-          <div className="flex mt-4">
-            <i className="bx bx-pencil text-[#5e81f4] bg-[#d0d9fa] text-xl p-2 rounded"></i>
-            <div className="ml-3 flex-1">
-              <h6 className="text-base mb-2 pr-12">UI/UX Design</h6>
-              <div className="w-full h-[10px] bg-[#d0d9fa] rounded-full">
-                <div
-                  className="h-full rounded-full bg-[#5e81f4]"
-                  style={{ width: "75%" }}
-                ></div>
-              </div>
-            </div>
-          </div>
+          
 
-          {/* Photography */}
-          <div className="flex mt-4">
-            <i className="bx bx-camera text-[#0cc3e7] bg-[#c4e7f8] text-xl p-2 rounded"></i>
-            <div className="ml-3 flex-1">
-              <h6 className="text-base mb-2 pr-12">Photography</h6>
-              <div className="w-full h-[10px] bg-[#c4e7f8] rounded-full">
-                <div
-                  className="h-full rounded-full bg-[#0cc3e7]"
-                  style={{ width: "30%" }}
-                ></div>
-              </div>
-            </div>
-          </div>
-
-          {/* Animation */}
-          <div className="flex mt-4">
-            <i className="bx bx-pyramid text-[#ffae33] bg-[#ffefd6] text-xl p-2 rounded"></i>
-            <div className="ml-3 flex-1">
-              <h6 className="text-base mb-2 pr-[71px]">Animation</h6>
-              <div className="w-full h-[10px] bg-[#f1dae5] rounded-full">
-                <div
-                  className="h-full rounded-full bg-[#ffae33]"
-                  style={{ width: "60%" }}
-                ></div>
-              </div>
-            </div>
-          </div>
-
-          {/* Upcoming Task */}
-          <h5 className="mt-10 text-lg font-semibold">Upcoming Task</h5>
-
-          {/* Task 1 */}
-          <div className="flex items-center mt-4">
-            <i className="bx bx-chat text-[#5e81f4] bg-[#d0d9fa] text-xl px-2 py-2 rounded"></i>
-            <div className="ml-3">
-              <h6 className="text-base m-0">UI/UX - Discussion</h6>
-              <small className="text-gray-500">03 Nov 2021, Wednesday</small>
-            </div>
-          </div>
-
-          {/* Task 2 */}
-          <div className="flex items-center mt-4">
-            <i className="bx bx-cube-alt text-[#ffae33] bg-[#ffefd6] text-xl px-2 py-2 rounded"></i>
-            <div className="ml-3">
-              <h6 className="text-base m-0">3D Animation</h6>
-              <small className="text-gray-500">04 Nov 2021, Thursday</small>
-            </div>
-          </div>
+          
+          
         </div>
       </div>
       {/* Akhir Sidebar Kanan */}

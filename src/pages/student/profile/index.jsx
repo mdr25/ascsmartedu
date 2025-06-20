@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { getStudentProfile, updateStudentProfile } from "../../../_services/siswa/profile";
-
+import { getStudentProfile, updateStudentProfile} from "../../../_services/siswa/profile";
 
 export default function StudentProfile() {
   const [form, setForm] = useState({
@@ -134,6 +133,9 @@ export default function StudentProfile() {
               placeholder="Kosongkan jika tidak ingin ganti"
               className="w-full bg-gray-200 rounded px-3 py-2 focus:outline-teal-600"
             />
+            <p className="text-sm text-red-500 mt-1">
+              Kosongkan jika tidak ingin ganti password
+            </p>
           </div>
           <div>
             <label className="block font-medium">Jenis Kelamin</label>
