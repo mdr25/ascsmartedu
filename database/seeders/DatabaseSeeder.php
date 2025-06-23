@@ -17,11 +17,13 @@ class DatabaseSeeder extends Seeder
         $this->call([
             RolesSeeder::class,
             JenjangSeeder::class,
+            ClassSeeder::class,
+            TeacherSeeder::class
         ]);
 
         // Admin
         User::firstOrCreate([
-            'email' => 'admin@example.com'
+            'email' => 'admin@gmail.com'
         ], [
             'name' => 'Admin',
             'password' => bcrypt('password123'),
