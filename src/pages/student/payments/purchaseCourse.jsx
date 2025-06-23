@@ -5,6 +5,7 @@ import {
   getLevels,
   createPayment,
 } from "../../../_services/siswa/payments";
+import qr from "../../../assets/qrcode_220368233_538aec211086dde8ccc46b87a5b90f5f.png";
 
 const pastelColors = [
   "bg-pink-100",
@@ -233,7 +234,7 @@ export default function PurchaseCourse() {
                   Scan QR Code di bawah untuk melakukan pembayaran:
                 </p>
                 <img
-                  src="/img/qris-example.png" // Ganti path dengan QRIS asli kamu
+                  src={qr} // Ganti path dengan QRIS asli kamu
                   alt="QRIS ASC SmartEdu"
                   className="mx-auto mb-3 w-40"
                 />
