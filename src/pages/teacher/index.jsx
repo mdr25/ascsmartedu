@@ -50,8 +50,7 @@ export default function TeacherDashboard() {
 
   if (loading)
     return <p className="text-center text-lg text-gray-600">Loading...</p>;
-  if (error)
-    return <p className="text-center text-lg text-red-500">{error}</p>;
+  if (error) return <p className="text-center text-lg text-red-500">{error}</p>;
 
   const {
     name = "Pengajar",
@@ -69,7 +68,9 @@ export default function TeacherDashboard() {
 
       {/* Section: Kelas yang Diajar */}
       <section className="bg-white rounded-2xl shadow p-6 space-y-4">
-        <h2 className="text-xl font-semibold text-gray-800">Kelas yang Anda Ajar</h2>
+        <h2 className="text-xl font-semibold text-gray-800">
+          Kelas yang Anda Ajar
+        </h2>
         {classes.length > 0 ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {classes.map((cls, index) => {
@@ -78,7 +79,7 @@ export default function TeacherDashboard() {
                 <Link
                   key={cls.id}
                   to={`/teacher/classes/${cls.id}`}
-                  className="group block rounded-xl overflow-hidden shadow-sm hover:shadow-md transition"
+                  className="block bg-gray-100 rounded-lg shadow-md overflow-hidden hover:scale-105 transition transform duration-200"
                 >
                   <div className={`h-20 ${colorClass}`}></div>
                   <div className="bg-white p-4 space-y-1">
@@ -88,7 +89,8 @@ export default function TeacherDashboard() {
                     </h3>
                     <p className="text-sm text-gray-600">{cls.description}</p>
                     <p className="text-sm text-gray-700">
-                      <span className="font-medium">Siswa:</span> {cls.total_student}
+                      <span className="font-medium">Siswa:</span>{" "}
+                      {cls.total_student}
                     </p>
                   </div>
                 </Link>
@@ -102,7 +104,9 @@ export default function TeacherDashboard() {
 
       {/* Section: Jadwal Mengajar Hari Ini */}
       <section className="bg-white rounded-2xl shadow p-6 space-y-4">
-        <h2 className="text-xl font-semibold text-gray-800">Jadwal Mengajar Hari Ini</h2>
+        <h2 className="text-xl font-semibold text-gray-800">
+          Jadwal Mengajar Hari Ini
+        </h2>
         {today_schedule.length > 0 ? (
           <ul className="space-y-3">
             {today_schedule.map((jadwal, index) => (
@@ -126,7 +130,9 @@ export default function TeacherDashboard() {
 
       {/* Section: Riwayat Kehadiran */}
       <section className="bg-white rounded-2xl shadow p-6 space-y-4">
-        <h2 className="text-xl font-semibold text-gray-800">Riwayat Kehadiran Siswa</h2>
+        <h2 className="text-xl font-semibold text-gray-800">
+          Riwayat Kehadiran Siswa
+        </h2>
         {recent_attendance.length > 0 ? (
           <ul className="space-y-2">
             {recent_attendance.flatMap((absensiList) =>
@@ -143,7 +149,8 @@ export default function TeacherDashboard() {
                       : "bg-red-100 text-red-800"
                   }`}
                 >
-                  <strong>{absensi.date}</strong> – {absensi.name} ({absensi.status})
+                  <strong>{absensi.date}</strong> – {absensi.name} (
+                  {absensi.status})
                 </li>
               ))
             )}

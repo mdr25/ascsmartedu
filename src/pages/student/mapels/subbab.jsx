@@ -18,29 +18,22 @@ const StudentSubbabIndex = () => {
     const fetchData = async () => {
       setIsLoading(true);
       try {
+        console.log("Params:", { classId, lessonId, babId });
+
         const [kelas, subbabResponse] = await Promise.all([
           getStudentClassDetail(classId),
           getSubbabByBabId(babId),
         ]);
 
-        console.log("✅ subbabResponse:", subbabResponse);
-
-        const subbabList = Array.isArray(subbabResponse)
-          ? subbabResponse
-          : subbabResponse?.data || [];
-
-        const sortedSubbabs = subbabList.sort((a, b) =>
-          (a.judul_subbab || "").localeCompare(b.judul_subbab || "", "id", {
-            sensitivity: "base",
-          })
-        );
+        console.log("Kelas:", kelas);
+        console.log("Subbab Response (raw):", subbabResponse);
 
         setClassData(kelas);
-        setSubbabs(sortedSubbabs);
+        setSubbabs(subbabResponse || []);
         setErrorMsg("");
       } catch (err) {
         setErrorMsg("Gagal memuat data subbab.");
-        console.error("❌ Gagal memuat data:", err);
+        console.error("Error fetch:", err);
       } finally {
         setIsLoading(false);
       }
@@ -94,25 +87,23 @@ const StudentSubbabIndex = () => {
         <span className="text-black font-semibold">Subbab</span>
       </nav>
 
-      
-
       {/* Card */}
       <div className="bg-white p-4 rounded-lg shadow">
         {/* Navigation Buttons */}
-      <div className="flex space-x-3 mb-4">
-        <button
-          onClick={() => navigate(`/student/classes/${classId}`)}
-          className="px-4 py-2 rounded text-sm bg-gray-200 text-gray-600"
-        >
-          People
-        </button>
-        <button
-          onClick={() => navigate(`/student/classes/${classId}/mapel`)}
-          className="px-4 py-2 rounded text-sm bg-teal-600 text-white"
-        >
-          Mata Pelajaran
-        </button>
-      </div>
+        <div className="flex space-x-3 mb-4">
+          <button
+            onClick={() => navigate(`/student/classes/${classId}`)}
+            className="px-4 py-2 rounded text-sm bg-gray-200 text-gray-600"
+          >
+            People
+          </button>
+          <button
+            onClick={() => navigate(`/student/classes/${classId}/mapel`)}
+            className="px-4 py-2 rounded text-sm bg-teal-600 text-white"
+          >
+            Mata Pelajaran
+          </button>
+        </div>
         <div className="border border-teal-500 rounded-xl p-4 bg-gray-100">
           <div className="mb-4">
             <h2 className="text-lg font-semibold">

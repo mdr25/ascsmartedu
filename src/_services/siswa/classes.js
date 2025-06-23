@@ -39,7 +39,17 @@ export const getBabByMapelId = async (mapelId) => {
 export const getSubbabByBabId = async (babId) => {
   try {
     const res = await api.get(`/student/bab/${babId}/subbab`);
-    return res.data?.data || [];
+    console.log("getSubbabByBabId siswa response:", res.data);
+    if (Array.isArray(res.data?.data)) {
+      return res.data.data;
+    }
+    if (Array.isArray(res.data?.data?.subbabs)) {
+      return res.data.data.subbabs;
+    }
+    if (Array.isArray(res.data)) {
+      return res.data;
+    }
+    return [];
   } catch (err) {
     console.error("Gagal mengambil subbab:", err.response?.data || err.message);
     throw err;

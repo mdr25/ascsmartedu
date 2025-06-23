@@ -199,6 +199,56 @@ export default function PurchaseCourse() {
               </select>
             </div>
 
+            {paymentMethod === "Transfer" && (
+              <div className="mb-4 p-4 border rounded bg-gray-100">
+                <p className="font-medium text-gray-800 mb-1">
+                  Silakan lakukan transfer ke rekening berikut:
+                </p>
+                <ul className="text-sm text-gray-700 mb-3">
+                  <li>
+                    <strong>Bank:</strong> BCA (Bank Central Asia)
+                  </li>
+                  <li>
+                    <strong>No. Rekening:</strong> 2345678901
+                  </li>
+                  <li>
+                    <strong>Atas Nama:</strong> ASC SmartEdu
+                  </li>
+                </ul>
+                <p className="text-sm text-gray-600">
+                  Transfer dapat dilakukan dari semua bank melalui ATM, Mobile
+                  Banking, atau Internet Banking. Untuk transfer antar bank,
+                  gunakan <strong>kode bank 014</strong> (BCA).
+                </p>
+                <p className="text-sm text-gray-600 mt-2 italic">
+                  * Mohon pastikan nama penerima sesuai dan jumlah transfer
+                  tepat.
+                </p>
+              </div>
+            )}
+
+            {paymentMethod === "Qris" && (
+              <div className="mb-4 p-4 border rounded bg-gray-100 text-center">
+                <p className="font-medium text-gray-800 mb-2">
+                  Scan QR Code di bawah untuk melakukan pembayaran:
+                </p>
+                <img
+                  src="/img/qris-example.png" // Ganti path dengan QRIS asli kamu
+                  alt="QRIS ASC SmartEdu"
+                  className="mx-auto mb-3 w-40"
+                />
+                <p className="text-sm text-gray-700">
+                  Pembayaran melalui QRIS dapat dilakukan menggunakan aplikasi
+                  seperti <strong>Gopay, OVO, DANA, ShopeePay</strong>, dan
+                  Mobile Banking (m-BCA, Livin’, BRImo, dll).
+                </p>
+                <p className="text-sm text-gray-600 mt-2 italic">
+                  * Pastikan nama penerima adalah <strong>ASC SmartEdu</strong>{" "}
+                  dan simpan bukti transaksi.
+                </p>
+              </div>
+            )}
+
             <div className="mb-4">
               <label className="block text-sm font-medium">
                 Bukti Pembayaran (link atau deskripsi)
